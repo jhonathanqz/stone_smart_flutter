@@ -19,7 +19,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   void initState() {
-    StoneSmart.instance().initPayment(controller);
+    StoneSmart.instance().initPayment(handler: controller);
     super.initState();
   }
 

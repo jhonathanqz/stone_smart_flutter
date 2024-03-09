@@ -49,7 +49,7 @@ public class StoneHelper {
             case  TRANSACTION_WAITING_PASSWORD:
                 return "Digite a sua senha.";
             case  TRANSACTION_SENDING:
-                return "Enviando transação. Aguarde.";
+                return "Processando pagamento. Aguarde.";
             case  TRANSACTION_REMOVE_CARD:
                 return "Remova o cartão.";
             case  TRANSACTION_CARD_REMOVED:
