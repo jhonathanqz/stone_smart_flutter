@@ -44,9 +44,19 @@ public class StoneSmart {
         }
 
         String amount = call.argument("amount");
+        if(call.method.equals(PAYMENT_ABORT)){
+            this.payment.cancelCurrentTransaction(currentContext, amount);
+            return;
+        }
+
+        if (call.method.equals(PAYMENT_CANCEL_TRANSACTION)) {
+            int typeTransaction = call.argument("typeTransaction");
+            this.payment.cancelTransaction(currentContext, amount, typeTransaction);
+            return;
+        }
+
         int parc = call.argument("installment");
         boolean withInterest = call.argument("withInterest");
-
 
         if (call.method.equals(PAYMENT_DEBIT)) {
             this.payment.doTransaction(currentContext,amount, 2, parc, withInterest);
@@ -56,12 +66,7 @@ public class StoneSmart {
             this.payment.doTransaction(currentContext,amount, 1, parc, withInterest);
         }  else if (call.method.equals(PAYMENT_VOUCHER)) {
             this.payment.doTransaction(currentContext,amount, 4, parc, withInterest);
-        } else if (call.method.equals(PAYMENT_ABORT)) {
-            this.payment.cancelCurrentTransaction(currentContext, amount);
-        }else if (call.method.equals(PAYMENT_CANCEL_TRANSACTION)) {
-            int typeTransaction = call.argument("typeTransaction");
-            this.payment.cancelTransaction(currentContext, amount, typeTransaction);
-        }else {
+        } else {
             result.notImplemented();
         }
     }

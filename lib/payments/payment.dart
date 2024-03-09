@@ -102,7 +102,9 @@ class Payment {
   Future<bool> abortTransaction({
     required int currentAmount,
   }) async {
-    return await channel.invokeMethod(PaymentTypeCall.ABORT.method);
+    return await channel.invokeMethod(PaymentTypeCall.ABORT.method, {
+      "amount": currentAmount.toString(),
+    });
   }
 
   //Function to invoke method from abort current transaction with sdk the Stone

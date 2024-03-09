@@ -162,6 +162,6 @@ public class PaymentsFragment implements PaymentsContract {
   }
 
   private String getMessage(String operation, String message) {
-    return operation + ":" + message;
+    return operation + " => " + message;
   }
 }

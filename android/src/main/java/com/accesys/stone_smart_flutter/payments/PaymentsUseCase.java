@@ -80,8 +80,8 @@ public class PaymentsUseCase {
           String jsonStoneResult = getGson().toJson(actionResult);
           finishTransaction(jsonStoneResult);
           mStonePrinter.printerFromTransaction(context, transaction);
+          currentTransactionObject = null;
           //alertPrinter(context, jsonStoneResult, transaction);
-
         }
         @Override
         public void onStatusChanged(Action action) {
@@ -92,8 +92,6 @@ public class PaymentsUseCase {
           if (action == Action.TRANSACTION_WAITING_QRCODE_SCAN) {
             mFragment.onAuthProgress("transaction", mStoneHelper.convertBitmapToString(transaction.getQRCode()));
           }
-          currentTransactionObject = null;
-
         }
         @Override
         public void onError() {
@@ -177,6 +175,7 @@ public class PaymentsUseCase {
         Log.d("print", "*** STONE -> ativação 5");
         mFragment.onMessage("Terminal ativado");
         mFragment.onAuthProgress("active", "Terminal ativado");
+        mFragment.onFinishedResponse("active", "Terminal ativado");
       }
   }
 
@@ -191,7 +190,6 @@ public class PaymentsUseCase {
         mFragment.onError("cancel", "Valor da transação difere da transação atual");
         return;
       }
-
       final CancellationProvider provider = getCancellationProvider(context, currentTransactionObject);
       provider.execute();
     } catch (Exception error) {
@@ -228,6 +226,7 @@ public class PaymentsUseCase {
       }
       @Override
       public void onError() {
+        Log.d("print", "*** STONE -> ABORT_onError: " + provider.getListOfErrors().toString());
         String error = currentTransactionObject.getActionCode();
         mFragment.onMessage("Erro ao cancelar transação");
         mFragment.onAuthProgress("cancel", error);
