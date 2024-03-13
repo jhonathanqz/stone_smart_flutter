@@ -1,4 +1,4 @@
-package com.accesys.stone_smart_flutter.core;
+package com.qztech.stone_smart_flutter.core;
 
 
 public class BasicResult {

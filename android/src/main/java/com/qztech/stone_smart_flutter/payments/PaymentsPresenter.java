@@ -1,4 +1,4 @@
-package com.accesys.stone_smart_flutter.payments;
+package com.qztech.stone_smart_flutter.payments;
 
 import android.content.Context;
 import android.util.Log;

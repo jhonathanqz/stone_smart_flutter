@@ -1,4 +1,4 @@
-package com.accesys.stone_smart_flutter.payments;
+package com.qztech.stone_smart_flutter.payments;
 
 import io.flutter.plugin.common.MethodChannel;
 import java.util.HashMap;

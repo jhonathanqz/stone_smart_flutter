@@ -1,12 +1,12 @@
-package com.accesys.stone_smart_flutter;
+package com.qztech.stone_smart_flutter;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.NonNull;
-import com.accesys.stone_smart_flutter.core.StoneSmart;
-import com.accesys.stone_smart_flutter.payments.PaymentsFragment;
-import com.accesys.stone_smart_flutter.payments.PaymentsPresenter;
-import com.accesys.stone_smart_flutter.payments.PaymentsUseCase;
+import com.qztech.stone_smart_flutter.core.StoneSmart;
+import com.qztech.stone_smart_flutter.payments.PaymentsFragment;
+import com.qztech.stone_smart_flutter.payments.PaymentsPresenter;
+import com.qztech.stone_smart_flutter.payments.PaymentsUseCase;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;

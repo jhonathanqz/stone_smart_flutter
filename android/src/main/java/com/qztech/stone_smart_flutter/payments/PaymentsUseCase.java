@@ -1,4 +1,4 @@
-package com.accesys.stone_smart_flutter.payments;
+package com.qztech.stone_smart_flutter.payments;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -9,9 +9,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.accesys.stone_smart_flutter.core.ActionResult;
-import com.accesys.stone_smart_flutter.core.BasicResult;
-import com.accesys.stone_smart_flutter.printer.StonePrinter;
+import com.qztech.stone_smart_flutter.core.ActionResult;
+import com.qztech.stone_smart_flutter.core.BasicResult;
+import com.qztech.stone_smart_flutter.printer.StonePrinter;
 import com.google.gson.Gson;
 
 import java.util.List;

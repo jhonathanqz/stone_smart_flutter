@@ -1,10 +1,10 @@
-package com.accesys.stone_smart_flutter.core;
+package com.qztech.stone_smart_flutter.core;
 
 import android.content.Context;
 import android.util.Log;
 
 
-import com.accesys.stone_smart_flutter.payments.PaymentsPresenter;
+import com.qztech.stone_smart_flutter.payments.PaymentsPresenter;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 

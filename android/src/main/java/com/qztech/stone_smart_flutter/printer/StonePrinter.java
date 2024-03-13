@@ -1,10 +1,10 @@
-package com.accesys.stone_smart_flutter.printer;
+package com.qztech.stone_smart_flutter.printer;
 
 
 import android.content.Context;
 
-import com.accesys.stone_smart_flutter.core.BasicResult;
-import com.accesys.stone_smart_flutter.payments.PaymentsFragment;
+import com.qztech.stone_smart_flutter.core.BasicResult;
+import com.qztech.stone_smart_flutter.payments.PaymentsFragment;
 import com.google.gson.Gson;
 
 import br.com.stone.posandroid.providers.PosPrintReceiptProvider;
