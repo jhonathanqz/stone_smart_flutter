@@ -1,5 +1,5 @@
 //Fixed payment type hanldle from return functions
-enum PaymentTypeHandler { ON_TRANSACTION_SUCCESS, ON_ERROR, ON_MESSAGE, ON_LOADING, WRITE_TO_FILE, ON_ABORTED_SUCCESSFULLY, DISPOSE_DIALOG, ACTIVE_DIALOG, ON_AUTH_PROGRESS, ON_TRANSACTION_INFO, ON_FINISHED_RESPONSE }
+enum PaymentTypeHandler { ON_TRANSACTION_SUCCESS, ON_ERROR, ON_MESSAGE, ON_LOADING, WRITE_TO_FILE, ON_ABORTED_SUCCESSFULLY, DISPOSE_DIALOG, ACTIVE_DIALOG, ON_AUTH_PROGRESS, ON_TRANSACTION_INFO, ON_FINISHED_RESPONSE, ON_CHANGED }
 
 extension StringPaymentHandlerExt on String {
   get handler {
@@ -57,12 +57,28 @@ extension PaymentTypeHandlerExt on PaymentTypeHandler {
         return "onTransactionInfo";
       case PaymentTypeHandler.ON_FINISHED_RESPONSE:
         return "onFinishedResponse";
+      case PaymentTypeHandler.ON_CHANGED:
+        return 'onChanged';
     }
   }
 }
 
 //fixed payment type to call from channel
-enum PaymentTypeCall { CREDIT, CREDIT_PARC, DEBIT, PIX, VOUCHER, ABORT, LAST_TRANSACTION, REFUND, ACTIVEPINPAD, PINPAD_AUTHENTICATED, CANCEL_TRANSACTION }
+enum PaymentTypeCall {
+  CREDIT,
+  CREDIT_PARC,
+  DEBIT,
+  PIX,
+  VOUCHER,
+  ABORT,
+  LAST_TRANSACTION,
+  REFUND,
+  ACTIVEPINPAD,
+  ACTIVEPINPAD_CREDENTIALS,
+  PINPAD_AUTHENTICATED,
+  CANCEL_TRANSACTION,
+  REVERSAL,
+}
 
 enum PaymentTypeTransaction { CREDIT, DEBIT, VOUCHER, PIX }
 
@@ -120,6 +136,10 @@ extension PaymentTypeCallExt on PaymentTypeCall {
         return "paymentPix";
       case PaymentTypeCall.CANCEL_TRANSACTION:
         return 'paymentCancelTransaction';
+      case PaymentTypeCall.REVERSAL:
+        return 'paymentReversal';
+      case PaymentTypeCall.ACTIVEPINPAD_CREDENTIALS:
+        return 'paymentActivePinpadCredentials';
     }
   }
 }

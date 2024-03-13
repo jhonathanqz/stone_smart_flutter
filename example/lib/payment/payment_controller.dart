@@ -1,6 +1,6 @@
-import 'package:stone_smart_flutter/payments/handler/payment_handler.dart';
+import 'package:stone_smart_flutter/payments/handler/istone_handler.dart';
 
-class PaymentController extends PaymentHandler {
+class PaymentController extends IStoneHandler {
   int saleValue = 0;
   bool enable = false;
   bool clickPayment = false;
@@ -75,5 +75,10 @@ class PaymentController extends PaymentHandler {
     this.response = response;
 
     enableRefund = true;
+  }
+
+  @override
+  void onChanged(String message) {
+    // TODO: implement onChanged
   }
 }

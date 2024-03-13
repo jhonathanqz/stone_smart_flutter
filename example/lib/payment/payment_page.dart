@@ -19,7 +19,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   void initState() {
-    StoneSmart.instance().initPayment(controller);
+    StoneSmart.instance().initPayment(handler: controller);
     super.initState();
   }
 
@@ -122,7 +122,7 @@ class _PaymentPageState extends State<PaymentPage> {
             onPressed: controller.clickPayment
                 ? () {
                     controller.setSaleValue(0.0);
-                    StoneSmart.instance().payment.abortTransaction(currentAmount: controller.saleValue);
+                    StoneSmart.instance().payment.abortTransaction();
                   }
                 : null,
             child: const Text("Cancelar Operação"),
@@ -132,7 +132,7 @@ class _PaymentPageState extends State<PaymentPage> {
           ),
           ElevatedButton(
             onPressed: () {
-              StoneSmart.instance().payment.abortTransaction(currentAmount: controller.saleValue);
+              StoneSmart.instance().payment.abortTransaction();
             },
             child: const Text("Abortar transação"),
           ),

@@ -1,4 +1,4 @@
-package com.accesys.stone_smart_flutter.payments;
+package com.qztech.stone_smart_flutter.payments;
 
 import io.flutter.plugin.common.MethodChannel;
 import java.util.HashMap;
@@ -31,12 +31,12 @@ public class PaymentsFragment implements PaymentsContract {
   private static final String ON_TRANSACTION_SUCCESS = "onTransactionSuccess";
   private static final String ON_ERROR = "onError";
   private static final String ON_MESSAGE = "onMessage";
+
+  private static final String ON_CHANGED = "onChanged";
   private static final String ON_FINISHED_RESPONSE = "onFinishedResponse";
   private static final String ON_LOADING = "onLoading";
   private static final String WRITE_TO_FILE = "writeToFile";
   private static final String ON_ABORTED_SUCCESSFULLY = "onAbortedSuccessfully";
-  private static final String DISPOSE_DIALOG = "disposeDialog";
-  private static final String ACTIVE_DIALOG = "activeDialog";
   private static final String ON_AUTH_PROGRESS = "onAuthProgress";
   private static final String ON_TRANSACTION_INFO = "onTransactionInfo";
 
@@ -51,11 +51,21 @@ public class PaymentsFragment implements PaymentsContract {
   }
 
   @Override
-  public void onError(final String operation, final String message) {
+  public void onError(final String message) {
     runOnUiThread(new Runnable() {
       @Override
       public void run() {
-        channel.invokeMethod(ON_ERROR, getMessage(operation, message));
+        channel.invokeMethod(ON_ERROR, message);
+      }
+    });
+  }
+
+  @Override
+  public void onChanged(String message) {
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        channel.invokeMethod(ON_CHANGED, message);
       }
     });
   }
@@ -71,11 +81,11 @@ public class PaymentsFragment implements PaymentsContract {
   }
 
   @Override
-  public void onFinishedResponse(final String operation, final String message) {
+  public void onFinishedResponse(final String message) {
     runOnUiThread(new Runnable() {
       @Override
       public void run() {
-        channel.invokeMethod(ON_FINISHED_RESPONSE, getMessage(operation, message));
+        channel.invokeMethod(ON_FINISHED_RESPONSE, message);
       }
     });
   }
@@ -118,31 +128,11 @@ public class PaymentsFragment implements PaymentsContract {
   }
 
   @Override
-  public void disposeDialog() {
+  public void onAuthProgress(final String message) {
     runOnUiThread(new Runnable() {
       @Override
       public void run() {
-        channel.invokeMethod(DISPOSE_DIALOG, true);
-      }
-    });
-  }
-
-  @Override
-  public void onActivationDialog() {
-    runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        channel.invokeMethod(ACTIVE_DIALOG, true);
-      }
-    });
-  }
-
-  @Override
-  public void onAuthProgress(final String operation, final String message) {
-    runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        channel.invokeMethod(ON_AUTH_PROGRESS, getMessage(operation, message));
+        channel.invokeMethod(ON_AUTH_PROGRESS, message);
       }
     });
   }
@@ -161,7 +151,7 @@ public class PaymentsFragment implements PaymentsContract {
     });
   }
 
-  private String getMessage(String operation, String message) {
-    return operation + " => " + message;
-  }
+  //private String getMessage(String operation, String message) {
+   // return operation + " => " + message;
+  //}
 }

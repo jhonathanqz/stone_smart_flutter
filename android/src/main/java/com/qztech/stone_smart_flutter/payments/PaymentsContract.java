@@ -1,14 +1,14 @@
-package com.accesys.stone_smart_flutter.payments;
+package com.qztech.stone_smart_flutter.payments;
 
 //Contract class
 interface PaymentsContract {
   void onTransactionSuccess();
 
-  void onError(String operation, String message);
+  void onError(String message);
 
   void onMessage(String message);
 
-  void onFinishedResponse(String operation, String message);
+  void onFinishedResponse(String message);
 
   void onLoading(boolean show);
 
@@ -20,11 +20,9 @@ interface PaymentsContract {
 
   void onAbortedSuccessfully();
 
-  void disposeDialog();
+  void onChanged(String message);
 
-  void onActivationDialog();
-
-  void onAuthProgress(String operation, String message);
+  void onAuthProgress(String message);
 
   void onTransactionInfo(
     String transactionCode,

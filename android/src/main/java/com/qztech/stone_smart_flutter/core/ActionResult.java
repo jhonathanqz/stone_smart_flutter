@@ -1,4 +1,4 @@
-package com.accesys.stone_smart_flutter.core;
+package com.qztech.stone_smart_flutter.core;
 
 import com.google.gson.Gson;
 
@@ -28,6 +28,29 @@ public class ActionResult {
   private String manufacture;
   private String actionCode;
 
+  private String method;
+  private String transactionStatus;
+  private String messageFromAuthorize;
+
+  private String errorMessage;
+  private String authorizationCode;
+
+  public void setAuthorizationCode(String value){this.authorizationCode = value;}
+
+  public String getErrorMessage() {
+    return errorMessage;
+  }
+
+  public void setErrorMessage(String errorMsg) {
+    this.errorMessage = errorMsg;
+  }
+
+  public String getMethod(){return this.method;}
+  public void setMethod(String value) {this.method = value;}
+  public String getTransactionStatus(){return this.transactionStatus;}
+  public void setTransactionStatus(String value){this.transactionStatus = value;}
+  public String getMessageFromAuthorize(){return this.messageFromAuthorize;}
+  public void setMessageFromAuthorize(String value){this.messageFromAuthorize = value;}
   public String getActionCode(){return this.actionCode;}
   public void setActionCode(String value){this.actionCode = value;}
 
@@ -79,7 +102,9 @@ public class ActionResult {
 
 
 
-  int result = 0;
+  private int result = 0;
+
+  public void setResult(int value) {this.result = value;}
 
   int isBuildResponse = 0;
 
@@ -92,15 +117,7 @@ public class ActionResult {
     return 0;
   }
 
-  private String errorMessage;
 
-  public String getErrorMessage() {
-    return errorMessage;
-  }
-
-  public void setErrorMessage(String errorMsg) {
-    this.errorMessage = errorMsg;
-  }
 
   public void buildResponseStoneTransaction(List<TransactionObject> transactionObjects) {
     for (TransactionObject list : transactionObjects) {
@@ -112,13 +129,14 @@ public class ActionResult {
       setTime(String.valueOf(list.getTime()));
       setAid(String.valueOf(list.getAid()));
       setArcq(String.valueOf(list.getArcq()));
-      setTransactionReference(String.valueOf(list.getTransactionReference()));
       setSaleAffiliationKey(String.valueOf(list.getSaleAffiliationKey()));
       setEntryMode(String.valueOf(list.getEntryMode()));//
-      setCardBrand(String.valueOf(list.getCardBrand()));//
       setTypeOfTransactionEnum(String.valueOf(list.getTypeOfTransactionEnum()));//
       setSerialNumber(Stone.getPosAndroidDevice().getPosAndroidSerialNumber());
       setManufacture(Stone.getPosAndroidDevice().getPosAndroidManufacturer());
+      setTransactionReference(String.valueOf(list.getTransactionReference()));
+      setCardBrand(String.valueOf(list.getCardBrand()));//
+      
     }
     this.isBuildResponse = 1;
   }
