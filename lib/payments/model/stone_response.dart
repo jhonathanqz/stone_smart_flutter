@@ -2,35 +2,33 @@
 import 'dart:convert';
 
 class StoneResponse {
-  final String? operation;
-  final String? response;
+  final String? method;
+  final String? errorMessage;
+  final String? message;
+  final int? result;
 
   StoneResponse({
-    this.operation,
-    this.response,
+    this.method,
+    this.errorMessage,
+    this.message,
+    this.result,
   });
-
-  StoneResponse copyWith({
-    String? operation,
-    String? response,
-  }) {
-    return StoneResponse(
-      operation: operation ?? this.operation,
-      response: response ?? this.response,
-    );
-  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'operation': operation,
-      'response': response,
+      'method': method,
+      'errorMessage': errorMessage,
+      'message': message,
+      'result': result,
     };
   }
 
   factory StoneResponse.fromMap(Map<String, dynamic> map) {
     return StoneResponse(
-      operation: map['operation'] != null ? map['operation'] as String : null,
-      response: map['response'] != null ? map['response'] as String : null,
+      method: map['method'] != null ? map['method'] as String : null,
+      errorMessage: map['errorMessage'] != null ? map['errorMessage'] as String : null,
+      message: map['message'] != null ? map['message'] as String : null,
+      result: map['result'] != null ? map['result'] as int : null,
     );
   }
 
@@ -39,15 +37,19 @@ class StoneResponse {
   factory StoneResponse.fromJson(String source) => StoneResponse.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() => 'StoneResponse(operation: $operation, response: $response)';
+  String toString() {
+    return 'StoneResponse(method: $method, errorMessage: $errorMessage, message: $message, result: $result)';
+  }
 
   @override
   bool operator ==(covariant StoneResponse other) {
     if (identical(this, other)) return true;
 
-    return other.operation == operation && other.response == response;
+    return other.method == method && other.errorMessage == errorMessage && other.message == message && other.result == result;
   }
 
   @override
-  int get hashCode => operation.hashCode ^ response.hashCode;
+  int get hashCode {
+    return method.hashCode ^ errorMessage.hashCode ^ message.hashCode ^ result.hashCode;
+  }
 }

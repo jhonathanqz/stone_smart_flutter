@@ -9,7 +9,6 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class StoneSmart {
-    //final PlugPag plugPag;
     final MethodChannel mChannel;
 
     // FUNCTIONS
@@ -21,8 +20,12 @@ public class StoneSmart {
     private static final String PAYMENT_VOUCHER = "paymentVoucher";
     private static final String PAYMENT_PIX = "paymentPix";
     private static final String ACTIVE_PINPAD = "paymentActivePinpad";
+
+    private static final String ACTIVE_PINPAD_CREDENTIALS = "paymentActivePinpadCredentials";
     private static final String PAYMENT_ABORT = "paymentAbort";
     private static final String PAYMENT_CANCEL_TRANSACTION = "paymentCancelTransaction";
+
+    private static final String PAYMENT_REVERSAL = "paymentReversal";
 
     final Context currentContext;
 
@@ -36,6 +39,11 @@ public class StoneSmart {
             this.payment = new PaymentsPresenter(this.mChannel);
         }
 
+        if(call.method.equals(PAYMENT_REVERSAL)) {
+            this.payment.onReversal(currentContext);
+            return;
+        }
+
         if(call.method.equals(ACTIVE_PINPAD)) {
             String appName = call.argument("appName");
             String stoneCode = call.argument("stoneCode");
@@ -43,11 +51,21 @@ public class StoneSmart {
             return;
         }
 
-        String amount = call.argument("amount");
-        if(call.method.equals(PAYMENT_ABORT)){
-            this.payment.cancelCurrentTransaction(currentContext, amount);
+        if(call.method.equals(ACTIVE_PINPAD_CREDENTIALS)) {
+            String appName = call.argument("appName");
+            String stoneCode = call.argument("stoneCode");
+            String qrCodeAuthotization = call.argument("qrCodeAuthorization");
+            String qrCodeProviderid = call.argument("qrCodeProviderid");
+            this.payment.activateWithCredentials(appName, stoneCode,qrCodeAuthotization, qrCodeProviderid, currentContext);
             return;
         }
+
+        if(call.method.equals(PAYMENT_ABORT)){
+            this.payment.abortCurrentPosTransaction();
+            return;
+        }
+
+        String amount = call.argument("amount");
 
         if (call.method.equals(PAYMENT_CANCEL_TRANSACTION)) {
             int typeTransaction = call.argument("typeTransaction");
@@ -59,13 +77,15 @@ public class StoneSmart {
         boolean withInterest = call.argument("withInterest");
 
         if (call.method.equals(PAYMENT_DEBIT)) {
-            this.payment.doTransaction(currentContext,amount, 2, parc, withInterest);
+            this.payment.doTransaction(currentContext,amount, 2, parc, withInterest, null,null);
         } else if (call.method.equals(PAYMENT_PIX)) {
-            this.payment.doTransaction(currentContext,amount, 3, parc, withInterest);
+            String qrCodeAuthotization = call.argument("qrCodeAuthorization");
+            String qrCodeProviderid = call.argument("qrCodeProviderid");
+            this.payment.doTransaction(currentContext,amount, 3, parc, withInterest, qrCodeAuthotization, qrCodeProviderid);
         } else if (call.method.equals(PAYMENT_CREDIT)) {
-            this.payment.doTransaction(currentContext,amount, 1, parc, withInterest);
+            this.payment.doTransaction(currentContext,amount, 1, parc, withInterest,null,null);
         }  else if (call.method.equals(PAYMENT_VOUCHER)) {
-            this.payment.doTransaction(currentContext,amount, 4, parc, withInterest);
+            this.payment.doTransaction(currentContext,amount, 4, parc, withInterest, null,null);
         } else {
             result.notImplemented();
         }

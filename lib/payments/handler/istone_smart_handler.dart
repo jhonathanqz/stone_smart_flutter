@@ -8,6 +8,8 @@ abstract class IStoneSmartHanlder {
 
   void onMessage(String message);
 
+  void onChanged(StoneResponse response);
+
   void onFinishedResponse(StoneTransactionModel response);
 
   void onLoading(bool show);

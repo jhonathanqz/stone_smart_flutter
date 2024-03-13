@@ -6,6 +6,8 @@ abstract class IStoneHandler {
 
   void onMessage(String message);
 
+  void onChanged(String message);
+
   void onFinishedResponse(String message);
 
   void onLoading(bool show);

@@ -25,6 +25,17 @@ class Payment {
           stoneSmartHanlder: iStoneSmartHanlder,
         ));
   }
+
+  //Function to reversal transaction
+  Future<bool> reversal() async {
+    try {
+      await channel.invokeMethod(PaymentTypeCall.REVERSAL.method);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   //Create external functions from invoke methodChannel
   //Function to active pinpad with sdk the Stone
   Future<bool> activePinpad({
@@ -35,6 +46,27 @@ class Payment {
       await channel.invokeMethod(PaymentTypeCall.ACTIVEPINPAD.method, {
         "appName": appName,
         "stoneCode": stoneCode,
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  //Create external functions from invoke methodChannel
+  //Function to active pinpad with sdk the Stone with credentials
+  Future<bool> activePinpadWithCredentials({
+    required String appName,
+    required String stoneCode,
+    required String qrCodeAuthroization,
+    required String qrCodeProviderid,
+  }) async {
+    try {
+      await channel.invokeMethod(PaymentTypeCall.ACTIVEPINPAD_CREDENTIALS.method, {
+        "appName": appName,
+        "stoneCode": stoneCode,
+        "qrCodeAuthorization": qrCodeAuthroization,
+        "qrCodeProviderid": qrCodeProviderid,
       });
       return true;
     } catch (e) {
@@ -83,13 +115,19 @@ class Payment {
   }
 
   //Function to invoke method from debit payment with sdk the Stone
-  Future<bool> pixPayment(int value) async {
+  Future<bool> pixPayment({
+    required int amount,
+    required String qrCodeAuthroization,
+    required String qrCodeProviderid,
+  }) async {
     return await channel.invokeMethod(
       PaymentTypeCall.PIX.method,
       {
-        "amount": value.toString(),
+        "amount": amount.toString(),
         "installment": 1,
         "withInterest": false,
+        "qrCodeAuthorization": qrCodeAuthroization,
+        "qrCodeProviderid": qrCodeProviderid,
       },
     );
   }
@@ -108,15 +146,11 @@ class Payment {
 
   //OPERATIONS
   //Function to invoke method from abort current transaction with sdk the Stone
-  Future<bool> abortTransaction({
-    required int currentAmount,
-  }) async {
-    return await channel.invokeMethod(PaymentTypeCall.ABORT.method, {
-      "amount": currentAmount.toString(),
-    });
+  Future<bool> abortTransaction() async {
+    return await channel.invokeMethod(PaymentTypeCall.ABORT.method);
   }
 
-  //Function to invoke method from abort current transaction with sdk the Stone
+  //Function to invoke method from cancel transaction with sdk the Stone
   Future<bool> cancelTransaction({
     required int amount,
     required PaymentTypeTransaction transactionType,
@@ -126,7 +160,4 @@ class Payment {
       "transactionType": transactionType.type,
     });
   }
-
-//Function to listen to stone returns in the native environment and notify Flutter
-
 }

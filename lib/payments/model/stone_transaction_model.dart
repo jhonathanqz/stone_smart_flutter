@@ -20,6 +20,12 @@ class StoneTransactionModel {
   final String? transactionReference;
   final String? typeOfTransactionEnum;
   final String? errorMessage;
+  final String? method;
+  final String? transactionStatus;
+  final String? messageFromAuthorize;
+  final String? message;
+  final String? authorizationCode;
+  final String? actionResultMessage;
 
   StoneTransactionModel({
     required this.actionCode,
@@ -40,6 +46,12 @@ class StoneTransactionModel {
     required this.transactionReference,
     required this.typeOfTransactionEnum,
     required this.errorMessage,
+    required this.method,
+    required this.transactionStatus,
+    required this.messageFromAuthorize,
+    required this.message,
+    required this.authorizationCode,
+    required this.actionResultMessage,
   });
 
   Map<String, dynamic> toMap() {
@@ -62,6 +74,12 @@ class StoneTransactionModel {
       'transactionReference': transactionReference,
       'typeOfTransactionEnum': typeOfTransactionEnum,
       'errorMessage': errorMessage,
+      'method': method,
+      'transactionStatus': transactionStatus,
+      'messageFromAuthorize': messageFromAuthorize,
+      'message': message,
+      'authorizationCode': authorizationCode,
+      'actionResultMessage': actionResultMessage,
     };
   }
 
@@ -85,6 +103,12 @@ class StoneTransactionModel {
       transactionReference: map['transactionReference'] != null ? map['transactionReference'] as String : null,
       typeOfTransactionEnum: map['typeOfTransactionEnum'] != null ? map['typeOfTransactionEnum'] as String : null,
       errorMessage: map['errorMessage'] != null ? map['errorMessage'] as String : null,
+      method: map['method'] != null ? map['method'] as String : null,
+      transactionStatus: map['transactionStatus'] != null ? map['transactionStatus'] as String : null,
+      messageFromAuthorize: map['messageFromAuthorize'] != null ? map['messageFromAuthorize'] as String : null,
+      message: map['message'] != null ? map['message'] as String : null,
+      authorizationCode: map['authorizationCode'] != null ? map['authorizationCode'] as String : null,
+      actionResultMessage: map['actionResultMessage'] != null ? map['actionResultMessage'] as String : null,
     );
   }
 
@@ -112,23 +136,24 @@ class StoneTransactionModel {
       transactionReference: '',
       typeOfTransactionEnum: '',
       errorMessage: message,
+      method: '',
+      transactionStatus: '',
+      messageFromAuthorize: '',
+      message: '',
+      authorizationCode: '',
+      actionResultMessage: '',
     );
-  }
-
-  @override
-  String toString() {
-    return 'StoneTransactionModel(actionCode: $actionCode, aid: $aid, amount: $amount, arcq: $arcq, cardBrand: $cardBrand, cardHolderNumber: $cardHolderNumber, date: $date, entryMode: $entryMode, idFromBase: $idFromBase, isBuildResponse: $isBuildResponse, manufacture: $manufacture, result: $result, saleAffiliationKey: $saleAffiliationKey, serialNumber: $serialNumber, time: $time, transactionReference: $transactionReference, typeOfTransactionEnum: $typeOfTransactionEnum, errorMessage: $errorMessage)';
   }
 
   @override
   bool operator ==(covariant StoneTransactionModel other) {
     if (identical(this, other)) return true;
 
-    return other.actionCode == actionCode && other.aid == aid && other.amount == amount && other.arcq == arcq && other.cardBrand == cardBrand && other.cardHolderNumber == cardHolderNumber && other.date == date && other.entryMode == entryMode && other.idFromBase == idFromBase && other.isBuildResponse == isBuildResponse && other.manufacture == manufacture && other.result == result && other.saleAffiliationKey == saleAffiliationKey && other.serialNumber == serialNumber && other.time == time && other.transactionReference == transactionReference && other.typeOfTransactionEnum == typeOfTransactionEnum && other.errorMessage == errorMessage;
+    return other.actionCode == actionCode && other.aid == aid && other.amount == amount && other.arcq == arcq && other.cardBrand == cardBrand && other.cardHolderNumber == cardHolderNumber && other.date == date && other.entryMode == entryMode && other.idFromBase == idFromBase && other.isBuildResponse == isBuildResponse && other.manufacture == manufacture && other.result == result && other.saleAffiliationKey == saleAffiliationKey && other.serialNumber == serialNumber && other.time == time && other.transactionReference == transactionReference && other.typeOfTransactionEnum == typeOfTransactionEnum && other.errorMessage == errorMessage && other.method == method && other.transactionStatus == transactionStatus && other.messageFromAuthorize == messageFromAuthorize && other.message == message && other.authorizationCode == authorizationCode && other.actionResultMessage == actionResultMessage;
   }
 
   @override
   int get hashCode {
-    return actionCode.hashCode ^ aid.hashCode ^ amount.hashCode ^ arcq.hashCode ^ cardBrand.hashCode ^ cardHolderNumber.hashCode ^ date.hashCode ^ entryMode.hashCode ^ idFromBase.hashCode ^ isBuildResponse.hashCode ^ manufacture.hashCode ^ result.hashCode ^ saleAffiliationKey.hashCode ^ serialNumber.hashCode ^ time.hashCode ^ transactionReference.hashCode ^ typeOfTransactionEnum.hashCode ^ errorMessage.hashCode;
+    return actionCode.hashCode ^ aid.hashCode ^ amount.hashCode ^ arcq.hashCode ^ cardBrand.hashCode ^ cardHolderNumber.hashCode ^ date.hashCode ^ entryMode.hashCode ^ idFromBase.hashCode ^ isBuildResponse.hashCode ^ manufacture.hashCode ^ result.hashCode ^ saleAffiliationKey.hashCode ^ serialNumber.hashCode ^ time.hashCode ^ transactionReference.hashCode ^ typeOfTransactionEnum.hashCode ^ errorMessage.hashCode ^ method.hashCode ^ transactionStatus.hashCode ^ messageFromAuthorize.hashCode ^ message.hashCode ^ authorizationCode.hashCode ^ actionResultMessage.hashCode;
   }
 }

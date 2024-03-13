@@ -10,27 +10,17 @@ import '../utils/payment_types.dart';
 
 abstract class IStoneHelper {
   static StoneResponse convertToStoneResponse(String message) {
-    if (message.contains(' => ')) {
-      final split = message.split(' => ');
-      if (split.length > 1) {
-        final operation = split[0].toLowerCase().trim();
-        final response = split[1];
-        return StoneResponse(operation: operation, response: response);
-      }
+    if (message.contains('{')) {
+      final map = json.decode(message);
+      return StoneResponse.fromMap(map);
     }
-    return StoneResponse(operation: 'stone', response: message);
+    return StoneResponse(message: message);
   }
 
   static StoneTransactionModel convertToStoneTransactionModel(String message) {
-    if (message.contains(' => ')) {
-      final split = message.split(' => ');
-      if (split.length > 1) {
-        final response = split[1];
-        if (response.contains('{')) {
-          final model = json.decode(response);
-          return StoneTransactionModel.fromMap(model);
-        }
-      }
+    if (message.contains('{')) {
+      final map = json.decode(message);
+      return StoneTransactionModel.fromMap(map);
     }
     return StoneTransactionModel.toError(message);
   }
@@ -62,6 +52,12 @@ abstract class IStoneHelper {
       case PaymentTypeHandler.ON_FINISHED_RESPONSE:
         {
           iStoneHandler.onFinishedResponse(call.arguments);
+          _stSmartHandler(message: call.arguments, iStoneSmartHanlder: stoneSmartHanlder);
+        }
+        break;
+      case PaymentTypeHandler.ON_CHANGED:
+        {
+          iStoneHandler.onChanged(call.arguments);
           _stSmartHandler(message: call.arguments, iStoneSmartHanlder: stoneSmartHanlder);
         }
         break;
@@ -145,6 +141,11 @@ abstract class IStoneHelper {
       case PaymentTypeHandler.ON_FINISHED_RESPONSE:
         {
           iStoneSmartHanlder.onFinishedResponse(IStoneHelper.convertToStoneTransactionModel(message));
+        }
+        break;
+      case PaymentTypeHandler.ON_CHANGED:
+        {
+          iStoneSmartHanlder.onChanged(IStoneHelper.convertToStoneResponse(message));
         }
         break;
       case PaymentTypeHandler.ON_LOADING:

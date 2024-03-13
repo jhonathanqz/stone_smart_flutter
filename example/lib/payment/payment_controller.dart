@@ -76,4 +76,9 @@ class PaymentController extends IStoneHandler {
 
     enableRefund = true;
   }
+
+  @override
+  void onChanged(String message) {
+    // TODO: implement onChanged
+  }
 }
