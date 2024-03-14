@@ -14,6 +14,8 @@
 
 <br>
 
+## Plugin não oficial!!!
+
 ## :dart: Sobre
 
 Projeto destinado a facilitar a integração com o SDK da Stone Smart no Flutter.
