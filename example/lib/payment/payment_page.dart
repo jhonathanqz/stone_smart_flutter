@@ -34,7 +34,9 @@ class _PaymentPageState extends State<PaymentPage> {
           ),
           TextField(
             onChanged: (value) => setState(() {
-              controller.setSaleValue(moneyController.text.isNotEmpty ? double.parse(moneyController.text) : 0.0);
+              controller.setSaleValue(moneyController.text.isNotEmpty
+                  ? double.parse(moneyController.text)
+                  : 0.0);
             }),
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(hintText: "Digite o valor"),
@@ -71,7 +73,9 @@ class _PaymentPageState extends State<PaymentPage> {
                         setState(() {
                           controller.clickPayment = true;
                         });
-                        StoneSmart.instance().payment.creditPayment(controller.saleValue);
+                        StoneSmart.instance()
+                            .payment
+                            .creditPayment(controller.saleValue);
                       }
                     : null,
               ),
@@ -99,7 +103,9 @@ class _PaymentPageState extends State<PaymentPage> {
                         setState(() {
                           controller.clickPayment = true;
                         });
-                        StoneSmart.instance().payment.voucherPayment(controller.saleValue);
+                        StoneSmart.instance()
+                            .payment
+                            .voucherPayment(controller.saleValue);
                       }
                     : null,
               ),
@@ -110,7 +116,9 @@ class _PaymentPageState extends State<PaymentPage> {
                   setState(() {
                     controller.clickPayment = true;
                   });
-                  StoneSmart.instance().payment.activePinpad(appName: 'AppDemo', stoneCode: '206192723');
+                  StoneSmart.instance()
+                      .payment
+                      .activePinpad(appName: 'AppDemo', stoneCode: '206192723');
                 },
               ),
             ],
