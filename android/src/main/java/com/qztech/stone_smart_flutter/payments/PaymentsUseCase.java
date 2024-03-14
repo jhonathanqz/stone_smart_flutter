@@ -77,8 +77,6 @@ public class PaymentsUseCase {
     if(userModel == null) {
       userModel = StoneStart.init(context);
     }
-
-    Log.d("print", "*** STONE -> userModel: " + (userModel != null ? userModel.get(0).toString() : null));
   }
 
   public void transaction(
@@ -110,7 +108,6 @@ public class PaymentsUseCase {
           TransactionDAO transactionDAO = new TransactionDAO(context);
           List<TransactionObject> transactionObjects = transactionDAO.getAllTransactionsOrderByIdDesc();
           checkStatusWithErrorTransaction(provider.getTransactionStatus(), context);
-          Log.d("print", "*** STONE -> transaction onSuccess: " + transactionObjects.get(0));
           actionResult.setTransactionStatus(provider.getTransactionStatus().toString());
           actionResult.setMessageFromAuthorize(provider.getMessageFromAuthorize());
           actionResult.setAuthorizationCode(provider.getAuthorizationCode());
@@ -127,13 +124,10 @@ public class PaymentsUseCase {
         }
         @Override
         public void onStatusChanged(Action action) {
-          Log.d("print", "*** STONE -> onStatusChanged: " + action.toString());
           String actionMessage = mStoneHelper.getMessageFromTransactionAction(action);
-          Log.d("print", "*** STONE -> textoOnStatusChanged: " + actionMessage);
           mFragment.onMessage(actionMessage);
           if (action == Action.TRANSACTION_WAITING_QRCODE_SCAN) {
             basicResult.setMethod("QRCode");
-            //basicResult.setQrCodeBitmap(transaction.getQRCode());
             basicResult.setMessage(mStoneHelper.convertBitmapToString(transaction.getQRCode()));
             mFragment.onChanged(convertBasicResultToJson(basicResult));
             mFragment.onAuthProgress(convertBasicResultToJson(basicResult));
@@ -141,7 +135,6 @@ public class PaymentsUseCase {
         }
         @Override
         public void onError() {
-          Log.d("print", "*** STONE -> transaction onError2: " + mStoneHelper.getErrorFromErrorList(provider.getListOfErrors()));
           mFragment.onMessage("Erro ao realizar transação");
 
           checkStatusWithErrorTransaction(provider.getTransactionStatus(), context);
@@ -167,8 +160,6 @@ public class PaymentsUseCase {
       });
       provider.execute();
     } catch (Exception e) {
-      Log.d("print", "*** STONE -> Error_catch1: " + e.toString());
-      Log.d("print", "*** STONE -> Error_catch2: " + e.getMessage());
       basicResult.setResult(999999);
       basicResult.setErrorMessage(e.getMessage());
 
@@ -179,16 +170,12 @@ public class PaymentsUseCase {
   }
 
   public void abortCurrentPosTransaction() {
-    Log.d("print", "*** STONE -> Entrei no abortPosTransaction");
     if(posTransactionProvider == null){
-      Log.d("print", "*** STONE -> abortPosTransaction é NULL");
       return;
     }
     try {
       posTransactionProvider.abortPayment();
-      Log.d("print", "*** STONE -> EXECUTEI abortPosTransaction");
     } catch (Exception error){
-      Log.d("print", "*** STONE -> ERRO CATCH no abortPosTransaction: " + error.getMessage());
   }
   }
   private String convertActionToJson(ActionResult actionResult) {
@@ -244,21 +231,15 @@ public class PaymentsUseCase {
           String stoneCode,
           Context context
   ) {
-    Log.d("print", "*** STONE -> iniciando ativação PINPAD");
-    Log.d("print", "*** STONE -> appName: " + appName);
-    Log.d("print", "*** STONE -> stoneCode: " + stoneCode);
     mFragment.onMessage("Iniciando ativação");
     Stone.setAppName(appName);
     checkUserModel(context);
       BasicResult basicResult = new BasicResult();
-      Log.d("print", "*** STONE -> ativação 2");
       if (userModel == null) {
-        Log.d("print", "*** STONE -> ativação 3");
         ActiveApplicationProvider activeApplicationProvider = getActiveApplicationProvider(context);
         activeApplicationProvider.activate(stoneCode);
 
       } else {
-        Log.d("print", "*** STONE -> ativação 5");
         mFragment.onMessage("Terminal ativado");
 
         basicResult.setMethod("active");
@@ -276,22 +257,16 @@ public class PaymentsUseCase {
           Map<StoneKeyType, String> stoneKeys,
           Context context
   ) {
-    Log.d("print", "*** STONE -> iniciando ativação PINPAD");
-    Log.d("print", "*** STONE -> appName: " + appName);
-    Log.d("print", "*** STONE -> stoneCode: " + stoneCode);
     mFragment.onMessage("Iniciando ativação");
     Stone.setAppName(appName);
     List<UserModel> userList = StoneStart.init(context, stoneKeys);
     userModel = userList;
     BasicResult basicResult = new BasicResult();
-    Log.d("print", "*** STONE -> ativação 2");
     if (userList == null) {
-      Log.d("print", "*** STONE -> ativação 3");
       ActiveApplicationProvider activeApplicationProvider = getActiveApplicationProvider(context);
       activeApplicationProvider.activate(stoneCode);
 
     } else {
-      Log.d("print", "*** STONE -> ativação 5");
       mFragment.onMessage("Terminal ativado");
 
       basicResult.setMethod("active");
@@ -338,7 +313,6 @@ public class PaymentsUseCase {
       }
       @Override
       public void onError() {
-        Log.d("print", "*** STONE -> ABORT_onError: " + mStoneHelper.getErrorFromErrorList(provider.getListOfErrors()));
         String error = currentTransactionObject.getActionCode();
         basicResult.setResult(999999);
         basicResult.setErrorMessage(mStoneHelper.getErrorFromErrorList(provider.getListOfErrors()));
@@ -354,7 +328,6 @@ public class PaymentsUseCase {
 
   @NonNull
   private ActiveApplicationProvider getActiveApplicationProvider(Context context) {
-    Log.d("print", "*** STONE -> ENTREI ATIVAÇÃO STONE");
     ActiveApplicationProvider activeApplicationProvider = new ActiveApplicationProvider(context);
 
     activeApplicationProvider.setDialogMessage("Ativando o Stone Code");
@@ -368,7 +341,6 @@ public class PaymentsUseCase {
     activeApplicationProvider.setConnectionCallback(new StoneCallbackInterface() {
       @Override
       public void onSuccess() {
-        Log.d("print", "*** STONE -> ativado com sucesso");
         mFragment.onMessage("Terminal ativado");
         mFragment.onTransactionSuccess();
         basicResult.setResult(0);
@@ -380,7 +352,6 @@ public class PaymentsUseCase {
 
       @Override
       public void onError() {
-        Log.d("print", "*** STONE -> ativação onError");
         mFragment.onMessage("Erro ao ativar terminal");
         basicResult.setResult(999999);
         basicResult.setErrorMessage(mStoneHelper.getErrorFromErrorList(activeApplicationProvider.getListOfErrors()));
@@ -402,19 +373,16 @@ public class PaymentsUseCase {
   public void onReversalTransaction(Context context) {
     BasicResult basicResult = new BasicResult();
     basicResult.setMethod("reversal");
-    Log.d("print", "*** STONE -> Entrei no onReversal");
 
     try {
       ReversalProvider reversalProvider = new ReversalProvider(context);
       mFragment.onMessage("Cancelando transação com erro");
       reversalProvider.setDialogMessage("Cancelando transação com erro");
       reversalProvider.isDefaultUI();
-      Log.d("print", "*** STONE -> Executando o onReversal");
       reversalProvider.setConnectionCallback(new StoneCallbackInterface() {
         @Override
         public void onSuccess() {
           ResponseCodeEnum responseCodeEnum = reversalProvider.getResponseCodeEnum();
-          Log.d("print", "*** STONE -> onSuccess onReversal: " + mStoneHelper.getMessageFromResponseCodeEnum(responseCodeEnum));
           basicResult.setResult(0);
           basicResult.setMessage(mStoneHelper.getMessageFromResponseCodeEnum(responseCodeEnum));
 
@@ -433,7 +401,6 @@ public class PaymentsUseCase {
         @Override
         public void onError() {
           ResponseCodeEnum responseCodeEnum = reversalProvider.getResponseCodeEnum();
-          Log.d("print", "*** STONE -> onError no onReversal: " + mStoneHelper.getMessageFromResponseCodeEnum(responseCodeEnum));
           mFragment.onMessage("Erro processar transação " + mStoneHelper.getMessageFromResponseCodeEnum(responseCodeEnum));
           basicResult.setResult(999999);
           basicResult.setErrorMessage(mStoneHelper.getMessageFromResponseCodeEnum(responseCodeEnum));
@@ -443,7 +410,6 @@ public class PaymentsUseCase {
       });
       reversalProvider.execute();
     } catch (Exception error) {
-      Log.d("print", "*** STONE -> Catch no onReversal: " + error.getMessage());
       basicResult.setErrorMessage(error.getMessage());
       mFragment.onError(convertBasicResultToJson(basicResult));
       mFragment.onMessage("Erro ao tentar reverter transação");

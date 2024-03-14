@@ -51,10 +51,8 @@ public class PaymentsPresenter {
     public void activate(String appName,
                          String stoneCode,
                          Context context) {
-        Log.d("print", "*** ATIVANDO PINPAD: " + stoneCode);
         mFragment.onMessage("Ativando terminal");
         mUseCase.initializeAndActivatePinpad(appName, stoneCode, context);
-        Log.d("print", "*** FIM ATIVAÇÃO: ");
     }
 
     public void activateWithCredentials(String appName,

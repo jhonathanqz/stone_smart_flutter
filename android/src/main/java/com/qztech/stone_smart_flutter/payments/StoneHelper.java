@@ -24,14 +24,12 @@ public class StoneHelper {
         transaction.setAmount(amount);
         transaction.setInstalmentTransaction(getInstallment(parc, withInterest));
         TypeOfTransactionEnum typeSelected = getTypeTransaction(typeTransaction);
-        Log.d("print", "*** STONE -> TYPE_TRANSACTION: " + typeSelected);
         transaction.setTypeOfTransaction(typeSelected);
         transaction.setCapture(true);
         return transaction;
     }
 
     TypeOfTransactionEnum getTypeTransaction(int type) {
-        Log.d("print", "*** STONE -> TYPE_TRANSACTION_VEIO: " + type);
         switch (type) {
             case 1:
                 return TypeOfTransactionEnum.CREDIT;
