@@ -285,12 +285,12 @@ Este projeto foi desenvolvido por:
 <a href="https://github.com/jhonathanqz">
   <img src="https://avatars.githubusercontent.com/u/74057391?s=96&v=4" height=90 />
 </a>
-<a href="https://github.com/jhonathanqz">
+<a href="https://github.com/Qz-Developer">
   <img src="https://avatars.githubusercontent.com/u/149726256?s=200&v=4" height=90 />
 </a>
 <br>
-<a href="https://github.com/gabuldev" target="_blank">Jhonathan Queiroz</a> e
-<a href="https://github.com/jhonathanqz" target="_blank">QZ Tech</a>
+<a href="https://github.com/jhonathanqz" target="_blank">Jhonathan Queiroz</a> e
+<a href="https://github.com/Qz-Developer" target="_blank">QZ Tech</a>
 </div>
 
 &#xa0;
