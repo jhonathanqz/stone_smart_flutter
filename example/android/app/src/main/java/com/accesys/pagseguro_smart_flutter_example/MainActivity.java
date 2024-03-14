@@ -1,4 +1,4 @@
-package com.accesys.stone_smart_flutter_example;
+package com.qztech.stone_smart_flutter_example;
 
 import io.flutter.embedding.android.FlutterActivity;
 
