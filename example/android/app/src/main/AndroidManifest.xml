@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.accesys.stone_smart_flutter_example">
+    package="com.qztech.stone_smart_flutter_example">
    
    <permission android:name="br.com.uol.stone.permission.MANAGE_PAYMENTS"/>
    
