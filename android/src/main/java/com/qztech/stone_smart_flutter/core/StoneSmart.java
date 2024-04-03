@@ -27,6 +27,8 @@ public class StoneSmart {
 
     private static final String PAYMENT_REVERSAL = "paymentReversal";
 
+    private static final String PAYMENT_PRINTER_TRANSACTION = "paymentPrinterTransaction";
+
     final Context currentContext;
 
     public StoneSmart(Context context, MethodChannel channel) {
@@ -41,6 +43,12 @@ public class StoneSmart {
 
         if(call.method.equals(PAYMENT_REVERSAL)) {
             this.payment.onReversal(currentContext);
+            return;
+        }
+
+        if(call.method.equals(PAYMENT_PRINTER_TRANSACTION)) {
+            boolean isPrinter = call.argument("isPrinter");
+            this.payment.printerCurrentTransaction(currentContext, isPrinter);
             return;
         }
 

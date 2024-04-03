@@ -117,6 +117,10 @@ public class ActionResult {
     return 0;
   }
 
+  private boolean isPrinterRequest;
+
+  public void setPrinterRequest(boolean value) {this.isPrinterRequest = value;}
+
 
 
   public void buildResponseStoneTransaction(List<TransactionObject> transactionObjects) {
@@ -136,6 +140,7 @@ public class ActionResult {
       setManufacture(Stone.getPosAndroidDevice().getPosAndroidManufacturer());
       setTransactionReference(String.valueOf(list.getTransactionReference()));
       setCardBrand(String.valueOf(list.getCardBrand()));//
+      setPrinterRequest(true);
       
     }
     this.isBuildResponse = 1;

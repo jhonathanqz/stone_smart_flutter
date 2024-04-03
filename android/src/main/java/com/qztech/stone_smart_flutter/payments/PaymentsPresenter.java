@@ -48,6 +48,10 @@ public class PaymentsPresenter {
         mUseCase.initTransaction(context, amount, typeTransaction, parc, withInterest, stoneKeys);
     }
 
+    public void printerCurrentTransaction(Context context, boolean isPrinter) {
+        mUseCase.printerCurrentTransaction(context, isPrinter);
+    }
+
     public void activate(String appName,
                          String stoneCode,
                          Context context) {

@@ -91,6 +91,7 @@ public class PaymentsUseCase {
     try {
       mFragment.onMessage("Iniciando transação");
       checkUserModel(context);
+      currentTransactionObject = null;
       final TransactionObject transaction = mStoneHelper.getTransactionObject(amount, typeTransaction, parc, withInterest);
       currentTransactionObject = transaction;
 
@@ -111,16 +112,11 @@ public class PaymentsUseCase {
           actionResult.setTransactionStatus(provider.getTransactionStatus().toString());
           actionResult.setMessageFromAuthorize(provider.getMessageFromAuthorize());
           actionResult.setAuthorizationCode(provider.getAuthorizationCode());
-
-          //mFragment.onMessage(provider.getMessageFromAuthorize());
-
           actionResult.buildResponseStoneTransaction(transactionObjects);
           String jsonStoneResult = convertActionToJson(actionResult);
           finishTransaction(jsonStoneResult);
-          mStonePrinter.printerFromTransaction(context, transaction);
-          currentTransactionObject = null;
+
           posTransactionProvider = null;
-          //alertPrinter(context, jsonStoneResult, transaction);
         }
         @Override
         public void onStatusChanged(Action action) {
@@ -167,6 +163,24 @@ public class PaymentsUseCase {
       currentTransactionObject = null;
       posTransactionProvider = null;
     }
+  }
+
+  private void changePrinterRequest() {
+    BasicResult basicResult = new BasicResult();
+    basicResult.setMethod("printerTransaction");
+    basicResult.setMessage("Deseja imprimir sua via?");
+    mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
+  }
+
+  public void printerCurrentTransaction(Context context, boolean isPrinter) {
+    if(currentTransactionObject == null) return;
+    if(!isPrinter) {
+      currentTransactionObject = null;
+      return;
+    }
+    try {
+      mStonePrinter.printerFromTransaction(context, currentTransactionObject);
+    } catch (Exception error) {}
   }
 
   public void abortCurrentPosTransaction() {
@@ -222,7 +236,6 @@ public class PaymentsUseCase {
   private void finishTransaction(String result) {
     mFragment.onTransactionSuccess();
     mFragment.onFinishedResponse(result);
-    currentTransactionObject = null;
   }
 
 
