@@ -69,7 +69,7 @@ public class StoneSmart {
         }
 
         if(call.method.equals(PAYMENT_ABORT)){
-            this.payment.abortCurrentPosTransaction();
+            this.payment.abortCurrentPosTransaction(currentContext);
             return;
         }
 

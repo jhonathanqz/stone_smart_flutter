@@ -22,6 +22,7 @@ import br.com.stone.posandroid.providers.PosTransactionProvider;
 import stone.application.StoneStart;
 import stone.application.enums.Action;
 import stone.application.enums.TransactionStatusEnum;
+import stone.application.enums.TypeOfTransactionEnum;
 import stone.application.interfaces.StoneActionCallback;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.application.xml.enums.ResponseCodeEnum;
@@ -64,7 +65,7 @@ public class PaymentsUseCase {
                               boolean withInterest,
                               Map<StoneKeyType, String> stoneKeys
                               ){
-    if(stoneKeys == null){
+    if(stoneKeys == null) {
       checkUserModel(context);
       transaction(context, amount, typeTransaction, parc, withInterest);
       return;
@@ -74,9 +75,9 @@ public class PaymentsUseCase {
   }
 
   private void checkUserModel(Context context) {
-    if(userModel == null) {
-      userModel = StoneStart.init(context);
-    }
+      if(userModel == null) {
+        userModel = StoneStart.init(context);
+      }
   }
 
   public void transaction(
@@ -90,13 +91,13 @@ public class PaymentsUseCase {
     basicResult.setMethod("transaction");
     try {
       mFragment.onMessage("Iniciando transação");
-      checkUserModel(context);
       currentTransactionObject = null;
       final TransactionObject transaction = mStoneHelper.getTransactionObject(amount, typeTransaction, parc, withInterest);
       currentTransactionObject = transaction;
 
       final PosTransactionProvider provider = new PosTransactionProvider(context, transaction, userModel.get(0));
       posTransactionProvider = provider;
+      //Essa variavel posTransactionProvider está armazenando o provider para que possamos cancelar a transação
 
       ActionResult actionResult = new ActionResult();
       actionResult.setMethod("transaction");
@@ -183,15 +184,20 @@ public class PaymentsUseCase {
     } catch (Exception error) {}
   }
 
-  public void abortCurrentPosTransaction() {
+  public void abortCurrentPosTransaction(Context context) {
     if(posTransactionProvider == null){
       return;
     }
     try {
       posTransactionProvider.abortPayment();
     } catch (Exception error){
+      BasicResult basicResult = new BasicResult();
+      basicResult.setResult(999999);
+      basicResult.setErrorMessage(error.getMessage());
+      mFragment.onError(convertBasicResultToJson(basicResult));
+    }
   }
-  }
+
   private String convertActionToJson(ActionResult actionResult) {
     return getGson().toJson(actionResult);
   }
@@ -244,9 +250,10 @@ public class PaymentsUseCase {
           String stoneCode,
           Context context
   ) {
-    mFragment.onMessage("Iniciando ativação");
-    Stone.setAppName(appName);
-    checkUserModel(context);
+    try {
+      mFragment.onMessage("Iniciando ativação");
+      Stone.setAppName(appName);
+      checkUserModel(context);
       BasicResult basicResult = new BasicResult();
       if (userModel == null) {
         ActiveApplicationProvider activeApplicationProvider = getActiveApplicationProvider(context);
@@ -262,6 +269,7 @@ public class PaymentsUseCase {
         mFragment.onFinishedResponse(resultJson);
         mFragment.onAuthProgress(resultJson);
       }
+    } catch (Exception error) {}
   }
 
   public void initializeAndActivatePinpadWithCredentials(
@@ -270,25 +278,27 @@ public class PaymentsUseCase {
           Map<StoneKeyType, String> stoneKeys,
           Context context
   ) {
-    mFragment.onMessage("Iniciando ativação");
-    Stone.setAppName(appName);
-    List<UserModel> userList = StoneStart.init(context, stoneKeys);
-    userModel = userList;
-    BasicResult basicResult = new BasicResult();
-    if (userList == null) {
-      ActiveApplicationProvider activeApplicationProvider = getActiveApplicationProvider(context);
-      activeApplicationProvider.activate(stoneCode);
+    try {
+      mFragment.onMessage("Iniciando ativação");
+      Stone.setAppName(appName);
+      List<UserModel> userList = StoneStart.init(context, stoneKeys);
+      userModel = userList;
+      BasicResult basicResult = new BasicResult();
+      if (userList == null) {
+        ActiveApplicationProvider activeApplicationProvider = getActiveApplicationProvider(context);
+        activeApplicationProvider.activate(stoneCode);
 
-    } else {
-      mFragment.onMessage("Terminal ativado");
+      } else {
+        mFragment.onMessage("Terminal ativado");
 
-      basicResult.setMethod("active");
-      basicResult.setResult(0);
-      basicResult.setMessage("Terminal ativado");
-      String resultJson = convertBasicResultToJson(basicResult);
-      mFragment.onFinishedResponse(resultJson);
-      mFragment.onAuthProgress(resultJson);
-    }
+        basicResult.setMethod("active");
+        basicResult.setResult(0);
+        basicResult.setMessage("Terminal ativado");
+        String resultJson = convertBasicResultToJson(basicResult);
+        mFragment.onFinishedResponse(resultJson);
+        mFragment.onAuthProgress(resultJson);
+      }
+    }catch (Exception error){}
   }
 
   public void cancelTransaction(Context context, String amount, int typeTransaction) {
@@ -297,6 +307,20 @@ public class PaymentsUseCase {
     try {
       final TransactionObject transaction = mStoneHelper.getTransactionObject(amount, typeTransaction, 1, false);
       final CancellationProvider cancellationProvider = getCancellationProvider(context, transaction);
+      cancellationProvider.execute();
+    } catch (Exception error) {
+      mFragment.onMessage("Erro ao cancelar transação");
+      basicResult.setResult(999999);
+      basicResult.setErrorMessage(error.getMessage());
+      mFragment.onError(convertBasicResultToJson(basicResult));
+    }
+  }
+
+  public void cancelTransactionpIX(Context context) {
+    BasicResult basicResult = new BasicResult();
+    basicResult.setMethod("cancel");
+    try {
+      final CancellationProvider cancellationProvider = getCancellationProvider(context, currentTransactionObject);
       cancellationProvider.execute();
     } catch (Exception error) {
       mFragment.onMessage("Erro ao cancelar transação");

@@ -67,6 +67,6 @@ dependencies{
     implementation "br.com.stone:stone-sdk-posandroid-sunmi:$stone_sdk_version"
     //implementation "br.com.stone:stone-sdk-posandroid-gertec:$stone_sdk_version"
 
-    // debugImplementation "com.github.tony19:logback-android:2.0.0"
-    // debugImplementation 'br.com.stone.sdk.android:debugmode:4.0.3'
+    debugImplementation "com.github.tony19:logback-android:2.0.0"
+    debugImplementation 'br.com.stone.sdk.android:debugmode:4.0.3'
 }

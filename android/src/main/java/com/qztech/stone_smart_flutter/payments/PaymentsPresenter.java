@@ -35,7 +35,7 @@ public class PaymentsPresenter {
                               String qrCodeAuthorization,
                               String qrCodeProviderid) {
         if(qrCodeProviderid == null && qrCodeAuthorization == null){
-            mUseCase.transaction(context, amount, typeTransaction, parc, withInterest);
+            mUseCase.initTransaction(context, amount, typeTransaction, parc, withInterest, null);
             return;
         }
         Map<StoneKeyType, String> stoneKeys = new HashMap<StoneKeyType, String>()
@@ -82,8 +82,8 @@ public class PaymentsPresenter {
         mUseCase.onReversalTransaction(context);
     }
 
-    public void abortCurrentPosTransaction() {
-        mUseCase.abortCurrentPosTransaction();
+    public void abortCurrentPosTransaction(Context context) {
+        mUseCase.abortCurrentPosTransaction(context);
     }
 
 
