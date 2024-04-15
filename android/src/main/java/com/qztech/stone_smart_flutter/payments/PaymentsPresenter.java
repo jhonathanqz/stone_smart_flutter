@@ -82,8 +82,12 @@ public class PaymentsPresenter {
         mUseCase.onReversalTransaction(context);
     }
 
-    public void abortCurrentPosTransaction(Context context) {
-        mUseCase.abortCurrentPosTransaction(context);
+    public void abortCurrentPosTransaction() {
+        mUseCase.abortCurrentPosTransaction();
+    }
+
+    public void abortPIXtransaction(Context context){
+        mUseCase.abortPIXtransaction(context);
     }
 
 

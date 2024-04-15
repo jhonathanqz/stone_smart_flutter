@@ -150,6 +150,10 @@ class Payment {
     return await channel.invokeMethod(PaymentTypeCall.ABORT.method);
   }
 
+  Future<bool> abortPIXTransaction() async {
+    return await channel.invokeMethod(PaymentTypeCall.ABORT_PIX.method);
+  }
+
   //Function to invoke method from printer current transaction with sdk the Stone
   Future<bool> printerCurrentTransaction({
     required bool isPrinter,

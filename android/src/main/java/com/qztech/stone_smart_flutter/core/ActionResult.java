@@ -35,76 +35,156 @@ public class ActionResult {
   private String errorMessage;
   private String authorizationCode;
 
-  public void setAuthorizationCode(String value){this.authorizationCode = value;}
+  public void setAuthorizationCode(String value){
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.authorizationCode = value;
+  }
 
   public String getErrorMessage() {
     return errorMessage;
   }
 
-  public void setErrorMessage(String errorMsg) {
-    this.errorMessage = errorMsg;
+  public void setErrorMessage(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.errorMessage = value;
   }
 
   public String getMethod(){return this.method;}
-  public void setMethod(String value) {this.method = value;}
+  public void setMethod(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.method = value;}
   public String getTransactionStatus(){return this.transactionStatus;}
-  public void setTransactionStatus(String value){this.transactionStatus = value;}
+  public void setTransactionStatus(String value){
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.transactionStatus = value;}
   public String getMessageFromAuthorize(){return this.messageFromAuthorize;}
-  public void setMessageFromAuthorize(String value){this.messageFromAuthorize = value;}
+  public void setMessageFromAuthorize(String value){
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.messageFromAuthorize = value;}
   public String getActionCode(){return this.actionCode;}
-  public void setActionCode(String value){this.actionCode = value;}
+  public void setActionCode(String value){
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.actionCode = value;}
 
   public String getSerialNumber() {return this.serialNumber;}
-  public void setSerialNumber(String value) {this.serialNumber = value;}
+  public void setSerialNumber(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.serialNumber = value;}
   public String getManufacture(){return this.manufacture;}
-  public void setManufacture(String value){this.manufacture = value;}
+  public void setManufacture(String value){
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.manufacture = value;}
 
   public int getIdFromBase(){return this.idFromBase;}
-  public void setIdFromBase(int value) {this.idFromBase = value;}
+  public void setIdFromBase(int value) {
+
+    this.idFromBase = value;}
 
   public String getAmount() {
     return this.amount;
   }
-  public void setAmount(String value) {this.amount = value;}
+  public void setAmount(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.amount = value;}
 
   public String getCardHolderNumber() {
     return this.cardHolderNumber;
   }
-  public void setCardHolderNumber(String value) {this.cardHolderNumber = value;}
+  public void setCardHolderNumber(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.cardHolderNumber = value;}
 
   public String getCardBrand() {
     return this.cardBrand;
   }
-  public void setCardBrand(String value) { this.cardBrand = value;}
+  public void setCardBrand(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.cardBrand = value;}
 
   public String getDate() {
     return this.date;
   }
-  public void setDate(String value) {this.date = value;}
+  public void setDate(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.date = value;}
 
   public String getTime() {
     return this.time;
   }
-  public void setTime(String value) {this.time = value;}
+  public void setTime(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.time = value;}
 
   public String getAid(){return this.aid;}
-  public void setAid(String value) {this.aid = value;}
+  public void setAid(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.aid = value;}
   public String getArcq() {return this.arcq;}
-  public void setArcq(String value) {this.arcq = value;}
+  public void setArcq(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.arcq = value;}
   public String getTransactionReference(){return this.transactionReference;}
-  public void setTransactionReference(String value) {this.transactionReference = value;}
+  public void setTransactionReference(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.transactionReference = value;}
   public String getSaleAffiliationKey(){return this.saleAffiliationKey;}
-  public void setSaleAffiliationKey(String value) {this.saleAffiliationKey = value;}
+  public void setSaleAffiliationKey(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.saleAffiliationKey = value;}
   public String getEntryMode(){return this.entryMode;}
-  public void setEntryMode(String value) {this.entryMode = value;}
+  public void setEntryMode(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.entryMode = value;}
   public String getTypeOfTransactionEnum(){return this.typeOfTransactionEnum;}
-  public void setTypeOfTransactionEnum(String value) {this.typeOfTransactionEnum = value;}
+  public void setTypeOfTransactionEnum(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.typeOfTransactionEnum = value;}
 
 
 
   private int result = 0;
 
-  public void setResult(int value) {this.result = value;}
+  public void setResult(int value) {
+
+    this.result = value;}
 
   int isBuildResponse = 0;
 
@@ -141,8 +221,9 @@ public class ActionResult {
       setTransactionReference(String.valueOf(list.getTransactionReference()));
       setCardBrand(String.valueOf(list.getCardBrand()));//
       setPrinterRequest(true);
-      
     }
     this.isBuildResponse = 1;
   }
+
+
 }

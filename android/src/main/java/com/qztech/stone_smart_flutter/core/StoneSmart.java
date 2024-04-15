@@ -23,6 +23,7 @@ public class StoneSmart {
 
     private static final String ACTIVE_PINPAD_CREDENTIALS = "paymentActivePinpadCredentials";
     private static final String PAYMENT_ABORT = "paymentAbort";
+    private static final String PAYMENT_ABORT_PIX = "paymentAbortPix";
     private static final String PAYMENT_CANCEL_TRANSACTION = "paymentCancelTransaction";
 
     private static final String PAYMENT_REVERSAL = "paymentReversal";
@@ -68,8 +69,13 @@ public class StoneSmart {
             return;
         }
 
+        if(call.method.equals(PAYMENT_ABORT_PIX)){
+            this.payment.abortPIXtransaction(currentContext);
+            return;
+        }
+
         if(call.method.equals(PAYMENT_ABORT)){
-            this.payment.abortCurrentPosTransaction(currentContext);
+            this.payment.abortCurrentPosTransaction();
             return;
         }
 

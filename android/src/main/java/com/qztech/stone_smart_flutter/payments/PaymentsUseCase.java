@@ -78,6 +78,11 @@ public class PaymentsUseCase {
       if(userModel == null) {
         userModel = StoneStart.init(context);
       }
+
+      boolean isInitialized = StoneStart.INSTANCE.getSDKInitialized();
+      if(!isInitialized){
+        userModel = StoneStart.init(context);
+      }
   }
 
   public void transaction(
@@ -92,11 +97,12 @@ public class PaymentsUseCase {
     try {
       mFragment.onMessage("Iniciando transação");
       currentTransactionObject = null;
+      posTransactionProvider = null;
+
       final TransactionObject transaction = mStoneHelper.getTransactionObject(amount, typeTransaction, parc, withInterest);
       currentTransactionObject = transaction;
 
-      final PosTransactionProvider provider = new PosTransactionProvider(context, transaction, userModel.get(0));
-      posTransactionProvider = provider;
+      posTransactionProvider = new PosTransactionProvider(context, transaction, userModel.get(0));
       //Essa variavel posTransactionProvider está armazenando o provider para que possamos cancelar a transação
 
       ActionResult actionResult = new ActionResult();
@@ -104,15 +110,15 @@ public class PaymentsUseCase {
 
       mFragment.onMessage("Comunicando com o servidor Stone. Aguarde.");
 
-      provider.setConnectionCallback(new StoneActionCallback() {
+      posTransactionProvider.setConnectionCallback(new StoneActionCallback() {
         @Override
         public void onSuccess() {
           TransactionDAO transactionDAO = new TransactionDAO(context);
           List<TransactionObject> transactionObjects = transactionDAO.getAllTransactionsOrderByIdDesc();
-          checkStatusWithErrorTransaction(provider.getTransactionStatus(), context);
-          actionResult.setTransactionStatus(provider.getTransactionStatus().toString());
-          actionResult.setMessageFromAuthorize(provider.getMessageFromAuthorize());
-          actionResult.setAuthorizationCode(provider.getAuthorizationCode());
+          checkStatusWithErrorTransaction(posTransactionProvider.getTransactionStatus(), context);
+          actionResult.setTransactionStatus(posTransactionProvider.getTransactionStatus().toString());
+          actionResult.setMessageFromAuthorize(posTransactionProvider.getMessageFromAuthorize());
+          actionResult.setAuthorizationCode(posTransactionProvider.getAuthorizationCode());
           actionResult.buildResponseStoneTransaction(transactionObjects);
           String jsonStoneResult = convertActionToJson(actionResult);
           finishTransaction(jsonStoneResult);
@@ -134,18 +140,18 @@ public class PaymentsUseCase {
         public void onError() {
           mFragment.onMessage("Erro ao realizar transação");
 
-          checkStatusWithErrorTransaction(provider.getTransactionStatus(), context);
+          checkStatusWithErrorTransaction(posTransactionProvider.getTransactionStatus(), context);
 
-          actionResult.setTransactionStatus(provider.getTransactionStatus().toString());
-          actionResult.setMessageFromAuthorize(provider.getMessageFromAuthorize());
-          actionResult.setAuthorizationCode(provider.getAuthorizationCode());
+          actionResult.setTransactionStatus(posTransactionProvider.getTransactionStatus().toString());
+          actionResult.setMessageFromAuthorize(posTransactionProvider.getMessageFromAuthorize());
+          actionResult.setAuthorizationCode(posTransactionProvider.getAuthorizationCode());
           actionResult.setResult(999999);
-          actionResult.setErrorMessage(mStoneHelper.getErrorFromErrorList(provider.getListOfErrors()));
+          actionResult.setErrorMessage(mStoneHelper.getErrorFromErrorList(posTransactionProvider.getListOfErrors()));
 
-          mFragment.onMessage(provider.getMessageFromAuthorize());
+          mFragment.onMessage(posTransactionProvider.getMessageFromAuthorize());
 
           basicResult.setResult(999999);
-          basicResult.setErrorMessage(mStoneHelper.getErrorFromErrorList(provider.getListOfErrors()));
+          basicResult.setErrorMessage(mStoneHelper.getErrorFromErrorList(posTransactionProvider.getListOfErrors()));
 
           mFragment.onError(convertBasicResultToJson(basicResult));
           String jsonError = convertActionToJson(actionResult);
@@ -155,13 +161,16 @@ public class PaymentsUseCase {
         }
 
       });
-      provider.execute();
+      posTransactionProvider.execute();
     } catch (Exception e) {
       basicResult.setResult(999999);
       basicResult.setErrorMessage(e.getMessage());
 
       mFragment.onError(convertBasicResultToJson(basicResult));
       currentTransactionObject = null;
+      if(posTransactionProvider != null){
+        abortCurrentPosTransaction();
+      }
       posTransactionProvider = null;
     }
   }
@@ -184,7 +193,7 @@ public class PaymentsUseCase {
     } catch (Exception error) {}
   }
 
-  public void abortCurrentPosTransaction(Context context) {
+  public void abortCurrentPosTransaction() {
     if(posTransactionProvider == null){
       return;
     }
@@ -196,6 +205,28 @@ public class PaymentsUseCase {
       basicResult.setErrorMessage(error.getMessage());
       mFragment.onError(convertBasicResultToJson(basicResult));
     }
+  }
+
+  public void abortPIXtransaction(Context context) {
+    Log.d("print", "****INICIANDO ABORT PIX");
+    try {
+      cancelTransactionPIX(context);
+    }catch (Exception err) {}
+
+    try {
+      posTransactionProvider.abortPayment();
+    } catch (Exception error){}
+
+
+    BasicResult basicResult = new BasicResult();
+    basicResult.setMethod("abortPix");
+    Log.d("print", "****FIM ABORT PIX");
+    mFragment.onMessage("Transação cancelada");
+    basicResult.setResult(999999);
+    basicResult.setMessage("Transação cancelada");
+    basicResult.setErrorMessage("Transação cancelada");
+    String jsonError = convertBasicResultToJson(basicResult);
+    mFragment.onFinishedResponse(jsonError);
   }
 
   private String convertActionToJson(ActionResult actionResult) {
@@ -316,18 +347,25 @@ public class PaymentsUseCase {
     }
   }
 
-  public void cancelTransactionpIX(Context context) {
+  public void cancelTransactionPIX(Context context) {
     BasicResult basicResult = new BasicResult();
-    basicResult.setMethod("cancel");
+    basicResult.setMethod("abortPix");
     try {
-      final CancellationProvider cancellationProvider = getCancellationProvider(context, currentTransactionObject);
+      final CancellationProvider cancellationProvider = new CancellationProvider(context, currentTransactionObject);
       cancellationProvider.execute();
     } catch (Exception error) {
-      mFragment.onMessage("Erro ao cancelar transação");
+      mFragment.onMessage("Transação cancelada");
       basicResult.setResult(999999);
-      basicResult.setErrorMessage(error.getMessage());
-      mFragment.onError(convertBasicResultToJson(basicResult));
+      basicResult.setMessage(error.getMessage());
+      String jsonError = convertBasicResultToJson(basicResult);
+      mFragment.onFinishedResponse(jsonError);
     }
+
+    try {
+      final TransactionObject transaction = mStoneHelper.getTransactionObject("1", 3, 1, false);
+      final PosTransactionProvider provider = new PosTransactionProvider(context, transaction, userModel.get(0));
+      provider.execute();
+    } catch(Exception e) {}
   }
 
   @NonNull
@@ -452,6 +490,4 @@ public class PaymentsUseCase {
       mFragment.onMessage("Erro ao tentar reverter transação");
     }
   }
-
-
 }

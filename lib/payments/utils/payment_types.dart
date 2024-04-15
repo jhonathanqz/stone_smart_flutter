@@ -71,6 +71,7 @@ enum PaymentTypeCall {
   PIX,
   VOUCHER,
   ABORT,
+  ABORT_PIX,
   LAST_TRANSACTION,
   REFUND,
   ACTIVEPINPAD,
@@ -143,6 +144,8 @@ extension PaymentTypeCallExt on PaymentTypeCall {
         return 'paymentActivePinpadCredentials';
       case PaymentTypeCall.PRINTER_TRANSACTION:
         return "paymentPrinterTransaction";
+      case PaymentTypeCall.ABORT_PIX:
+        return "paymentAbortPix";
     }
   }
 }
