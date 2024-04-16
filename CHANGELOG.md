@@ -1,3 +1,7 @@
+## 1.0.2
+
+- Fix abort pix payment
+
 ## 1.0.1
 
 - Fix documentation
