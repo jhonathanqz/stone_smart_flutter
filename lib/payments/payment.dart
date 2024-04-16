@@ -62,8 +62,7 @@ class Payment {
     required String qrCodeProviderid,
   }) async {
     try {
-      await channel
-          .invokeMethod(PaymentTypeCall.ACTIVEPINPAD_CREDENTIALS.method, {
+      await channel.invokeMethod(PaymentTypeCall.ACTIVEPINPAD_CREDENTIALS.method, {
         "appName": appName,
         "stoneCode": stoneCode,
         "qrCodeAuthorization": qrCodeAuthroization,
@@ -151,13 +150,25 @@ class Payment {
     return await channel.invokeMethod(PaymentTypeCall.ABORT.method);
   }
 
+  Future<bool> abortPIXTransaction() async {
+    return await channel.invokeMethod(PaymentTypeCall.ABORT_PIX.method);
+  }
+
+  //Function to invoke method from printer current transaction with sdk the Stone
+  Future<bool> printerCurrentTransaction({
+    required bool isPrinter,
+  }) async {
+    return await channel.invokeMethod(PaymentTypeCall.PRINTER_TRANSACTION.method, {
+      "isPrinter": isPrinter,
+    });
+  }
+
   //Function to invoke method from cancel transaction with sdk the Stone
   Future<bool> cancelTransaction({
     required int amount,
     required PaymentTypeTransaction transactionType,
   }) async {
-    return await channel
-        .invokeMethod(PaymentTypeCall.CANCEL_TRANSACTION.method, {
+    return await channel.invokeMethod(PaymentTypeCall.CANCEL_TRANSACTION.method, {
       "amount": amount.toString(),
       "transactionType": transactionType.type,
     });

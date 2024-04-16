@@ -23,9 +23,12 @@ public class StoneSmart {
 
     private static final String ACTIVE_PINPAD_CREDENTIALS = "paymentActivePinpadCredentials";
     private static final String PAYMENT_ABORT = "paymentAbort";
+    private static final String PAYMENT_ABORT_PIX = "paymentAbortPix";
     private static final String PAYMENT_CANCEL_TRANSACTION = "paymentCancelTransaction";
 
     private static final String PAYMENT_REVERSAL = "paymentReversal";
+
+    private static final String PAYMENT_PRINTER_TRANSACTION = "paymentPrinterTransaction";
 
     final Context currentContext;
 
@@ -44,6 +47,12 @@ public class StoneSmart {
             return;
         }
 
+        if(call.method.equals(PAYMENT_PRINTER_TRANSACTION)) {
+            boolean isPrinter = call.argument("isPrinter");
+            this.payment.printerCurrentTransaction(currentContext, isPrinter);
+            return;
+        }
+
         if(call.method.equals(ACTIVE_PINPAD)) {
             String appName = call.argument("appName");
             String stoneCode = call.argument("stoneCode");
@@ -57,6 +66,11 @@ public class StoneSmart {
             String qrCodeAuthotization = call.argument("qrCodeAuthorization");
             String qrCodeProviderid = call.argument("qrCodeProviderid");
             this.payment.activateWithCredentials(appName, stoneCode,qrCodeAuthotization, qrCodeProviderid, currentContext);
+            return;
+        }
+
+        if(call.method.equals(PAYMENT_ABORT_PIX)){
+            this.payment.abortPIXtransaction(currentContext);
             return;
         }
 
