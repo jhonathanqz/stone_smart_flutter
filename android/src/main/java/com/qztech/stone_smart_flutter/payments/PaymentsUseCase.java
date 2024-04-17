@@ -124,7 +124,7 @@ public class PaymentsUseCase {
           actionResult.buildResponseStoneTransaction(transactionObjects);
           String jsonStoneResult = convertActionToJson(actionResult);
           finishTransaction(jsonStoneResult);
-          printerReceiptTransaction(context, currentTransactionObject);
+          //printerReceiptTransaction(context, currentTransactionObject);
 
           posTransactionProvider = null;
         }
