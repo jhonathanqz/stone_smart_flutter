@@ -27,6 +27,7 @@ public class ActionResult {
   private String serialNumber;
   private String manufacture;
   private String actionCode;
+  private int cardBrandId;
 
   private String method;
   private String transactionStatus;
@@ -35,6 +36,10 @@ public class ActionResult {
   private String errorMessage;
   private String authorizationCode;
   private String transactionObject;
+
+  public void setCardBrandId(int value) {
+    this.cardBrandId = value;
+  }
 
   public void setTransactionObject(String value) {
     if(value == null || value.isEmpty()) {
@@ -209,6 +214,14 @@ public class ActionResult {
 
   public void setPrinterRequest(boolean value) {this.isPrinterRequest = value;}
 
+  public String cardSequenceNumber;
+  public void setCardSequenceNumber(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.cardSequenceNumber = value;
+  }
+
 
 
   public void buildResponseStoneTransaction(List<TransactionObject> transactionObjects) {
@@ -228,7 +241,10 @@ public class ActionResult {
       setManufacture(Stone.getPosAndroidDevice().getPosAndroidManufacturer());
       setTransactionReference(String.valueOf(list.getTransactionReference()));
       setCardBrand(String.valueOf(list.getCardBrandName()));//
+      setCardBrandId(list.getCardBrandId());
+      setCardSequenceNumber(list.getCardSequenceNumber());
       setTransactionObject(list.toString());
+      setAuthorizationCode(list.getAuthorizationCode());
       setPrinterRequest(true);
     }
     this.isBuildResponse = 1;
