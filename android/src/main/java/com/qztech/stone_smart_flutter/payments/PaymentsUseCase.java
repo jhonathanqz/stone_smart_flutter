@@ -18,9 +18,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import br.com.stone.posandroid.providers.PosPrintReceiptProvider;
 import br.com.stone.posandroid.providers.PosTransactionProvider;
 import stone.application.StoneStart;
 import stone.application.enums.Action;
+import stone.application.enums.ReceiptType;
 import stone.application.enums.TransactionStatusEnum;
 import stone.application.enums.TypeOfTransactionEnum;
 import stone.application.interfaces.StoneActionCallback;
@@ -122,6 +124,7 @@ public class PaymentsUseCase {
           actionResult.buildResponseStoneTransaction(transactionObjects);
           String jsonStoneResult = convertActionToJson(actionResult);
           finishTransaction(jsonStoneResult);
+          printerReceiptTransaction(context, currentTransactionObject);
 
           posTransactionProvider = null;
         }
@@ -191,6 +194,14 @@ public class PaymentsUseCase {
     try {
       mStonePrinter.printerFromTransaction(context, currentTransactionObject);
     } catch (Exception error) {}
+  }
+
+  public void printerReceiptTransaction(Context context, TransactionObject transactionObject) {
+    try {
+      PosPrintReceiptProvider printer = new PosPrintReceiptProvider(context, transactionObject, ReceiptType.MERCHANT);
+      printer.execute();
+    } catch(Exception e) {
+    }
   }
 
   public void abortCurrentPosTransaction() {
