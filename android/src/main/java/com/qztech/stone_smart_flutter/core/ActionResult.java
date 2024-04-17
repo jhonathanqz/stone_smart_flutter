@@ -34,6 +34,14 @@ public class ActionResult {
 
   private String errorMessage;
   private String authorizationCode;
+  private String transactionObject;
+
+  public void setTransactionObject(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.transactionObject = value;
+  }
 
   public void setAuthorizationCode(String value){
     if(value == null || value.isEmpty()) {
@@ -219,7 +227,8 @@ public class ActionResult {
       setSerialNumber(Stone.getPosAndroidDevice().getPosAndroidSerialNumber());
       setManufacture(Stone.getPosAndroidDevice().getPosAndroidManufacturer());
       setTransactionReference(String.valueOf(list.getTransactionReference()));
-      setCardBrand(String.valueOf(list.getCardBrand()));//
+      setCardBrand(String.valueOf(list.getCardBrandName()));//
+      setTransactionObject(list.toString());
       setPrinterRequest(true);
     }
     this.isBuildResponse = 1;
