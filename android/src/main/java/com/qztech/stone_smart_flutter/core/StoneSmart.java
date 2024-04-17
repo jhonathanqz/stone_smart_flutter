@@ -17,6 +17,7 @@ public class StoneSmart {
     // METHODS
     private static final String PAYMENT_DEBIT = "paymentDebit";
     private static final String PAYMENT_CREDIT = "paymentCredit";
+    private static final String PAYMENT_CREDIT_PARC = "paymentCreditParc";
     private static final String PAYMENT_VOUCHER = "paymentVoucher";
     private static final String PAYMENT_PIX = "paymentPix";
     private static final String ACTIVE_PINPAD = "paymentActivePinpad";
@@ -98,7 +99,9 @@ public class StoneSmart {
             this.payment.doTransaction(currentContext,amount, 3, parc, withInterest, qrCodeAuthotization, qrCodeProviderid);
         } else if (call.method.equals(PAYMENT_CREDIT)) {
             this.payment.doTransaction(currentContext,amount, 1, parc, withInterest,null,null);
-        }  else if (call.method.equals(PAYMENT_VOUCHER)) {
+        }  else if (call.method.equals(PAYMENT_CREDIT_PARC)) {
+            this.payment.doTransaction(currentContext,amount, 1, parc, withInterest,null,null);
+        } else if (call.method.equals(PAYMENT_VOUCHER)) {
             this.payment.doTransaction(currentContext,amount, 4, parc, withInterest, null,null);
         } else {
             result.notImplemented();
