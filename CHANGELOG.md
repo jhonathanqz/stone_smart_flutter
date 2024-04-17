@@ -1,3 +1,7 @@
+## 1.0.4
+
+- Configure method creditPaymentParc
+
 ## 1.0.3
 
 - Fix stone response with cardBrandName
