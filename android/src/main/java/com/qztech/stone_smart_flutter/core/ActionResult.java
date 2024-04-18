@@ -222,6 +222,31 @@ public class ActionResult {
     this.cardSequenceNumber = value;
   }
 
+  public String transactionKey;
+
+  public void setTransactionKey(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.transactionKey = value;
+  }
+
+  public String externalId;
+  public void setExternalID(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.externalId = value;
+  }
+
+  public String initiatorTransactionKey;
+  public void setInitiatorTransactionKey(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.initiatorTransactionKey = value;
+  }
+
 
 
   public void buildResponseStoneTransaction(List<TransactionObject> transactionObjects) {
@@ -245,6 +270,9 @@ public class ActionResult {
       setCardSequenceNumber(list.getCardSequenceNumber());
       setTransactionObject(list.toString());
       setAuthorizationCode(list.getAuthorizationCode());
+      setTransactionKey(list.getAcquirerTransactionKey());
+      setExternalID(list.getExternalId());
+      setInitiatorTransactionKey(list.getInitiatorTransactionKey());
       setPrinterRequest(true);
     }
     this.isBuildResponse = 1;

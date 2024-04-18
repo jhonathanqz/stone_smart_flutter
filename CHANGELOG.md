@@ -1,3 +1,7 @@
+## 1.0.5
+
+- Fixed printer establishment
+
 ## 1.0.4
 
 - Configure method creditPaymentParc
