@@ -1,3 +1,7 @@
+## 1.0.8
+
+- Feat: Configure new property isPrinterEstablishment
+
 ## 1.0.6
 
 - Fixed transaction response
