@@ -2,6 +2,11 @@
 
 - Feat: Configure new property isPrinterEstablishment
 
+## 1.0.7
+
+- Fixed transaction response
+- Fixed establishment printer
+
 ## 1.0.6
 
 - Fixed transaction response
