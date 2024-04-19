@@ -65,15 +65,16 @@ public class PaymentsUseCase {
                               int typeTransaction,
                               int parc,
                               boolean withInterest,
-                              Map<StoneKeyType, String> stoneKeys
+                              Map<StoneKeyType, String> stoneKeys,
+                              boolean isPrinter
                               ){
     if(stoneKeys == null) {
       checkUserModel(context);
-      transaction(context, amount, typeTransaction, parc, withInterest);
+      transaction(context, amount, typeTransaction, parc, withInterest, isPrinter);
       return;
     }
     userModel = StoneStart.init(context, stoneKeys);
-    transaction(context, amount, typeTransaction, parc, withInterest);
+    transaction(context, amount, typeTransaction, parc, withInterest, isPrinter);
   }
 
   private void checkUserModel(Context context) {
@@ -92,7 +93,8 @@ public class PaymentsUseCase {
           String amount,
           int typeTransaction,
           int parc,
-          boolean withInterest
+          boolean withInterest,
+          boolean isPrinter
   ) {
     BasicResult basicResult = new BasicResult();
     basicResult.setMethod("transaction");
@@ -124,7 +126,9 @@ public class PaymentsUseCase {
           actionResult.buildResponseStoneTransaction(transactionObjects);
           String jsonStoneResult = convertActionToJson(actionResult);
           finishTransaction(jsonStoneResult);
-          printerReceiptTransaction(context, currentTransactionObject);
+          if(isPrinter){
+            printerReceiptTransaction(context, currentTransactionObject);
+          }
 
           posTransactionProvider = null;
         }

@@ -60,6 +60,7 @@ class Payment {
     required String stoneCode,
     required String qrCodeAuthroization,
     required String qrCodeProviderid,
+    bool isPrinterEstablishment = true,
   }) async {
     try {
       await channel.invokeMethod(PaymentTypeCall.ACTIVEPINPAD_CREDENTIALS.method, {
@@ -67,6 +68,7 @@ class Payment {
         "stoneCode": stoneCode,
         "qrCodeAuthorization": qrCodeAuthroization,
         "qrCodeProviderid": qrCodeProviderid,
+        "isPrinter": isPrinterEstablishment,
       });
       return true;
     } catch (e) {
@@ -75,13 +77,17 @@ class Payment {
   }
 
 //Function to invoke method from credit payment with sdk the Stone
-  Future<bool> creditPayment(int value) async {
+  Future<bool> creditPayment(
+    int value, {
+    bool isPrinterEstablishment = true,
+  }) async {
     return await channel.invokeMethod(
       PaymentTypeCall.CREDIT.method,
       {
         "amount": value.toString(),
         "installment": 1,
         "withInterest": false,
+        "isPrinter": isPrinterEstablishment,
       },
     );
   }
@@ -91,6 +97,7 @@ class Payment {
     required int value,
     int installment = 1,
     bool withInterest = false,
+    bool isPrinterEstablishment = true,
   }) async {
     return await channel.invokeMethod(
       PaymentTypeCall.CREDIT_PARC.method,
@@ -98,18 +105,23 @@ class Payment {
         "amount": value.toString(),
         "installment": installment,
         "withInterest": withInterest,
+        "isPrinter": isPrinterEstablishment,
       },
     );
   }
 
 //Function to invoke method from debit payment with sdk the Stone
-  Future<bool> debitPayment(int value) async {
+  Future<bool> debitPayment(
+    int value, {
+    bool isPrinterEstablishment = true,
+  }) async {
     return await channel.invokeMethod(
       PaymentTypeCall.DEBIT.method,
       {
         "amount": value.toString(),
         "installment": 1,
         "withInterest": false,
+        "isPrinter": isPrinterEstablishment,
       },
     );
   }
@@ -119,6 +131,7 @@ class Payment {
     required int amount,
     required String qrCodeAuthroization,
     required String qrCodeProviderid,
+    bool isPrinterEstablishment = true,
   }) async {
     return await channel.invokeMethod(
       PaymentTypeCall.PIX.method,
@@ -128,18 +141,23 @@ class Payment {
         "withInterest": false,
         "qrCodeAuthorization": qrCodeAuthroization,
         "qrCodeProviderid": qrCodeProviderid,
+        "isPrinter": isPrinterEstablishment,
       },
     );
   }
 
 //Function to invoke method from voucher payment with sdk the Stone
-  Future<bool> voucherPayment(int value) async {
+  Future<bool> voucherPayment(
+    int value, {
+    bool isPrinterEstablishment = true,
+  }) async {
     return await channel.invokeMethod(
       PaymentTypeCall.VOUCHER.method,
       {
         "amount": value.toString(),
         "installment": 1,
         "withInterest": false,
+        "isPrinter": isPrinterEstablishment,
       },
     );
   }
