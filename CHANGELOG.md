@@ -1,3 +1,7 @@
+## 1.0.6
+
+- Fixed transaction response
+
 ## 1.0.5
 
 - Fixed printer establishment
