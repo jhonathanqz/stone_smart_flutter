@@ -1,3 +1,7 @@
+## 1.0.9+1
+
+- Fixed method printer establishment with transaction status approved
+
 ## 1.0.9
 
 - Fixed method printer establishment with transaction status approved

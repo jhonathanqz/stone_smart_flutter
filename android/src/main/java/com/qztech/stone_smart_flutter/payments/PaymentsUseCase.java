@@ -119,8 +119,7 @@ public class PaymentsUseCase {
         public void onSuccess() {
           TransactionDAO transactionDAO = new TransactionDAO(context);
           List<TransactionObject> transactionObjects = transactionDAO.getAllTransactionsOrderByIdDesc();
-          TransactionStatusEnum status=  posTransactionProvider.getTransactionStatus();
-          checkStatusWithErrorTransaction(status, context);
+          checkStatusWithErrorTransaction(posTransactionProvider.getTransactionStatus(), context);
           actionResult.setTransactionStatus(posTransactionProvider.getTransactionStatus().toString());
           actionResult.setMessageFromAuthorize(posTransactionProvider.getMessageFromAuthorize());
           actionResult.setAuthorizationCode(posTransactionProvider.getAuthorizationCode());
@@ -128,10 +127,8 @@ public class PaymentsUseCase {
           String jsonStoneResult = convertActionToJson(actionResult);
           finishTransaction(jsonStoneResult);
 
-          if(status == TransactionStatusEnum.APPROVED){
-            if(isPrinter){
-              printerReceiptTransaction(context, currentTransactionObject);
-            }
+          if(isPrinter) {
+            printerReceiptTransaction(context, currentTransactionObject, posTransactionProvider.getTransactionStatus());
           }
 
           posTransactionProvider = null;
@@ -204,10 +201,15 @@ public class PaymentsUseCase {
     } catch (Exception error) {}
   }
 
-  public void printerReceiptTransaction(Context context, TransactionObject transactionObject) {
+  public void printerReceiptTransaction(Context context, TransactionObject transactionObject,TransactionStatusEnum status ) {
     try {
-      PosPrintReceiptProvider printer = new PosPrintReceiptProvider(context, transactionObject, ReceiptType.MERCHANT);
-      printer.execute();
+      boolean isPrinterValid = status == TransactionStatusEnum.APPROVED || transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED;
+
+        if(isPrinterValid) {
+        PosPrintReceiptProvider printer = new PosPrintReceiptProvider(context, transactionObject, ReceiptType.MERCHANT);
+        printer.execute();
+      }
+
     } catch(Exception e) {
     }
   }
