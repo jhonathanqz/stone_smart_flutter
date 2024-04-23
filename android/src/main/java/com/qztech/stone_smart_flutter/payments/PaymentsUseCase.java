@@ -119,15 +119,19 @@ public class PaymentsUseCase {
         public void onSuccess() {
           TransactionDAO transactionDAO = new TransactionDAO(context);
           List<TransactionObject> transactionObjects = transactionDAO.getAllTransactionsOrderByIdDesc();
-          checkStatusWithErrorTransaction(posTransactionProvider.getTransactionStatus(), context);
+          TransactionStatusEnum status=  posTransactionProvider.getTransactionStatus();
+          checkStatusWithErrorTransaction(status, context);
           actionResult.setTransactionStatus(posTransactionProvider.getTransactionStatus().toString());
           actionResult.setMessageFromAuthorize(posTransactionProvider.getMessageFromAuthorize());
           actionResult.setAuthorizationCode(posTransactionProvider.getAuthorizationCode());
           actionResult.buildResponseStoneTransaction(transactionObjects);
           String jsonStoneResult = convertActionToJson(actionResult);
           finishTransaction(jsonStoneResult);
-          if(isPrinter){
-            printerReceiptTransaction(context, currentTransactionObject);
+
+          if(status == TransactionStatusEnum.APPROVED){
+            if(isPrinter){
+              printerReceiptTransaction(context, currentTransactionObject);
+            }
           }
 
           posTransactionProvider = null;
