@@ -1,6 +1,6 @@
 name: stone_smart_flutter
 description: Plugin Flutter para integrar sua aplicação com o SDK Android da Stone para meios de pagamento.
-version: 1.0.8
+version: 1.0.9+1
 repository: https://github.com/jhonathanqz/stone_smart_flutter
 
 environment:
