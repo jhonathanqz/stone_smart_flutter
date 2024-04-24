@@ -37,6 +37,15 @@ public class ActionResult {
   private String authorizationCode;
   private String transactionObject;
 
+  private String userModel;
+
+  public void setUserModel(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.userModel = value;
+  }
+
   public void setCardBrandId(int value) {
     this.cardBrandId = value;
   }
@@ -249,8 +258,8 @@ public class ActionResult {
 
 
 
-  public void buildResponseStoneTransaction(List<TransactionObject> transactionObjects) {
-    if(transactionObjects.isEmpty()){
+  public void buildResponseStoneTransaction(List<TransactionObject> transactionObjects, boolean isPaymentApproved) {
+    if(transactionObjects.isEmpty()  || !isPaymentApproved){
       return;
     }
     TransactionObject list = transactionObjects.get(0);

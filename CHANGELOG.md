@@ -1,3 +1,11 @@
+## 1.0.9+3
+
+- Fixed method onReversalTransaction
+
+## 1.0.9+2
+
+- Add UserModel of the StoneTransactionResponse
+
 ## 1.0.9+1
 
 - Fixed method printer establishment with transaction status approved

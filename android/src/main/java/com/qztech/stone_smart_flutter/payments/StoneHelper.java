@@ -69,6 +69,10 @@ public class StoneHelper {
     }
 
     public String getMessageFromResponseCodeEnum(ResponseCodeEnum response) {
+        if(response == null) {
+            return "Erro na operação";
+        }
+
         switch (response) {
             case Declined:
                 return "Recusado";
