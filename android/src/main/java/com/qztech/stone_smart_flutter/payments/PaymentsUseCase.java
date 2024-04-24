@@ -453,22 +453,22 @@ public class PaymentsUseCase {
     try {
       ReversalProvider reversalProvider = new ReversalProvider(context);
       mFragment.onMessage("Cancelando transação com erro");
-      reversalProvider.setDialogMessage("Cancelando transação com erro");
-      reversalProvider.isDefaultUI();
+      // reversalProvider.setDialogMessage("Cancelando transação com erro");
+      // reversalProvider.isDefaultUI();
       reversalProvider.setConnectionCallback(new StoneCallbackInterface() {
         @Override
         public void onSuccess() {
-          ResponseCodeEnum responseCodeEnum = reversalProvider.getResponseCodeEnum();
+          //ResponseCodeEnum responseCodeEnum = reversalProvider.getResponseCodeEnum();
           basicResult.setResult(0);
-          basicResult.setMessage(mStoneHelper.getMessageFromResponseCodeEnum(responseCodeEnum));
+          //basicResult.setMessage(mStoneHelper.getMessageFromResponseCodeEnum(responseCodeEnum));
 
-          if(responseCodeEnum == ResponseCodeEnum.Approved){
-            mFragment.onMessage("Transação aprovada");
-            mFragment.onTransactionSuccess();
+          // if(responseCodeEnum == ResponseCodeEnum.Approved){
+          //   mFragment.onMessage("Transação aprovada");
+          //   mFragment.onTransactionSuccess();
 
-            mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
-            return;
-          }
+          //   mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
+          //   return;
+          // }
           mFragment.onMessage("Transação concluída");
           mFragment.onTransactionSuccess();
           mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
