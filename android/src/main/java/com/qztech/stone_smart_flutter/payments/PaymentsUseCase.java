@@ -123,6 +123,10 @@ public class PaymentsUseCase {
           actionResult.setTransactionStatus(posTransactionProvider.getTransactionStatus().toString());
           actionResult.setMessageFromAuthorize(posTransactionProvider.getMessageFromAuthorize());
           actionResult.setAuthorizationCode(posTransactionProvider.getAuthorizationCode());
+          if(!userModel.isEmpty()){
+            String userModelString = getGson().toJson(userModel.get(0));
+            actionResult.setUserModel(userModelString);
+          }
           actionResult.buildResponseStoneTransaction(transactionObjects);
           String jsonStoneResult = convertActionToJson(actionResult);
           finishTransaction(jsonStoneResult);
@@ -258,39 +262,6 @@ public class PaymentsUseCase {
     return getGson().toJson(basicResult);
   }
 
-  private void alertPrinter(final Context context, final String result, final TransactionObject transactionObject) {
-    new Handler(Looper.getMainLooper()).post(new Runnable() {
-      @Override
-      public void run() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Impressão comprovante");
-        builder.setMessage("Deseja imprimir sua via?");
-        builder.setPositiveButton(
-                "Sim",
-                new DialogInterface.OnClickListener() {
-                  public void onClick(DialogInterface arg0, int arg1) {
-                    arg0.dismiss();
-                    mStonePrinter.printerFromTransaction(context, transactionObject);
-                    finishTransaction(result);
-                  }
-                }
-        );
-        builder.setNegativeButton(
-                "Não",
-                new DialogInterface.OnClickListener() {
-                  public void onClick(DialogInterface arg0, int arg1) {
-                    arg0.dismiss();
-                    finishTransaction(result);
-                  }
-                }
-        );
-        AlertDialog alerta = builder.create();
-        alerta.show();
-      }
-    });
-  }
-
-
   private void finishTransaction(String result) {
     mFragment.onTransactionSuccess();
     mFragment.onFinishedResponse(result);
@@ -317,6 +288,10 @@ public class PaymentsUseCase {
         basicResult.setMethod("active");
         basicResult.setResult(0);
         basicResult.setMessage("Terminal ativado");
+        if(!userModel.isEmpty()){
+          String userModelString = getGson().toJson(userModel.get(0));
+          basicResult.setUserModel(userModelString);
+        }
         String resultJson = convertBasicResultToJson(basicResult);
         mFragment.onFinishedResponse(resultJson);
         mFragment.onAuthProgress(resultJson);
@@ -346,6 +321,10 @@ public class PaymentsUseCase {
         basicResult.setMethod("active");
         basicResult.setResult(0);
         basicResult.setMessage("Terminal ativado");
+        if(!userModel.isEmpty()){
+          String userModelString = getGson().toJson(userModel.get(0));
+          basicResult.setUserModel(userModelString);
+        }
         String resultJson = convertBasicResultToJson(basicResult);
         mFragment.onFinishedResponse(resultJson);
         mFragment.onAuthProgress(resultJson);

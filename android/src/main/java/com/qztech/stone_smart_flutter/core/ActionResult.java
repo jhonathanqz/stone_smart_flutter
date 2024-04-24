@@ -37,6 +37,15 @@ public class ActionResult {
   private String authorizationCode;
   private String transactionObject;
 
+  private String userModel;
+
+  public void setUserModel(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.userModel = value;
+  }
+
   public void setCardBrandId(int value) {
     this.cardBrandId = value;
   }
