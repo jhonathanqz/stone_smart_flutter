@@ -127,7 +127,8 @@ public class PaymentsUseCase {
             String userModelString = getGson().toJson(userModel.get(0));
             actionResult.setUserModel(userModelString);
           }
-          actionResult.buildResponseStoneTransaction(transactionObjects);
+          boolean isPaymentApproved = posTransactionProvider.getTransactionStatus() == TransactionStatusEnum.APPROVED || currentTransactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED;
+          actionResult.buildResponseStoneTransaction(transactionObjects, isPaymentApproved);
           String jsonStoneResult = convertActionToJson(actionResult);
           finishTransaction(jsonStoneResult);
 
@@ -382,7 +383,8 @@ public class PaymentsUseCase {
        mFragment.onMessage("Transação cancelada");
        mFragment.onTransactionSuccess();
        basicResult.setResult(0);
-       basicResult.setMessage(mStoneHelper.getMessageFromResponseCodeEnum(provider.getResponseCodeEnum()));
+       ResponseCodeEnum responseCode = provider.getResponseCodeEnum();
+       basicResult.setMessage(mStoneHelper.getMessageFromResponseCodeEnum(responseCode));
        mFragment.onAuthProgress("Transação cancelada");
        mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
       }
@@ -475,10 +477,9 @@ public class PaymentsUseCase {
 
         @Override
         public void onError() {
-          ResponseCodeEnum responseCodeEnum = reversalProvider.getResponseCodeEnum();
-          mFragment.onMessage("Erro processar transação " + mStoneHelper.getMessageFromResponseCodeEnum(responseCodeEnum));
+          mFragment.onMessage("Erro ao processar transação");
           basicResult.setResult(999999);
-          basicResult.setErrorMessage(mStoneHelper.getMessageFromResponseCodeEnum(responseCodeEnum));
+          basicResult.setErrorMessage("Erro ao processar transação");
 
           mFragment.onError(convertBasicResultToJson(basicResult));
         }
