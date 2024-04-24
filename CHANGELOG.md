@@ -1,3 +1,7 @@
+## 1.0.9+3
+
+- Fixed method onReversalTransaction
+
 ## 1.0.9+2
 
 - Add UserModel of the StoneTransactionResponse
