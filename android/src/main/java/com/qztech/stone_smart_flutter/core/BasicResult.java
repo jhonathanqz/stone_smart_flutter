@@ -6,6 +6,11 @@ public class BasicResult {
     private String errorMessage;
     private int result;
     private String message;
+    private String userModel;
+
+    public void setUserModel(String value) {
+        this.userModel = value;
+    }
     public void setMethod(String value) {
         this.method = value;
     }
