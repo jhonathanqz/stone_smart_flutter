@@ -1,3 +1,7 @@
+## 1.0.10
+
+- Fixed method local
+
 ## 1.0.9+4
 
 - Fixed method onReversal
