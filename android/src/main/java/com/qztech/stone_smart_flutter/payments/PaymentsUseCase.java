@@ -169,6 +169,7 @@ public class PaymentsUseCase {
           mFragment.onError(convertBasicResultToJson(basicResult));
           String jsonError = convertActionToJson(actionResult);
           mFragment.onFinishedResponse(jsonError);
+          posTransactionProvider.abortPayment();
           currentTransactionObject = null;
           posTransactionProvider= null;
         }
@@ -214,7 +215,6 @@ public class PaymentsUseCase {
         PosPrintReceiptProvider printer = new PosPrintReceiptProvider(context, transactionObject, ReceiptType.MERCHANT);
         printer.execute();
       }
-
     } catch(Exception e) {
     }
   }
@@ -441,10 +441,9 @@ public class PaymentsUseCase {
 
   public void checkStatusWithErrorTransaction(TransactionStatusEnum status, Context context){
     if(status == null) return;
-    if(status == TransactionStatusEnum.WITH_ERROR){
+    if(status == TransactionStatusEnum.WITH_ERROR) {
       onReversalTransaction(context);
     }
-
   }
 
   public void onReversalTransaction(Context context) {
