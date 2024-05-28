@@ -1,3 +1,11 @@
+## 1.0.10+1
+
+- Fixed method printer from transaction
+
+## 1.0.10
+
+- Fixed method printer transaction
+
 ## 1.0.9+4
 
 - Fixed method onReversal

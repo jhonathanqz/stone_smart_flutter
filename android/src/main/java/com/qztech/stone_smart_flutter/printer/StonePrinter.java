@@ -34,33 +34,33 @@ public class StonePrinter {
     }
 
     public void printerFromTransaction(Context context, TransactionObject transactionObject) {
-        BasicResult basicResult = new BasicResult();
-        basicResult.setMethod("printer");
+        // BasicResult basicResult = new BasicResult();
+        // basicResult.setMethod("printer");
         try {
             PosPrintReceiptProvider posPrintReceiptProvider = new PosPrintReceiptProvider(context, transactionObject, ReceiptType.CLIENT);
             posPrintReceiptProvider.setConnectionCallback(new StoneCallbackInterface() {
                 @Override
                 public void onSuccess() {
-                    mFragment.onMessage("Impressão realizada com sucesso");
-                    basicResult.setResult(0);
-                    basicResult.setMessage("Impressão finalizada com sucesso");
-                    mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
+                    // mFragment.onMessage("Impressão realizada com sucesso");
+                    // basicResult.setResult(0);
+                    // basicResult.setMessage("Impressão finalizada com sucesso");
+                    // mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
                 }
 
                 @Override
                 public void onError() {
-                    basicResult.setResult(999999);
-                    basicResult.setErrorMessage(posPrintReceiptProvider.getListOfErrors().toString());
-                    mFragment.onMessage("Erro ao realizar impressão");
-                    mFragment.onError(convertBasicResultToJson(basicResult));
+                    // basicResult.setResult(999999);
+                    // basicResult.setErrorMessage(posPrintReceiptProvider.getListOfErrors().toString());
+                    // mFragment.onMessage("Erro ao realizar impressão");
+                    // mFragment.onError(convertBasicResultToJson(basicResult));
                 }
             });
             posPrintReceiptProvider.execute();
         } catch (Exception error) {
-            basicResult.setResult(999999);
-            basicResult.setErrorMessage(error.getMessage());
-            mFragment.onMessage("Erro ao realizar impressão");
-            mFragment.onError(convertBasicResultToJson(basicResult));
+            // basicResult.setResult(999999);
+            // basicResult.setErrorMessage(error.getMessage());
+            // mFragment.onMessage("Erro ao realizar impressão");
+            // mFragment.onError(convertBasicResultToJson(basicResult));
         }
     }
 }
