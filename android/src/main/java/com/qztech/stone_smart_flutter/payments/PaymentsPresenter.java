@@ -53,6 +53,10 @@ public class PaymentsPresenter {
         mUseCase.printerCurrentTransaction(context, isPrinter);
     }
 
+    public void setPaymentOption(String value) {
+        mUseCase.setPaymentOption(value);
+    }
+
     public void activate(String appName,
                          String stoneCode,
                          Context context) {

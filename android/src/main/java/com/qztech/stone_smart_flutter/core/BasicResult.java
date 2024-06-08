@@ -1,12 +1,20 @@
 package com.qztech.stone_smart_flutter.core;
 
 
+import java.util.List;
+
 public class BasicResult {
     private String method;
     private String errorMessage;
     private int result;
     private String message;
     private String userModel;
+
+    private List<String> options;
+
+    public void setOptions(List<String> value) {
+        this.options = value;
+    }
 
     public void setUserModel(String value) {
         this.userModel = value;
