@@ -80,6 +80,7 @@ enum PaymentTypeCall {
   CANCEL_TRANSACTION,
   REVERSAL,
   PRINTER_TRANSACTION,
+  PAYMENT_OPTION,
 }
 
 enum PaymentTypeTransaction { CREDIT, DEBIT, VOUCHER, PIX }
@@ -146,6 +147,8 @@ extension PaymentTypeCallExt on PaymentTypeCall {
         return "paymentPrinterTransaction";
       case PaymentTypeCall.ABORT_PIX:
         return "paymentAbortPix";
+      case PaymentTypeCall.PAYMENT_OPTION:
+        return "paymentOptions";
     }
   }
 }

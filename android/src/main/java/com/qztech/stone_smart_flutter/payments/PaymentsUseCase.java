@@ -14,6 +14,7 @@ import com.qztech.stone_smart_flutter.core.BasicResult;
 import com.qztech.stone_smart_flutter.printer.StonePrinter;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -46,6 +47,7 @@ public class PaymentsUseCase {
   private TransactionObject currentTransactionObject;
   private PosTransactionProvider posTransactionProvider;
   private List<UserModel> userModel;
+  private List<String> optionList;
   Gson gson = null;
   public PaymentsUseCase(MethodChannel channel) {
     this.mFragment = new PaymentsFragment(channel);
@@ -148,6 +150,16 @@ public class PaymentsUseCase {
             mFragment.onChanged(convertBasicResultToJson(basicResult));
             mFragment.onAuthProgress(convertBasicResultToJson(basicResult));
           }
+
+          if(action == Action.TRANSACTION_TYPE_SELECTION){
+            List<String> options = posTransactionProvider.getTransactionTypeOptions();
+            optionList = options;
+            basicResult.setMethod("PaymentOptions");
+            basicResult.setOptions(options);
+            basicResult.setMessage(actionMessage);
+            mFragment.onChanged(convertBasicResultToJson(basicResult));
+            mFragment.onAuthProgress(convertBasicResultToJson(basicResult));
+          }
         }
         @Override
         public void onError() {
@@ -187,6 +199,13 @@ public class PaymentsUseCase {
       }
       posTransactionProvider = null;
     }
+  }
+
+  public void setPaymentOption(String value) {
+    Log.d("print", "****Chegou option: " + value);
+    if(posTransactionProvider == null) return;
+    Integer index = optionList.indexOf(value);
+    posTransactionProvider.setTransactionTypeSelected(index);
   }
 
   private void changePrinterRequest() {

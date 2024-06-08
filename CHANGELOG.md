@@ -1,3 +1,8 @@
+## 1.0.11
+
+- Configure onChanged to PaymentOptions selected
+- Create and configure function setPaymentOption
+
 ## 1.0.10+1
 
 - Fixed method printer from transaction

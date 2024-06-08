@@ -28,6 +28,7 @@ public class StoneSmart {
     private static final String PAYMENT_CANCEL_TRANSACTION = "paymentCancelTransaction";
 
     private static final String PAYMENT_REVERSAL = "paymentReversal";
+    private static final String PAYMENT_OPTIONS = "paymentOptions";
 
     private static final String PAYMENT_PRINTER_TRANSACTION = "paymentPrinterTransaction";
 
@@ -77,6 +78,12 @@ public class StoneSmart {
 
         if(call.method.equals(PAYMENT_ABORT)){
             this.payment.abortCurrentPosTransaction();
+            return;
+        }
+
+        if(call.method.equals(PAYMENT_OPTIONS)) {
+            String optionSelected = call.argument("option");
+            this.payment.setPaymentOption(optionSelected);
             return;
         }
 
