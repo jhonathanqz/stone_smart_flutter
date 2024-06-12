@@ -23,6 +23,7 @@ class Payment {
           call: e,
           iStoneHandler: paymentHandler,
           stoneSmartHanlder: iStoneSmartHanlder,
+          onMessageListener: (message) {},
         ));
   }
 

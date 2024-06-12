@@ -149,6 +149,16 @@ public class PaymentsUseCase {
             basicResult.setMessage(mStoneHelper.convertBitmapToString(transaction.getQRCode()));
             mFragment.onChanged(convertBasicResultToJson(basicResult));
             mFragment.onAuthProgress(convertBasicResultToJson(basicResult));
+
+            // List<String> options = new ArrayList<String>();
+            // options.add("Vale Refeição");
+            // options.add("Vale Alimentação");
+            // optionList = options;
+            // basicResult.setMethod("PaymentOptions");
+            // basicResult.setOptions(options);
+            // basicResult.setMessage(actionMessage);
+            // mFragment.onChanged(convertBasicResultToJson(basicResult));
+            // mFragment.onAuthProgress(convertBasicResultToJson(basicResult));
           }
 
           if(action == Action.TRANSACTION_TYPE_SELECTION){
@@ -203,7 +213,7 @@ public class PaymentsUseCase {
 
   public void setPaymentOption(String value) {
     Log.d("print", "****Chegou option: " + value);
-    if(posTransactionProvider == null) return;
+    if(posTransactionProvider == null || optionList.isEmpty()) return;
     Integer index = optionList.indexOf(value);
     posTransactionProvider.setTransactionTypeSelected(index);
   }
