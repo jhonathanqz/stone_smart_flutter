@@ -12,23 +12,5 @@ abstract class IStoneHandler {
 
   void onLoading(bool show);
 
-  void writeToFile({
-    String? transactionCode,
-    String? transactionId,
-    String? response,
-  });
-
-  void onAbortedSuccessfully();
-
-  void disposeDialog();
-
-  void onActivationDialog();
-
   void onAuthProgress(String message);
-
-  void onTransactionInfo({
-    String? transactionCode,
-    String? transactionId,
-    String? response,
-  });
 }

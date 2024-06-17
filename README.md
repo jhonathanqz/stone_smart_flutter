@@ -195,10 +195,6 @@ Método responsável por devolver uma response da transação.
 
 Método acionado quando a transação foi concluída com sucesso.
 
-##### onTransactionInfo
-
-Método resposável por devolver uma response completa da transação, sendo possível mapear vários campos retornados.
-
 #### Iniciar transação
 
 Para iniciar a transação é necessário primeiro chamar a função de ativação do PinPad, passando como parâmetro o código de ativação daquele POS (código este informado na sua conta PagBank).

@@ -203,7 +203,7 @@ public class PaymentsUseCase {
 
   public void setPaymentOption(String value) {
     Log.d("print", "****Chegou option: " + value);
-    if(posTransactionProvider == null) return;
+    if(posTransactionProvider == null || optionList.isEmpty()) return;
     Integer index = optionList.indexOf(value);
     posTransactionProvider.setTransactionTypeSelected(index);
   }
