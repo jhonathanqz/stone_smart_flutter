@@ -12,21 +12,10 @@ interface PaymentsContract {
 
   void onLoading(boolean show);
 
-  void writeToFile(
-    String transactionCode,
-    String transactionId,
-    String response
-  );
-
   void onAbortedSuccessfully();
 
   void onChanged(String message);
 
   void onAuthProgress(String message);
 
-  void onTransactionInfo(
-    String transactionCode,
-    String transactionId,
-    String response
-  );
 }

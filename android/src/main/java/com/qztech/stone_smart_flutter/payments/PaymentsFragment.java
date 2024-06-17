@@ -35,10 +35,8 @@ public class PaymentsFragment implements PaymentsContract {
   private static final String ON_CHANGED = "onChanged";
   private static final String ON_FINISHED_RESPONSE = "onFinishedResponse";
   private static final String ON_LOADING = "onLoading";
-  private static final String WRITE_TO_FILE = "writeToFile";
   private static final String ON_ABORTED_SUCCESSFULLY = "onAbortedSuccessfully";
   private static final String ON_AUTH_PROGRESS = "onAuthProgress";
-  private static final String ON_TRANSACTION_INFO = "onTransactionInfo";
 
   @Override
   public void onTransactionSuccess() {
@@ -101,23 +99,6 @@ public class PaymentsFragment implements PaymentsContract {
   }
 
   @Override
-  public void writeToFile(
-          String transactionCode,
-          String transactionId,
-          String response) {
-    runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("transactionCode", transactionCode);
-        map.put("transactionId", transactionId);
-        map.put("response", response);
-        channel.invokeMethod(WRITE_TO_FILE, map);
-      }
-    });
-  }
-
-  @Override
   public void onAbortedSuccessfully() {
     runOnUiThread(new Runnable() {
       @Override
@@ -137,19 +118,7 @@ public class PaymentsFragment implements PaymentsContract {
     });
   }
 
-  @Override
-  public void onTransactionInfo(String transactionCode, String transactionId, String response) {
-    runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("transactionCode", transactionCode);
-        map.put("transactionId", transactionId);
-        map.put("response", response);
-        channel.invokeMethod(ON_TRANSACTION_INFO, map);
-      }
-    });
-  }
+
 
   //private String getMessage(String operation, String message) {
    // return operation + " => " + message;
