@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:stone_smart_flutter/payments/handler/istone_handler.dart';
 
 class PaymentController extends IStoneHandler {
@@ -22,32 +23,36 @@ class PaymentController extends IStoneHandler {
 
   @override
   void onAuthProgress(String message) {
-    print('***onAuthProgress: $message');
+    debugPrint('***onAuthProgress: $message');
   }
 
   @override
   void onError(String message) {
-    print('***onError: $message');
+    debugPrint('***onError: $message');
   }
 
   @override
   void onMessage(String message) {
-    print('***********onMessage: $message');
+    debugPrint('***********onMessage: $message');
   }
 
   @override
   void onFinishedResponse(String message) {
-    print('***onFinishedResponse: $message');
+    debugPrint('***onFinishedResponse: $message');
   }
 
   @override
-  void onTransactionSuccess() {}
+  void onTransactionSuccess() {
+    debugPrint('***onTransactionSuccess');
+  }
 
   @override
-  void onLoading(bool show) {}
+  void onLoading(bool show) {
+    debugPrint('***onLoading: $show');
+  }
 
   @override
   void onChanged(String message) {
-    // TODO: implement onChanged
+    debugPrint('***onChanged: $message');
   }
 }
