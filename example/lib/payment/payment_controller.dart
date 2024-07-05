@@ -21,17 +21,6 @@ class PaymentController extends IStoneHandler {
   }
 
   @override
-  void disposeDialog() {
-    //BotToast.cleanAll();
-  }
-
-  @override
-  void onAbortedSuccessfully() {}
-
-  @override
-  void onActivationDialog() {}
-
-  @override
   void onAuthProgress(String message) {
     print('***onAuthProgress: $message');
   }
@@ -55,27 +44,7 @@ class PaymentController extends IStoneHandler {
   void onTransactionSuccess() {}
 
   @override
-  void writeToFile({
-    String? transactionCode,
-    String? transactionId,
-    String? response,
-  }) {}
-
-  @override
   void onLoading(bool show) {}
-
-  @override
-  void onTransactionInfo({
-    String? transactionCode,
-    String? transactionId,
-    String? response,
-  }) {
-    this.transactionCode = transactionCode;
-    this.transactionId = transactionId;
-    this.response = response;
-
-    enableRefund = true;
-  }
 
   @override
   void onChanged(String message) {
