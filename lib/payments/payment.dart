@@ -191,4 +191,13 @@ class Payment {
       "transactionType": transactionType.type,
     });
   }
+
+  Future<bool> setPaymentOption({
+    required String option,
+  }) async {
+    // return await channel.invokeMethod(PaymentTypeCall.PAYMENT_OPTION.method, {
+    //   "option": option,
+    // });
+    return true;
+  }
 }
