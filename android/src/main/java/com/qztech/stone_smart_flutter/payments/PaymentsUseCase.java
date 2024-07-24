@@ -100,6 +100,9 @@ public class PaymentsUseCase {
   ) {
     BasicResult basicResult = new BasicResult();
     basicResult.setMethod("transaction");
+    ActionResult actionResult = new ActionResult();
+    actionResult.setMethod("transaction");
+
     try {
       mFragment.onMessage("Iniciando transação");
       currentTransactionObject = null;
@@ -110,9 +113,6 @@ public class PaymentsUseCase {
 
       posTransactionProvider = new PosTransactionProvider(context, transaction, userModel.get(0));
       //Essa variavel posTransactionProvider está armazenando o provider para que possamos cancelar a transação
-
-      ActionResult actionResult = new ActionResult();
-      actionResult.setMethod("transaction");
 
       mFragment.onMessage("Comunicando com o servidor Stone. Aguarde.");
 
@@ -181,7 +181,7 @@ public class PaymentsUseCase {
           mFragment.onError(convertBasicResultToJson(basicResult));
           String jsonError = convertActionToJson(actionResult);
           mFragment.onFinishedResponse(jsonError);
-          posTransactionProvider.abortPayment();
+          //posTransactionProvider.abortPayment();
           currentTransactionObject = null;
           posTransactionProvider= null;
         }

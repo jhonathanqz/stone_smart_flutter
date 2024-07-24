@@ -1,3 +1,7 @@
+## 1.0.11+1
+
+- Fixed method transaction
+
 ## 1.0.11
 
 - Configure onChanged to PaymentOptions selected
