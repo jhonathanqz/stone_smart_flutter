@@ -181,7 +181,7 @@ public class PaymentsUseCase {
           mFragment.onError(convertBasicResultToJson(basicResult));
           String jsonError = convertActionToJson(actionResult);
           mFragment.onFinishedResponse(jsonError);
-          //posTransactionProvider.abortPayment();
+          // posTransactionProvider.abortPayment();
           currentTransactionObject = null;
           posTransactionProvider= null;
         }
@@ -373,6 +373,9 @@ public class PaymentsUseCase {
     try {
       final CancellationProvider cancellationProvider = new CancellationProvider(context, currentTransactionObject);
       cancellationProvider.execute();
+      // if(posTransactionProvider != null) {
+      //   posTransactionProvider.abortPayment();
+      // }
     } catch (Exception error) {
       mFragment.onMessage("Transação cancelada");
       basicResult.setResult(999999);
@@ -459,7 +462,12 @@ public class PaymentsUseCase {
   }
 
   public void checkStatusWithErrorTransaction(TransactionStatusEnum status, Context context){
-    if(status == null) return;
+    if(status == null || (status != TransactionStatusEnum.WITH_ERROR && status != TransactionStatusEnum.APPROVED) ) {
+      if(posTransactionProvider != null) {
+        posTransactionProvider.abortPayment();
+      }
+      return;
+    };
     if(status == TransactionStatusEnum.WITH_ERROR) {
       onReversalTransaction(context);
     }
