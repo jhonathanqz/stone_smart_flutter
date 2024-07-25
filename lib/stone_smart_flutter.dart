@@ -21,12 +21,12 @@ class StoneSmart {
 //Function to init payment and register handler from notify
   void initPayment({
     required IStoneHandler handler,
-    IStoneSmartHanlder? iStoneSmartHanlder,
+    IStoneSmartHandler? iStoneSmartHandler,
   }) {
     _payment = Payment(
       channel: _channel,
       paymentHandler: handler,
-      iStoneSmartHanlder: iStoneSmartHanlder,
+      iStoneSmartHandler: iStoneSmartHandler,
     );
   }
 

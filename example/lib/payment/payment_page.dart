@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stone_smart_flutter/payments/utils/payment_types.dart';
 import 'package:stone_smart_flutter/stone_smart_flutter.dart';
+import 'package:stone_smart_flutter_example/payment/payment_smart_controller.dart';
 
 import 'payment_controller.dart';
 
@@ -13,13 +14,17 @@ class PaymentPage extends StatefulWidget {
 
 class _PaymentPageState extends State<PaymentPage> {
   final PaymentController controller = PaymentController();
+  final PaymentSmartController smartController = PaymentSmartController();
 
   double? saleValue;
   TextEditingController moneyController = TextEditingController();
 
   @override
   void initState() {
-    StoneSmart.instance().initPayment(handler: controller);
+    StoneSmart.instance().initPayment(
+      handler: controller,
+      iStoneSmartHandler: smartController,
+    );
     super.initState();
   }
 
