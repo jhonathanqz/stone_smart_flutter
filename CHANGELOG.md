@@ -1,3 +1,7 @@
+## 1.0.11+2
+
+- Fixed method transaction with abort
+
 ## 1.0.11+1
 
 - Fixed method transaction
