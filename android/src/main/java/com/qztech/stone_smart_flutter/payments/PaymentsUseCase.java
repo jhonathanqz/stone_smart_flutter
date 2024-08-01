@@ -517,4 +517,48 @@ public class PaymentsUseCase {
       mFragment.onMessage("Erro ao tentar reverter transação");
     }
   }
+
+    public void getTransactionByInitiatorTransactionKey(Context context, String initiatorTransactionKey) {
+      BasicResult basicResult = new BasicResult();
+      basicResult.setMethod("paymentGetTransactionByInitiatorTransactionKey");
+      ActionResult actionResult = new ActionResult();
+      boolean isPaymentApproved = false;
+
+      try {
+        TransactionDAO transactionDAO = new TransactionDAO(context);
+        TransactionObject transactionObject = transactionDAO.findTransactionWithInitiatorTransactionKey(initiatorTransactionKey);
+
+        if (transactionObject == null) {
+          handleTransactionError(context, "Transação não encontrada", actionResult, basicResult);
+          return;
+        }
+
+        basicResult.setResult(0);
+        basicResult.setMessage("Transação encontrada");
+
+        if(transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED){
+          isPaymentApproved = true;
+        }
+
+        actionResult.setTransactionStatus(transactionObject.getTransactionStatus().toString());
+        actionResult.setMessageFromAuthorize(transactionObject.getAuthorizationCode());
+        actionResult.setAuthorizationCode(transactionObject.getAuthorizationCode());
+
+        if(!userModel.isEmpty()){
+          String userModelString = getGson().toJson(userModel.get(0));
+          actionResult.setUserModel(userModelString);
+        }
+
+        actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
+
+        actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
+        String jsonStoneResult = convertActionToJson(actionResult);
+        finishTransaction(jsonStoneResult);
+
+      } catch (Exception error) {
+        handleTransactionError(context, "Erro ao buscar transação", actionResult, basicResult);
+
+      }
+
+    }
 }

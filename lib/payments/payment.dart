@@ -199,4 +199,12 @@ class Payment {
       "option": option,
     });
   }
+
+  Future<bool> getTransactionByInitiatorTransactionKey({
+    required String initiatorTransactionKey,
+  }) async {
+    return await channel.invokeMethod(PaymentTypeCall.GET_TRANSACTION_BY_INITIATOR_TRANSACTION_KEY.method, {
+      "initiatorTransactionKey": initiatorTransactionKey,
+    });
+  }
 }

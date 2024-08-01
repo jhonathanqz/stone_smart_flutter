@@ -32,6 +32,8 @@ public class StoneSmart {
 
     private static final String PAYMENT_PRINTER_TRANSACTION = "paymentPrinterTransaction";
 
+    private static final String PAYMENT_GET_TRANSACTION_BY_INITIATOR_TRANSACTION_KEY = "paymentGetTransactionByInitiatorTransactionKey";
+
     final Context currentContext;
 
     public StoneSmart(Context context, MethodChannel channel) {
@@ -44,8 +46,14 @@ public class StoneSmart {
             this.payment = new PaymentsPresenter(this.mChannel);
         }
 
-        if(call.method.equals(PAYMENT_REVERSAL)) {
+        if (call.method.equals(PAYMENT_REVERSAL)) {
             this.payment.onReversal(currentContext);
+            return;
+        }
+        
+        if(call.method.equals(PAYMENT_GET_TRANSACTION_BY_INITIATOR_TRANSACTION_KEY)) {
+            String initiatorTransactionKey = call.argument("initiatorTransactionKey");
+            this.payment.getTransactionByInitiatorTransactionKey(currentContext, initiatorTransactionKey);
             return;
         }
 
