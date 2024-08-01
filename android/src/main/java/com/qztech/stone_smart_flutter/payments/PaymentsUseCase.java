@@ -1,10 +1,6 @@
 package com.qztech.stone_smart_flutter.payments;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -14,10 +10,8 @@ import com.qztech.stone_smart_flutter.core.BasicResult;
 import com.qztech.stone_smart_flutter.printer.StonePrinter;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import br.com.stone.posandroid.providers.PosPrintReceiptProvider;
 import br.com.stone.posandroid.providers.PosTransactionProvider;
@@ -25,7 +19,6 @@ import stone.application.StoneStart;
 import stone.application.enums.Action;
 import stone.application.enums.ReceiptType;
 import stone.application.enums.TransactionStatusEnum;
-import stone.application.enums.TypeOfTransactionEnum;
 import stone.application.interfaces.StoneActionCallback;
 import stone.application.interfaces.StoneCallbackInterface;
 import stone.application.xml.enums.ResponseCodeEnum;
@@ -65,6 +58,7 @@ public class PaymentsUseCase {
   public void initTransaction(Context context,
                               String amount,
                               int typeTransaction,
+                              String initiatorTransactionKey,
                               int parc,
                               boolean withInterest,
                               Map<StoneKeyType, String> stoneKeys,
@@ -72,11 +66,11 @@ public class PaymentsUseCase {
                               ){
     if(stoneKeys == null) {
       checkUserModel(context);
-      transaction(context, amount, typeTransaction, parc, withInterest, isPrinter);
+      transaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, isPrinter);
       return;
     }
     userModel = StoneStart.init(context, stoneKeys);
-    transaction(context, amount, typeTransaction, parc, withInterest, isPrinter);
+    transaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, isPrinter);
   }
 
   private void checkUserModel(Context context) {
@@ -90,10 +84,85 @@ public class PaymentsUseCase {
       }
   }
 
+
+  public void handleTransactionError(Context context, String message, ActionResult actionResult, BasicResult basicResult) {
+    mFragment.onMessage(message);
+
+    checkStatusWithErrorTransaction(posTransactionProvider.getTransactionStatus(), context);
+
+    actionResult.setTransactionStatus(posTransactionProvider.getTransactionStatus().toString());
+    actionResult.setMessageFromAuthorize(posTransactionProvider.getMessageFromAuthorize());
+    actionResult.setAuthorizationCode(posTransactionProvider.getAuthorizationCode());
+    actionResult.setResult(999999);
+    actionResult.setErrorMessage(mStoneHelper.getErrorFromErrorList(posTransactionProvider.getListOfErrors()));
+
+    mFragment.onMessage(posTransactionProvider.getMessageFromAuthorize());
+
+    basicResult.setResult(999999);
+    basicResult.setErrorMessage(mStoneHelper.getErrorFromErrorList(posTransactionProvider.getListOfErrors()));
+
+    mFragment.onError(convertBasicResultToJson(basicResult));
+    String jsonError = convertActionToJson(actionResult);
+    mFragment.onFinishedResponse(jsonError);
+    // posTransactionProvider.abortPayment();
+    currentTransactionObject = null;
+    posTransactionProvider= null;
+
+    mFragment.onMessage("Transação concluída");
+  }
+
+  public void handleTransactionSuccess(Context context, ActionResult actionResult, boolean isPrinter, TransactionObject transaction) {
+    TransactionDAO transactionDAO = new TransactionDAO(context);
+    TransactionObject transactionObject = transactionDAO.findTransactionWithInitiatorTransactionKey(transaction.getInitiatorTransactionKey());
+    checkStatusWithErrorTransaction(posTransactionProvider.getTransactionStatus(), context);
+    actionResult.setTransactionStatus(posTransactionProvider.getTransactionStatus().toString());
+    actionResult.setMessageFromAuthorize(posTransactionProvider.getMessageFromAuthorize());
+    actionResult.setAuthorizationCode(posTransactionProvider.getAuthorizationCode());
+    if(!userModel.isEmpty()){
+      String userModelString = getGson().toJson(userModel.get(0));
+      actionResult.setUserModel(userModelString);
+    }
+    boolean isPaymentApproved = posTransactionProvider.getTransactionStatus() == TransactionStatusEnum.APPROVED || currentTransactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED;
+    actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
+    String jsonStoneResult = convertActionToJson(actionResult);
+    finishTransaction(jsonStoneResult);
+
+    if (isPrinter) {
+      printerReceiptTransaction(context, currentTransactionObject, posTransactionProvider.getTransactionStatus());
+    }
+
+    posTransactionProvider = null;
+
+    mFragment.onMessage("Transação concluída");
+    mFragment.onTransactionSuccess();
+  }
+
+  public void handleTransactionStatusChanged(Action action, TransactionObject transaction, BasicResult basicResult) {
+    String actionMessage = mStoneHelper.getMessageFromTransactionAction(action);
+    mFragment.onMessage(actionMessage);
+    if (action == Action.TRANSACTION_WAITING_QRCODE_SCAN) {
+      basicResult.setMethod("QRCode");
+      basicResult.setMessage(mStoneHelper.convertBitmapToString(transaction.getQRCode()));
+      mFragment.onChanged(convertBasicResultToJson(basicResult));
+      mFragment.onAuthProgress(convertBasicResultToJson(basicResult));
+    }
+
+    if(action == Action.TRANSACTION_TYPE_SELECTION){
+      List<String> options = posTransactionProvider.getTransactionTypeOptions();
+      optionList = options;
+      basicResult.setMethod("PaymentOptions");
+      basicResult.setOptions(options);
+      basicResult.setMessage(actionMessage);
+      mFragment.onChanged(convertBasicResultToJson(basicResult));
+      mFragment.onAuthProgress(convertBasicResultToJson(basicResult));
+    }
+  }
+
   public void transaction(
           Context context,
           String amount,
           int typeTransaction,
+          String initiatorTransactionKey,
           int parc,
           boolean withInterest,
           boolean isPrinter
@@ -103,6 +172,8 @@ public class PaymentsUseCase {
     ActionResult actionResult = new ActionResult();
     actionResult.setMethod("transaction");
 
+
+
     try {
       mFragment.onMessage("Iniciando transação");
       currentTransactionObject = null;
@@ -111,79 +182,59 @@ public class PaymentsUseCase {
       final TransactionObject transaction = mStoneHelper.getTransactionObject(amount, typeTransaction, parc, withInterest);
       currentTransactionObject = transaction;
 
-      posTransactionProvider = new PosTransactionProvider(context, transaction, userModel.get(0));
+      // Essa validação é para verificar se a transação já foi realizada (recomendação da própria Stone) para evitar duplicidade
+      if(initiatorTransactionKey != null && !initiatorTransactionKey.isEmpty()){
+        TransactionDAO transactionDAO = new TransactionDAO(context);
+
+        TransactionObject transactionObject = transactionDAO.findTransactionWithInitiatorTransactionKey(initiatorTransactionKey);
+        if(transactionObject != null){
+          if(transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED){
+
+            checkStatusWithErrorTransaction(transactionObject.getTransactionStatus(), context);
+            actionResult.setTransactionStatus(transactionObject.getTransactionStatus().toString());
+            actionResult.setMessageFromAuthorize(transactionObject.getAuthorizationCode());
+            actionResult.setAuthorizationCode(transactionObject.getAuthorizationCode());
+
+            if(!userModel.isEmpty()){
+              String userModelString = getGson().toJson(userModel.get(0));
+              actionResult.setUserModel(userModelString);
+            }
+
+            boolean isPaymentApproved = transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED;
+
+            actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
+            String jsonStoneResult = convertActionToJson(actionResult);
+            finishTransaction(jsonStoneResult);
+
+            mFragment.onMessage("Transação concluída");
+            mFragment.onTransactionSuccess();
+          } else {
+            handleTransactionError(context, "Transação já realizada mas não aprovada", actionResult, basicResult);
+          }
+          return;
+        }
+
+        transaction.setInitiatorTransactionKey(initiatorTransactionKey);
+      }
+
+
       //Essa variavel posTransactionProvider está armazenando o provider para que possamos cancelar a transação
+      posTransactionProvider = new PosTransactionProvider(context, transaction, userModel.get(0));
 
       mFragment.onMessage("Comunicando com o servidor Stone. Aguarde.");
 
       posTransactionProvider.setConnectionCallback(new StoneActionCallback() {
         @Override
         public void onSuccess() {
-          TransactionDAO transactionDAO = new TransactionDAO(context);
-          List<TransactionObject> transactionObjects = transactionDAO.getAllTransactionsOrderByIdDesc();
-          checkStatusWithErrorTransaction(posTransactionProvider.getTransactionStatus(), context);
-          actionResult.setTransactionStatus(posTransactionProvider.getTransactionStatus().toString());
-          actionResult.setMessageFromAuthorize(posTransactionProvider.getMessageFromAuthorize());
-          actionResult.setAuthorizationCode(posTransactionProvider.getAuthorizationCode());
-          if(!userModel.isEmpty()){
-            String userModelString = getGson().toJson(userModel.get(0));
-            actionResult.setUserModel(userModelString);
-          }
-          boolean isPaymentApproved = posTransactionProvider.getTransactionStatus() == TransactionStatusEnum.APPROVED || currentTransactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED;
-          actionResult.buildResponseStoneTransaction(transactionObjects, isPaymentApproved);
-          String jsonStoneResult = convertActionToJson(actionResult);
-          finishTransaction(jsonStoneResult);
-
-          if(isPrinter) {
-            printerReceiptTransaction(context, currentTransactionObject, posTransactionProvider.getTransactionStatus());
-          }
-
-          posTransactionProvider = null;
+          handleTransactionSuccess(context, actionResult, isPrinter, transaction);
         }
         @Override
         public void onStatusChanged(Action action) {
-          String actionMessage = mStoneHelper.getMessageFromTransactionAction(action);
-          mFragment.onMessage(actionMessage);
-          if (action == Action.TRANSACTION_WAITING_QRCODE_SCAN) {
-            basicResult.setMethod("QRCode");
-            basicResult.setMessage(mStoneHelper.convertBitmapToString(transaction.getQRCode()));
-            mFragment.onChanged(convertBasicResultToJson(basicResult));
-            mFragment.onAuthProgress(convertBasicResultToJson(basicResult));
-          }
-
-          if(action == Action.TRANSACTION_TYPE_SELECTION){
-            List<String> options = posTransactionProvider.getTransactionTypeOptions();
-            optionList = options;
-            basicResult.setMethod("PaymentOptions");
-            basicResult.setOptions(options);
-            basicResult.setMessage(actionMessage);
-            mFragment.onChanged(convertBasicResultToJson(basicResult));
-            mFragment.onAuthProgress(convertBasicResultToJson(basicResult));
-          }
+          handleTransactionStatusChanged(action, transaction, basicResult);
         }
         @Override
         public void onError() {
-          mFragment.onMessage("Erro ao realizar transação");
-
-          checkStatusWithErrorTransaction(posTransactionProvider.getTransactionStatus(), context);
-
-          actionResult.setTransactionStatus(posTransactionProvider.getTransactionStatus().toString());
-          actionResult.setMessageFromAuthorize(posTransactionProvider.getMessageFromAuthorize());
-          actionResult.setAuthorizationCode(posTransactionProvider.getAuthorizationCode());
-          actionResult.setResult(999999);
-          actionResult.setErrorMessage(mStoneHelper.getErrorFromErrorList(posTransactionProvider.getListOfErrors()));
-
-          mFragment.onMessage(posTransactionProvider.getMessageFromAuthorize());
-
-          basicResult.setResult(999999);
-          basicResult.setErrorMessage(mStoneHelper.getErrorFromErrorList(posTransactionProvider.getListOfErrors()));
-
-          mFragment.onError(convertBasicResultToJson(basicResult));
-          String jsonError = convertActionToJson(actionResult);
-          mFragment.onFinishedResponse(jsonError);
-          // posTransactionProvider.abortPayment();
-          currentTransactionObject = null;
-          posTransactionProvider= null;
+          handleTransactionError(context, "Erro ao realizar transação", actionResult, basicResult);
         }
 
       });
@@ -252,7 +303,7 @@ public class PaymentsUseCase {
     }
   }
 
-  public void abortPIXtransaction(Context context) {
+  public void abortPIXTransaction(Context context) {
     Log.d("print", "****INICIANDO ABORT PIX");
     try {
       cancelTransactionPIX(context);
@@ -319,7 +370,7 @@ public class PaymentsUseCase {
     } catch (Exception error) {}
   }
 
-  public void initializeAndActivatePinpadWithCredentials(
+  public void initializeAndActivatePinPadWithCredentials(
           String appName,
           String stoneCode,
           Map<StoneKeyType, String> stoneKeys,
@@ -517,4 +568,48 @@ public class PaymentsUseCase {
       mFragment.onMessage("Erro ao tentar reverter transação");
     }
   }
+
+    public void getTransactionByInitiatorTransactionKey(Context context, String initiatorTransactionKey) {
+      BasicResult basicResult = new BasicResult();
+      basicResult.setMethod("paymentGetTransactionByInitiatorTransactionKey");
+      ActionResult actionResult = new ActionResult();
+      boolean isPaymentApproved = false;
+
+      try {
+        TransactionDAO transactionDAO = new TransactionDAO(context);
+        TransactionObject transactionObject = transactionDAO.findTransactionWithInitiatorTransactionKey(initiatorTransactionKey);
+
+        if (transactionObject == null) {
+          handleTransactionError(context, "Transação não encontrada", actionResult, basicResult);
+          return;
+        }
+
+        basicResult.setResult(0);
+        basicResult.setMessage("Transação encontrada");
+
+        if(transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED){
+          isPaymentApproved = true;
+        }
+
+        actionResult.setTransactionStatus(transactionObject.getTransactionStatus().toString());
+        actionResult.setMessageFromAuthorize(transactionObject.getAuthorizationCode());
+        actionResult.setAuthorizationCode(transactionObject.getAuthorizationCode());
+
+        if(!userModel.isEmpty()){
+          String userModelString = getGson().toJson(userModel.get(0));
+          actionResult.setUserModel(userModelString);
+        }
+
+        actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
+
+        actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
+        String jsonStoneResult = convertActionToJson(actionResult);
+        finishTransaction(jsonStoneResult);
+
+      } catch (Exception error) {
+        handleTransactionError(context, "Erro ao buscar transação", actionResult, basicResult);
+
+      }
+
+    }
 }

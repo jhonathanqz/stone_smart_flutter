@@ -258,60 +258,39 @@ public class ActionResult {
 
 
 
-  public void buildResponseStoneTransaction(List<TransactionObject> transactionObjects, boolean isPaymentApproved) {
-    if(transactionObjects.isEmpty()  || !isPaymentApproved){
+  public void buildResponseStoneTransaction(TransactionObject transactionObjects, boolean isPaymentApproved) {
+    if (!isPaymentApproved) {
       return;
     }
-    TransactionObject list = transactionObjects.get(0);
-    setIdFromBase(list.getIdFromBase());
-    setActionCode(String.valueOf(list.getActionCode()));
-    setAmount(list.getAmount());
-    setCardHolderNumber(String.valueOf(list.getCardHolderNumber()));
-    setDate(String.valueOf(list.getDate()));
-    setTime(String.valueOf(list.getTime()));
-    setAid(String.valueOf(list.getAid()));
-    setArcq(String.valueOf(list.getArcq()));
-    setSaleAffiliationKey(String.valueOf(list.getSaleAffiliationKey()));
-    setEntryMode(String.valueOf(list.getEntryMode()));//
-    setTypeOfTransactionEnum(String.valueOf(list.getTypeOfTransactionEnum()));//
+    
+    
+    Gson gson = new Gson();
+    String transactionObjectsJson = gson.toJson(transactionObjects);
+
+    setIdFromBase(transactionObjects.getIdFromBase());
+    setActionCode(String.valueOf(transactionObjects.getActionCode()));
+    setAmount(transactionObjects.getAmount());
+    setCardHolderNumber(String.valueOf(transactionObjects.getCardHolderNumber()));
+    setDate(String.valueOf(transactionObjects.getDate()));
+    setTime(String.valueOf(transactionObjects.getTime()));
+    setAid(String.valueOf(transactionObjects.getAid()));
+    setArcq(String.valueOf(transactionObjects.getArcq()));
+    setSaleAffiliationKey(String.valueOf(transactionObjects.getSaleAffiliationKey()));
+    setEntryMode(String.valueOf(transactionObjects.getEntryMode()));//
+    setTypeOfTransactionEnum(String.valueOf(transactionObjects.getTypeOfTransactionEnum()));//
     setSerialNumber(Stone.getPosAndroidDevice().getPosAndroidSerialNumber());
     setManufacture(Stone.getPosAndroidDevice().getPosAndroidManufacturer());
-    setTransactionReference(String.valueOf(list.getTransactionReference()));
-    setCardBrand(String.valueOf(list.getCardBrandName()));//
-    setCardBrandId(list.getCardBrandId());
-    setCardSequenceNumber(list.getCardSequenceNumber());
-    setTransactionObject(list.toString());
-    setAuthorizationCode(list.getAuthorizationCode());
-    setTransactionKey(list.getAcquirerTransactionKey());
-    setExternalID(list.getExternalId());
-    setInitiatorTransactionKey(list.getInitiatorTransactionKey());
+    setTransactionReference(String.valueOf(transactionObjects.getTransactionReference()));
+    setCardBrand(String.valueOf(transactionObjects.getCardBrandName()));//
+    setCardBrandId(transactionObjects.getCardBrandId());
+    setCardSequenceNumber(transactionObjects.getCardSequenceNumber());
+    setTransactionObject(transactionObjectsJson);
+    setAuthorizationCode(transactionObjects.getAuthorizationCode());
+    setTransactionKey(transactionObjects.getAcquirerTransactionKey());
+    setExternalID(transactionObjects.getExternalId());
+    setInitiatorTransactionKey(transactionObjects.getInitiatorTransactionKey());
     setPrinterRequest(true);
 
-    // for (TransactionObject list : transactionObjects) {
-    //   setIdFromBase(list.getIdFromBase());
-    //   setActionCode(String.valueOf(list.getActionCode()));
-    //   setAmount(list.getAmount());
-    //   setCardHolderNumber(String.valueOf(list.getCardHolderNumber()));
-    //   setDate(String.valueOf(list.getDate()));
-    //   setTime(String.valueOf(list.getTime()));
-    //   setAid(String.valueOf(list.getAid()));
-    //   setArcq(String.valueOf(list.getArcq()));
-    //   setSaleAffiliationKey(String.valueOf(list.getSaleAffiliationKey()));
-    //   setEntryMode(String.valueOf(list.getEntryMode()));//
-    //   setTypeOfTransactionEnum(String.valueOf(list.getTypeOfTransactionEnum()));//
-    //   setSerialNumber(Stone.getPosAndroidDevice().getPosAndroidSerialNumber());
-    //   setManufacture(Stone.getPosAndroidDevice().getPosAndroidManufacturer());
-    //   setTransactionReference(String.valueOf(list.getTransactionReference()));
-    //   setCardBrand(String.valueOf(list.getCardBrandName()));//
-    //   setCardBrandId(list.getCardBrandId());
-    //   setCardSequenceNumber(list.getCardSequenceNumber());
-    //   setTransactionObject(list.toString());
-    //   setAuthorizationCode(list.getAuthorizationCode());
-    //   setTransactionKey(list.getAcquirerTransactionKey());
-    //   setExternalID(list.getExternalId());
-    //   setInitiatorTransactionKey(list.getInitiatorTransactionKey());
-    //   setPrinterRequest(true);
-    // }
     this.isBuildResponse = 1;
   }
 
