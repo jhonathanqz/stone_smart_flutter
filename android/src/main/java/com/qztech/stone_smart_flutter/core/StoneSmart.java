@@ -106,19 +106,20 @@ public class StoneSmart {
         int parc = call.argument("installment");
         boolean withInterest = call.argument("withInterest");
         boolean isPrinter = call.argument("isPrinter");
+        String initiatorTransactionKey = call.argument("initiatorTransactionKey");
 
         if (call.method.equals(PAYMENT_DEBIT)) {
-            this.payment.doTransaction(currentContext,amount, 2, parc, withInterest, null,null, isPrinter);
+            this.payment.doTransaction(currentContext,amount, 2, initiatorTransactionKey, parc, withInterest, null,null, isPrinter);
         } else if (call.method.equals(PAYMENT_PIX)) {
             String qrCodeAuthotization = call.argument("qrCodeAuthorization");
             String qrCodeProviderid = call.argument("qrCodeProviderid");
-            this.payment.doTransaction(currentContext,amount, 3, parc, withInterest, qrCodeAuthotization, qrCodeProviderid, isPrinter);
+            this.payment.doTransaction(currentContext,amount, 3, initiatorTransactionKey, parc, withInterest, qrCodeAuthotization, qrCodeProviderid, isPrinter);
         } else if (call.method.equals(PAYMENT_CREDIT)) {
-            this.payment.doTransaction(currentContext,amount, 1, parc, withInterest,null,null, isPrinter);
+            this.payment.doTransaction(currentContext,amount, 1, initiatorTransactionKey, parc, withInterest,null,null, isPrinter);
         }  else if (call.method.equals(PAYMENT_CREDIT_PARC)) {
-            this.payment.doTransaction(currentContext,amount, 1, parc, withInterest,null,null, isPrinter);
+            this.payment.doTransaction(currentContext,amount, 1, initiatorTransactionKey, parc, withInterest,null,null, isPrinter);
         } else if (call.method.equals(PAYMENT_VOUCHER)) {
-            this.payment.doTransaction(currentContext,amount, 4, parc, withInterest, null,null, isPrinter);
+            this.payment.doTransaction(currentContext,amount, 4,initiatorTransactionKey, parc, withInterest, null,null, isPrinter);
         } else {
             result.notImplemented();
         }

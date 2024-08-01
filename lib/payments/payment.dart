@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-
 import 'package:stone_smart_flutter/payments/handler/istone_handler.dart';
 import 'package:stone_smart_flutter/payments/helper/istone_helper.dart';
 import 'package:stone_smart_flutter/payments/utils/payment_types.dart';
@@ -76,10 +75,11 @@ class Payment {
     }
   }
 
-//Function to invoke method from credit payment with sdk the Stone
+  //Function to invoke method from credit payment with sdk the Stone
   Future<bool> creditPayment(
     int value, {
     bool isPrinterEstablishment = true,
+    String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
       PaymentTypeCall.CREDIT.method,
@@ -88,16 +88,18 @@ class Payment {
         "installment": 1,
         "withInterest": false,
         "isPrinter": isPrinterEstablishment,
+        "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
   }
 
-//Function to invoke method from credit installment payment  with sdk the Stone
+  //Function to invoke method from credit installment payment  with sdk the Stone
   Future<bool> creditPaymentParc({
     required int value,
     int installment = 1,
     bool withInterest = false,
     bool isPrinterEstablishment = true,
+    String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
       PaymentTypeCall.CREDIT_PARC.method,
@@ -106,14 +108,16 @@ class Payment {
         "installment": installment,
         "withInterest": withInterest,
         "isPrinter": isPrinterEstablishment,
+        "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
   }
 
-//Function to invoke method from debit payment with sdk the Stone
+  //Function to invoke method from debit payment with sdk the Stone
   Future<bool> debitPayment(
     int value, {
     bool isPrinterEstablishment = true,
+    String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
       PaymentTypeCall.DEBIT.method,
@@ -122,6 +126,7 @@ class Payment {
         "installment": 1,
         "withInterest": false,
         "isPrinter": isPrinterEstablishment,
+        "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
   }
@@ -132,6 +137,7 @@ class Payment {
     required String qrCodeAuthroization,
     required String qrCodeProviderid,
     bool isPrinterEstablishment = true,
+    String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
       PaymentTypeCall.PIX.method,
@@ -142,14 +148,16 @@ class Payment {
         "qrCodeAuthorization": qrCodeAuthroization,
         "qrCodeProviderid": qrCodeProviderid,
         "isPrinter": isPrinterEstablishment,
+        "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
   }
 
-//Function to invoke method from voucher payment with sdk the Stone
+  //Function to invoke method from voucher payment with sdk the Stone
   Future<bool> voucherPayment(
     int value, {
     bool isPrinterEstablishment = true,
+    String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
       PaymentTypeCall.VOUCHER.method,
@@ -158,6 +166,7 @@ class Payment {
         "installment": 1,
         "withInterest": false,
         "isPrinter": isPrinterEstablishment,
+        "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
   }

@@ -1,16 +1,16 @@
 //Contract payment handler
 abstract class IStoneHandler {
-  void onTransactionSuccess();
+  Future<void> onTransactionSuccess();
 
-  void onError(String message);
+  Future<void> onError(String message);
 
-  void onMessage(String message);
+  Future<void> onMessage(String message);
 
-  void onChanged(String message);
+  Future<void> onChanged(String message);
 
-  void onFinishedResponse(String message);
+  Future<void> onFinishedResponse(String message);
 
-  void onLoading(bool show);
+  Future<void> onLoading(bool show);
 
-  void onAuthProgress(String message);
+  Future<void> onAuthProgress(String message);
 }
