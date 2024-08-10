@@ -4,7 +4,7 @@ enum PaymentTypeHandler { ON_TRANSACTION_SUCCESS, ON_ERROR, ON_MESSAGE, ON_LOADI
 extension StringPaymentHandlerExt on String {
   get handler {
     switch (this) {
-      case "onTransactionSucess":
+      case "onTransactionSuccess":
         return PaymentTypeHandler.ON_TRANSACTION_SUCCESS;
       case "onError":
         return PaymentTypeHandler.ON_ERROR;
@@ -36,7 +36,7 @@ extension PaymentTypeHandlerExt on PaymentTypeHandler {
   get method {
     switch (this) {
       case PaymentTypeHandler.ON_TRANSACTION_SUCCESS:
-        return "onTransactionSucess";
+        return "onTransactionSuccess";
       case PaymentTypeHandler.ON_ERROR:
         return "onError";
       case PaymentTypeHandler.ON_MESSAGE:
