@@ -28,49 +28,49 @@ abstract class IStoneHelper {
   static Future<dynamic> callHandler({
     required MethodCall call,
     required IStoneHandler iStoneHandler,
-    IStoneSmartHanlder? stoneSmartHanlder,
+    IStoneSmartHandler? stoneSmartHandler,
   }) async {
     switch (call.method.handler) {
       case PaymentTypeHandler.ON_TRANSACTION_SUCCESS:
         {
           iStoneHandler.onTransactionSuccess();
-          _stSmartHandler(message: call.arguments, iStoneSmartHanlder: stoneSmartHanlder);
+          _stSmartHandler(call: call, iStoneSmartHandler: stoneSmartHandler);
         }
         break;
       case PaymentTypeHandler.ON_ERROR:
         {
           iStoneHandler.onError(call.arguments);
-          _stSmartHandler(message: call.arguments, iStoneSmartHanlder: stoneSmartHanlder);
+          _stSmartHandler(call: call, iStoneSmartHandler: stoneSmartHandler);
         }
         break;
       case PaymentTypeHandler.ON_MESSAGE:
         {
           iStoneHandler.onMessage(call.arguments);
-          _stSmartHandler(message: call.arguments, iStoneSmartHanlder: stoneSmartHanlder);
+          _stSmartHandler(call: call, iStoneSmartHandler: stoneSmartHandler);
         }
         break;
       case PaymentTypeHandler.ON_FINISHED_RESPONSE:
         {
           iStoneHandler.onFinishedResponse(call.arguments);
-          _stSmartHandler(message: call.arguments, iStoneSmartHanlder: stoneSmartHanlder);
+          _stSmartHandler(call: call, iStoneSmartHandler: stoneSmartHandler);
         }
         break;
       case PaymentTypeHandler.ON_CHANGED:
         {
           iStoneHandler.onChanged(call.arguments);
-          _stSmartHandler(message: call.arguments, iStoneSmartHanlder: stoneSmartHanlder);
+          _stSmartHandler(call: call, iStoneSmartHandler: stoneSmartHandler);
         }
         break;
       case PaymentTypeHandler.ON_LOADING:
         {
           iStoneHandler.onLoading(call.arguments);
-          _stSmartHandler(message: call.arguments, iStoneSmartHanlder: stoneSmartHanlder);
+          _stSmartHandler(call: call, iStoneSmartHandler: stoneSmartHandler);
         }
         break;
       case PaymentTypeHandler.ON_AUTH_PROGRESS:
         {
           iStoneHandler.onAuthProgress(call.arguments);
-          _stSmartHandler(message: call.arguments, iStoneSmartHanlder: stoneSmartHanlder);
+          _stSmartHandler(call: call, iStoneSmartHandler: stoneSmartHandler);
         }
         break;
       default:
@@ -80,63 +80,67 @@ abstract class IStoneHelper {
   }
 
   static void _stSmartHandler({
-    required dynamic message,
-    IStoneSmartHanlder? iStoneSmartHanlder,
+    required MethodCall call,
+    IStoneSmartHandler? iStoneSmartHandler,
   }) {
-    if (iStoneSmartHanlder == null) return;
-    switch (message.handler) {
+    if (iStoneSmartHandler == null) return;
+    switch (call.method.handler) {
       case PaymentTypeHandler.ON_TRANSACTION_SUCCESS:
         {
-          iStoneSmartHanlder.onTransactionSuccess();
+          iStoneSmartHandler.onTransactionSuccess();
         }
         break;
       case PaymentTypeHandler.ON_ERROR:
         {
-          iStoneSmartHanlder.onError(IStoneHelper.convertToStoneResponse(message));
+          iStoneSmartHandler
+              .onError(IStoneHelper.convertToStoneResponse(call.arguments));
         }
         break;
       case PaymentTypeHandler.ON_MESSAGE:
         {
-          iStoneSmartHanlder.onMessage(message);
+          iStoneSmartHandler.onMessage(call.arguments);
         }
         break;
       case PaymentTypeHandler.ON_FINISHED_RESPONSE:
         {
-          iStoneSmartHanlder.onFinishedResponse(IStoneHelper.convertToStoneTransactionModel(message));
+          iStoneSmartHandler.onFinishedResponse(
+              IStoneHelper.convertToStoneTransactionModel(call.arguments));
         }
         break;
       case PaymentTypeHandler.ON_CHANGED:
         {
-          iStoneSmartHanlder.onChanged(IStoneHelper.convertToStoneResponse(message));
+          iStoneSmartHandler
+              .onChanged(IStoneHelper.convertToStoneResponse(call.arguments));
         }
         break;
       case PaymentTypeHandler.ON_LOADING:
         {
-          iStoneSmartHanlder.onLoading(message);
+          iStoneSmartHandler.onLoading(call.arguments);
         }
         break;
       case PaymentTypeHandler.WRITE_TO_FILE:
         {
-          iStoneSmartHanlder.writeToFile(
-            transactionCode: message['transactionCode'],
-            transactionId: message['transactionId'],
-            response: message['response'],
+          iStoneSmartHandler.writeToFile(
+            transactionCode: call.arguments['transactionCode'],
+            transactionId: call.arguments['transactionId'],
+            response: call.arguments['response'],
           );
         }
         break;
       case PaymentTypeHandler.ON_ABORTED_SUCCESSFULLY:
         {
-          iStoneSmartHanlder.onAbortedSuccessfully();
+          iStoneSmartHandler.onAbortedSuccessfully();
         }
         break;
       case PaymentTypeHandler.ON_AUTH_PROGRESS:
         {
-          iStoneSmartHanlder.onAuthProgress(IStoneHelper.convertToStoneResponse(message));
+          iStoneSmartHandler.onAuthProgress(
+              IStoneHelper.convertToStoneResponse(call.arguments));
         }
         break;
       case PaymentTypeHandler.ON_TRANSACTION_INFO:
         {
-          iStoneSmartHanlder.onTransactionInfo(message);
+          iStoneSmartHandler.onTransactionInfo(call.arguments);
         }
         break;
       default:
