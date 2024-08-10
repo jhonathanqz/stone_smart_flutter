@@ -1,3 +1,8 @@
+## 1.0.12
+
+- Create and configure new method getTransactionByInitiatorTransactionKey
+- Fix structure
+
 ## 1.0.11+2
 
 - Fixed method transaction with abort

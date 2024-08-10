@@ -147,7 +147,7 @@ public class PaymentsUseCase {
       mFragment.onAuthProgress(convertBasicResultToJson(basicResult));
     }
 
-    if(action == Action.TRANSACTION_TYPE_SELECTION){
+    if(action == Action.TRANSACTION_TYPE_SELECTION) {
       List<String> options = posTransactionProvider.getTransactionTypeOptions();
       optionList = options;
       basicResult.setMethod("PaymentOptions");
@@ -530,7 +530,7 @@ public class PaymentsUseCase {
 
     try {
       ReversalProvider reversalProvider = new ReversalProvider(context);
-      mFragment.onMessage("Cancelando transação com erro");
+      // mFragment.onMessage("Cancelando transação com erro");
       // reversalProvider.setDialogMessage("Cancelando transação com erro");
       // reversalProvider.isDefaultUI();
       reversalProvider.setConnectionCallback(new StoneCallbackInterface() {
@@ -547,14 +547,14 @@ public class PaymentsUseCase {
           //   mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
           //   return;
           // }
-          mFragment.onMessage("Transação concluída");
+          // mFragment.onMessage("Transação concluída");
           mFragment.onTransactionSuccess();
           mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
         }
 
         @Override
         public void onError() {
-          mFragment.onMessage("Erro ao processar transação");
+          // mFragment.onMessage("Erro ao processar transação");
           basicResult.setResult(999999);
           basicResult.setErrorMessage("Erro ao processar transação");
 
@@ -565,7 +565,7 @@ public class PaymentsUseCase {
     } catch (Exception error) {
       basicResult.setErrorMessage(error.getMessage());
       mFragment.onError(convertBasicResultToJson(basicResult));
-      mFragment.onMessage("Erro ao tentar reverter transação");
+      // mFragment.onMessage("Erro ao tentar reverter transação");
     }
   }
 

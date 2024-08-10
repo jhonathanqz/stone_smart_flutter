@@ -1,25 +1,12 @@
 // ignore_for_file: constant_identifier_names
 //Fixed payment type hanldle from return functions
 
-enum PaymentTypeHandler {
-  ON_TRANSACTION_SUCCESS,
-  ON_ERROR,
-  ON_MESSAGE,
-  ON_LOADING,
-  WRITE_TO_FILE,
-  ON_ABORTED_SUCCESSFULLY,
-  DISPOSE_DIALOG,
-  ACTIVE_DIALOG,
-  ON_AUTH_PROGRESS,
-  ON_TRANSACTION_INFO,
-  ON_FINISHED_RESPONSE,
-  ON_CHANGED
-}
+enum PaymentTypeHandler { ON_TRANSACTION_SUCCESS, ON_ERROR, ON_MESSAGE, ON_LOADING, WRITE_TO_FILE, ON_ABORTED_SUCCESSFULLY, DISPOSE_DIALOG, ACTIVE_DIALOG, ON_AUTH_PROGRESS, ON_TRANSACTION_INFO, ON_FINISHED_RESPONSE, ON_CHANGED }
 
 extension StringPaymentHandlerExt on String {
   get handler {
     switch (this) {
-      case "onTransactionSucess":
+      case "onTransactionSuccess":
         return PaymentTypeHandler.ON_TRANSACTION_SUCCESS;
       case "onError":
         return PaymentTypeHandler.ON_ERROR;
@@ -51,7 +38,7 @@ extension PaymentTypeHandlerExt on PaymentTypeHandler {
   get method {
     switch (this) {
       case PaymentTypeHandler.ON_TRANSACTION_SUCCESS:
-        return "onTransactionSucess";
+        return "onTransactionSuccess";
       case PaymentTypeHandler.ON_ERROR:
         return "onError";
       case PaymentTypeHandler.ON_MESSAGE:

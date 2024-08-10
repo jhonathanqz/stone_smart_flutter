@@ -1,7 +1,7 @@
 import 'package:stone_smart_flutter/payments/model/stone_response.dart';
 import 'package:stone_smart_flutter/payments/model/stone_transaction_model.dart';
 
-abstract class IStoneSmartHanlder {
+abstract class IStoneSmartHandler {
   void onTransactionSuccess();
 
   void onError(StoneResponse response);

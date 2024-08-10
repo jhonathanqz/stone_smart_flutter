@@ -11,17 +11,17 @@ const CHANNEL_NAME = "stone_smart_flutter";
 class Payment {
   final MethodChannel channel;
   final IStoneHandler paymentHandler;
-  final IStoneSmartHanlder? iStoneSmartHanlder;
+  final IStoneSmartHandler? iStoneSmartHandler;
 
   Payment({
     required this.channel,
     required this.paymentHandler,
-    this.iStoneSmartHanlder,
+    this.iStoneSmartHandler,
   }) {
     channel.setMethodCallHandler((e) => IStoneHelper.callHandler(
           call: e,
           iStoneHandler: paymentHandler,
-          stoneSmartHanlder: iStoneSmartHanlder,
+          stoneSmartHandler: iStoneSmartHandler,
         ));
   }
 
