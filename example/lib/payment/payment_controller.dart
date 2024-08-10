@@ -21,64 +21,37 @@ class PaymentController extends IStoneHandler {
   }
 
   @override
-  void disposeDialog() {
-    //BotToast.cleanAll();
+  Future<void> onAuthProgress(String message) {
+    throw UnimplementedError();
   }
 
   @override
-  void onAbortedSuccessfully() {}
-
-  @override
-  void onActivationDialog() {}
-
-  @override
-  void onAuthProgress(String message) {
-    print('***onAuthProgress: $message');
+  Future<void> onChanged(String message) {
+    throw UnimplementedError();
   }
 
   @override
-  void onError(String message) {
-    print('***onError: $message');
+  Future<void> onError(String message) {
+    throw UnimplementedError();
   }
 
   @override
-  void onMessage(String message) {
-    print('***********onMessage: $message');
+  Future<void> onFinishedResponse(String message) {
+    throw UnimplementedError();
   }
 
   @override
-  void onFinishedResponse(String message) {
-    print('***onFinishedResponse: $message');
+  Future<void> onLoading(bool show) {
+    throw UnimplementedError();
   }
 
   @override
-  void onTransactionSuccess() {}
-
-  @override
-  void writeToFile({
-    String? transactionCode,
-    String? transactionId,
-    String? response,
-  }) {}
-
-  @override
-  void onLoading(bool show) {}
-
-  @override
-  void onTransactionInfo({
-    String? transactionCode,
-    String? transactionId,
-    String? response,
-  }) {
-    this.transactionCode = transactionCode;
-    this.transactionId = transactionId;
-    this.response = response;
-
-    enableRefund = true;
+  Future<void> onMessage(String message) {
+    throw UnimplementedError();
   }
 
   @override
-  void onChanged(String message) {
-    // TODO: implement onChanged
+  Future<void> onTransactionSuccess() {
+    throw UnimplementedError();
   }
 }
