@@ -1,7 +1,6 @@
 package com.qztech.stone_smart_flutter.payments;
 
 import android.content.Context;
-import android.util.Log;
 
 
 import java.util.HashMap;
@@ -30,13 +29,14 @@ public class PaymentsPresenter {
     public void doTransaction(Context context,
                               String amount,
                               int typeTransaction,
+                              String initiatorTransactionKey,
                               int parc,
                               boolean withInterest,
                               String qrCodeAuthorization,
                               String qrCodeProviderid,
                               boolean isPrinter) {
         if(qrCodeProviderid == null && qrCodeAuthorization == null){
-            mUseCase.initTransaction(context, amount, typeTransaction, parc, withInterest, null, isPrinter);
+            mUseCase.initTransaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, null, isPrinter);
             return;
         }
         Map<StoneKeyType, String> stoneKeys = new HashMap<StoneKeyType, String>()
@@ -46,7 +46,7 @@ public class PaymentsPresenter {
                 put(StoneKeyType.QRCODE_PROVIDERID, qrCodeProviderid);
             }
         };
-        mUseCase.initTransaction(context, amount, typeTransaction, parc, withInterest, stoneKeys, isPrinter);
+        mUseCase.initTransaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, stoneKeys, isPrinter);
     }
 
     public void printerCurrentTransaction(Context context, boolean isPrinter) {
@@ -76,7 +76,7 @@ public class PaymentsPresenter {
                 put(StoneKeyType.QRCODE_PROVIDERID, qrCodeProviderid);
             }
         };
-        mUseCase.initializeAndActivatePinpadWithCredentials(appName, stoneCode, stoneKeys, context);
+        mUseCase.initializeAndActivatePinPadWithCredentials(appName, stoneCode, stoneKeys, context);
 
     }
     public void cancelTransaction(Context context, String amount, int typeTransaction) {
@@ -92,10 +92,13 @@ public class PaymentsPresenter {
     }
 
     public void abortPIXtransaction(Context context){
-        mUseCase.abortPIXtransaction(context);
+        mUseCase.abortPIXTransaction(context);
     }
 
-
+    public void getTransactionByInitiatorTransactionKey(Context context, String initiatorTransactionKey) {
+        System.out.println("InitiatorTransactionKey: " + initiatorTransactionKey);
+        mUseCase.getTransactionByInitiatorTransactionKey(context, initiatorTransactionKey);
+    }
 
     public void dispose() {
         if (mSubscribe != null) {

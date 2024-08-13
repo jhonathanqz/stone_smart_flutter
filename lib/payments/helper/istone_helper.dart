@@ -92,8 +92,7 @@ abstract class IStoneHelper {
         break;
       case PaymentTypeHandler.ON_ERROR:
         {
-          iStoneSmartHandler
-              .onError(IStoneHelper.convertToStoneResponse(call.arguments));
+          iStoneSmartHandler.onError(IStoneHelper.convertToStoneResponse(call.arguments));
         }
         break;
       case PaymentTypeHandler.ON_MESSAGE:
@@ -103,14 +102,12 @@ abstract class IStoneHelper {
         break;
       case PaymentTypeHandler.ON_FINISHED_RESPONSE:
         {
-          iStoneSmartHandler.onFinishedResponse(
-              IStoneHelper.convertToStoneTransactionModel(call.arguments));
+          iStoneSmartHandler.onFinishedResponse(IStoneHelper.convertToStoneTransactionModel(call.arguments));
         }
         break;
       case PaymentTypeHandler.ON_CHANGED:
         {
-          iStoneSmartHandler
-              .onChanged(IStoneHelper.convertToStoneResponse(call.arguments));
+          iStoneSmartHandler.onChanged(IStoneHelper.convertToStoneResponse(call.arguments));
         }
         break;
       case PaymentTypeHandler.ON_LOADING:
@@ -134,8 +131,7 @@ abstract class IStoneHelper {
         break;
       case PaymentTypeHandler.ON_AUTH_PROGRESS:
         {
-          iStoneSmartHandler.onAuthProgress(
-              IStoneHelper.convertToStoneResponse(call.arguments));
+          iStoneSmartHandler.onAuthProgress(IStoneHelper.convertToStoneResponse(call.arguments));
         }
         break;
       case PaymentTypeHandler.ON_TRANSACTION_INFO:

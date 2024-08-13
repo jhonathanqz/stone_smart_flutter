@@ -11,7 +11,6 @@ class PaymentController extends IStoneHandler {
   String? transactionCode;
   String? transactionId;
   String? response;
-  ValueNotifier<String> message = ValueNotifier<String>('');
 
   void setSaleValue(double value) {
     if (value > 0.0) {
@@ -25,22 +24,22 @@ class PaymentController extends IStoneHandler {
   }
 
   @override
-  Future<void> onAuthProgress(String message) async {
+  Future<void> onAuthProgress(String? message) async {
     debugPrint('***onAuthProgress: $message');
   }
 
   @override
-  Future<void> onChanged(String message) async {
+  Future<void> onChanged(String? message) async {
     debugPrint('***onChanged: $message');
   }
 
   @override
-  Future<void> onError(String message) async {
+  Future<void> onError(String? message) async {
     debugPrint('***onError: $message');
   }
 
   @override
-  Future<void> onFinishedResponse(String message) async {
+  Future<void> onFinishedResponse(String? message) async {
     debugPrint('***onFinishedResponse: $message');
   }
 
@@ -50,8 +49,7 @@ class PaymentController extends IStoneHandler {
   }
 
   @override
-  Future<void> onMessage(String message) async {
-    this.message.value = message;
+  Future<void> onMessage(String? message) async {
   }
 
   @override

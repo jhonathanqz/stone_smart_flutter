@@ -23,7 +23,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: widget.controller.message,
+      valueListenable: widget.smartController.transactions,
       builder: (context, value, child) {
         return ListView.builder(
             itemCount: widget.smartController.transactions.value.length,

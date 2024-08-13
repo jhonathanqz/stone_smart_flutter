@@ -11,6 +11,7 @@ class PaymentSmartController extends IStoneSmartHandler {
   String? transactionCode;
   String? transactionId;
   String? response;
+  ValueNotifier<String> message = ValueNotifier<String>('');
   ValueNotifier<List<Map>> transactions = ValueNotifier<List<Map>>([]);
 
   void setSaleValue(double value) {
@@ -54,7 +55,7 @@ class PaymentSmartController extends IStoneSmartHandler {
 
   @override
   void onMessage(String message) {
-    debugPrint('***onAuthProgress: $message');
+    this.message.value = message;
   }
 
   @override

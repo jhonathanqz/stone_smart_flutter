@@ -163,7 +163,7 @@ class _PaymentPageState extends State<PaymentPage> {
               height: 10,
             ),
             ValueListenableBuilder(
-              valueListenable: widget.controller.message,
+              valueListenable: widget.smartController.message,
               builder: (context, value, child) {
                 return Text(value);
               },

@@ -29,7 +29,6 @@ android {
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
-
     signingConfigs {
         positivo {
             storeFile file('..\\..\\Chaves\\positivo-keystore.jks')

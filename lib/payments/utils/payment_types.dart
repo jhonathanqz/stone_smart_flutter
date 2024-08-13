@@ -1,18 +1,7 @@
+// ignore_for_file: constant_identifier_names
 //Fixed payment type hanldle from return functions
-enum PaymentTypeHandler {
-  ON_TRANSACTION_SUCCESS,
-  ON_ERROR,
-  ON_MESSAGE,
-  ON_LOADING,
-  WRITE_TO_FILE,
-  ON_ABORTED_SUCCESSFULLY,
-  DISPOSE_DIALOG,
-  ACTIVE_DIALOG,
-  ON_AUTH_PROGRESS,
-  ON_TRANSACTION_INFO,
-  ON_FINISHED_RESPONSE,
-  ON_CHANGED
-}
+
+enum PaymentTypeHandler { ON_TRANSACTION_SUCCESS, ON_ERROR, ON_MESSAGE, ON_LOADING, WRITE_TO_FILE, ON_ABORTED_SUCCESSFULLY, DISPOSE_DIALOG, ACTIVE_DIALOG, ON_AUTH_PROGRESS, ON_TRANSACTION_INFO, ON_FINISHED_RESPONSE, ON_CHANGED }
 
 extension StringPaymentHandlerExt on String {
   get handler {
@@ -49,7 +38,7 @@ extension PaymentTypeHandlerExt on PaymentTypeHandler {
   get method {
     switch (this) {
       case PaymentTypeHandler.ON_TRANSACTION_SUCCESS:
-        return "onTransactionSucess";
+        return "onTransactionSuccess";
       case PaymentTypeHandler.ON_ERROR:
         return "onError";
       case PaymentTypeHandler.ON_MESSAGE:
@@ -94,6 +83,7 @@ enum PaymentTypeCall {
   REVERSAL,
   PRINTER_TRANSACTION,
   PAYMENT_OPTION,
+  GET_TRANSACTION_BY_INITIATOR_TRANSACTION_KEY,
 }
 
 enum PaymentTypeTransaction { CREDIT, DEBIT, VOUCHER, PIX }
@@ -162,6 +152,8 @@ extension PaymentTypeCallExt on PaymentTypeCall {
         return "paymentAbortPix";
       case PaymentTypeCall.PAYMENT_OPTION:
         return "paymentOptions";
+      case PaymentTypeCall.GET_TRANSACTION_BY_INITIATOR_TRANSACTION_KEY:
+        return "paymentGetTransactionByInitiatorTransactionKey";
     }
   }
 }
