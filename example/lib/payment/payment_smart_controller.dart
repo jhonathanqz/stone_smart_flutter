@@ -11,6 +11,7 @@ class PaymentSmartController extends IStoneSmartHandler {
   String? transactionCode;
   String? transactionId;
   String? response;
+  ValueNotifier<List<Map>> transactions = ValueNotifier<List<Map>>([]);
 
   void setSaleValue(double value) {
     if (value > 0.0) {
@@ -30,47 +31,39 @@ class PaymentSmartController extends IStoneSmartHandler {
 
   @override
   void onAuthProgress(StoneResponse response) {
-    debugPrint('***onAuthProgress: ${response.toJson()}');
-    debugPrint('***onAuthProgress: ${response.message}');
+    debugPrint('***onAuthProgress: $response');
   }
 
   @override
   void onChanged(StoneResponse response) {
-    debugPrint('***onChanged: ${response.toJson()}');
-    debugPrint('***onChanged: ${response.message}');
+    debugPrint('***onAuthProgress: $response');
   }
 
   @override
   void onError(StoneResponse response) {
-    debugPrint('***onError: ${response.toJson()}');
-    debugPrint('***onError: ${response.message}');
+    debugPrint('***onAuthProgress: $response');
   }
 
   @override
   void onFinishedResponse(StoneTransactionModel response) {
-    debugPrint('***onFinishedResponse: ${response.toJson()}');
-    debugPrint('***onFinishedResponse: ${response.message}');
+    debugPrint('***onAuthProgress: $response');
   }
 
   @override
-  void onLoading(bool show) {
-    debugPrint('***onLoading: $show');
-  }
+  void onLoading(bool show) {}
 
   @override
   void onMessage(String message) {
-    debugPrint('***********onMessage: $message');
+    debugPrint('***onAuthProgress: $message');
   }
 
   @override
   void onTransactionInfo(String response) {
-    debugPrint('***onTransactionInfo: $response');
+    debugPrint('***onAuthProgress: $response');
   }
 
   @override
-  void onTransactionSuccess() {
-    debugPrint('***onTransactionSuccess');
-  }
+  void onTransactionSuccess() {}
 
   @override
   void writeToFile({
@@ -78,6 +71,10 @@ class PaymentSmartController extends IStoneSmartHandler {
     String? transactionId,
     String? response,
   }) {
-    debugPrint('***writeToFile: $transactionCode, $transactionId, $response');
+    transactions.value.add({
+      'transactionId': transactionId,
+      'transactionCode': transactionCode,
+      'value': saleValue.toString(),
+    });
   }
 }

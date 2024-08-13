@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:stone_smart_flutter/payments/handler/istone_handler.dart';
 
@@ -9,6 +11,7 @@ class PaymentController extends IStoneHandler {
   String? transactionCode;
   String? transactionId;
   String? response;
+  ValueNotifier<String> message = ValueNotifier<String>('');
 
   void setSaleValue(double value) {
     if (value > 0.0) {
@@ -22,37 +25,37 @@ class PaymentController extends IStoneHandler {
   }
 
   @override
-  void onAuthProgress(String message) {
+  Future<void> onAuthProgress(String message) async {
     debugPrint('***onAuthProgress: $message');
   }
 
   @override
-  void onError(String message) {
+  Future<void> onChanged(String message) async {
+    debugPrint('***onChanged: $message');
+  }
+
+  @override
+  Future<void> onError(String message) async {
     debugPrint('***onError: $message');
   }
 
   @override
-  void onMessage(String message) {
-    debugPrint('***********onMessage: $message');
-  }
-
-  @override
-  void onFinishedResponse(String message) {
+  Future<void> onFinishedResponse(String message) async {
     debugPrint('***onFinishedResponse: $message');
   }
 
   @override
-  void onTransactionSuccess() {
-    debugPrint('***onTransactionSuccess');
-  }
-
-  @override
-  void onLoading(bool show) {
+  Future<void> onLoading(bool show) async {
     debugPrint('***onLoading: $show');
   }
 
   @override
-  void onChanged(String message) {
-    debugPrint('***onChanged: $message');
+  Future<void> onMessage(String message) async {
+    this.message.value = message;
+  }
+
+  @override
+  Future<void> onTransactionSuccess() async {
+    debugPrint('***onTransactionSuccess');
   }
 }
