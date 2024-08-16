@@ -98,7 +98,7 @@ public class StoneSmart {
         String amount = call.argument("amount");
 
         if (call.method.equals(PAYMENT_CANCEL_TRANSACTION)) {
-            int typeTransaction = call.argument("typeTransaction");
+            int typeTransaction = call.argument("transactionType");
             this.payment.cancelTransaction(currentContext, amount, typeTransaction);
             return;
         }

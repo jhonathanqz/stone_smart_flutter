@@ -1,6 +1,6 @@
 ## 1.0.13
 
-- Update Stone SDK to v4.9.2
+- Update Stone SDK to v4.9.3
 - Fixed abortPix Payment
 
 ## 1.0.12
