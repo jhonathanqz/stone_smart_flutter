@@ -187,7 +187,7 @@ public class PaymentsUseCase {
         TransactionDAO transactionDAO = new TransactionDAO(context);
 
         TransactionObject transactionObject = transactionDAO.findTransactionWithInitiatorTransactionKey(initiatorTransactionKey);
-        if(transactionObject != null){
+        if(transactionObject != null) {
           if(transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED){
 
             checkStatusWithErrorTransaction(transactionObject.getTransactionStatus(), context);
@@ -226,6 +226,7 @@ public class PaymentsUseCase {
       posTransactionProvider.setConnectionCallback(new StoneActionCallback() {
         @Override
         public void onSuccess() {
+          checkTransactionWithError(context);
           handleTransactionSuccess(context, actionResult, isPrinter, transaction);
         }
         @Override
@@ -234,6 +235,7 @@ public class PaymentsUseCase {
         }
         @Override
         public void onError() {
+          checkTransactionWithError(context);
           handleTransactionError(context, "Erro ao realizar transação", actionResult, basicResult);
         }
 
@@ -416,30 +418,69 @@ public class PaymentsUseCase {
       basicResult.setErrorMessage(error.getMessage());
       mFragment.onError(convertBasicResultToJson(basicResult));
     }
+
+    checkTransactionWithError(context);
   }
 
   public void cancelTransactionPIX(Context context) {
     BasicResult basicResult = new BasicResult();
     basicResult.setMethod("abortPix");
+    // Log.d("print", "****************************************************************** ABORT PIX 1 ******************************************************************");
+    if(posTransactionProvider != null) {
+        posTransactionProvider.abortPayment();
+      }
+
     try {
       final CancellationProvider cancellationProvider = new CancellationProvider(context, currentTransactionObject);
       cancellationProvider.execute();
-      // if(posTransactionProvider != null) {
-      //   posTransactionProvider.abortPayment();
-      // }
+      
     } catch (Exception error) {
+      Log.d("print", "****ERRO_CANCEL_PIX_1: " + error.getMessage());
       mFragment.onMessage("Transação cancelada");
       basicResult.setResult(999999);
-      basicResult.setMessage(error.getMessage());
-      String jsonError = convertBasicResultToJson(basicResult);
-      mFragment.onFinishedResponse(jsonError);
+      
     }
 
-    try {
-      final TransactionObject transaction = mStoneHelper.getTransactionObject("1", 3, 1, false);
-      final PosTransactionProvider provider = new PosTransactionProvider(context, transaction, userModel.get(0));
-      provider.execute();
-    } catch(Exception e) {}
+    // try {
+    //   final TransactionObject transaction = mStoneHelper.getTransactionObject("1", 3, 1, false);
+    //   final PosTransactionProvider provider = new PosTransactionProvider(context, transaction, userModel.get(0));
+    //   provider.execute();
+    // } catch(Exception e) {
+    //   Log.d("print", "****ERRO_CANCEL_PIX_2: " + e.getMessage());
+    // }
+
+    // try {
+    //   Log.d("print", "****ERRO_CANCEL_PIX NOVO");
+    //   ReversalProvider reversalProvider = new ReversalProvider(context);
+    //   reversalProvider.setConnectionCallback(new StoneCallbackInterface() {
+    //         @Override
+    //         public void onSuccess() {
+    //           Log.d("print", "****ERRO_CANCEL_PIX_ON SUCCESS");
+    //           basicResult.setMessage("OK");
+    //           String jsonError = convertBasicResultToJson(basicResult);
+    //           mFragment.onFinishedResponse(jsonError);
+    //           Log.d("print", "****************************************************************** ABORT PIX 3 ******************************************************************");
+    //         }
+
+    //         @Override
+    //         public void onError() {
+    //           Log.d("print", "****ERRO_CANCEL_PIX_ON ERROR");
+    //           basicResult.setMessage("ERROR");
+    //           String jsonError = convertBasicResultToJson(basicResult);
+    //           mFragment.onFinishedResponse(jsonError);
+    //           Log.d("print", "****************************************************************** ABORT PIX 4 ******************************************************************");
+    //         }
+    //   });
+    //   reversalProvider.execute();
+    // } catch(Exception e) {
+    //   Log.d("print", "****ERRO_CANCEL_PIX_3: " + e.getMessage());
+    //   basicResult.setMessage("ERROR");
+    //   String jsonError = convertBasicResultToJson(basicResult);
+    //   mFragment.onFinishedResponse(jsonError);
+    // }
+    checkTransactionWithError(context);
+
+    // Log.d("print", "****************************************************************** ABORT PIX 2 ******************************************************************");
   }
 
   @NonNull
@@ -512,7 +553,7 @@ public class PaymentsUseCase {
     return activeApplicationProvider;
   }
 
-  public void checkStatusWithErrorTransaction(TransactionStatusEnum status, Context context){
+  public void checkStatusWithErrorTransaction(TransactionStatusEnum status, Context context) {
     if(status == null || (status != TransactionStatusEnum.WITH_ERROR && status != TransactionStatusEnum.APPROVED) ) {
       if(posTransactionProvider != null) {
         posTransactionProvider.abortPayment();
@@ -524,48 +565,47 @@ public class PaymentsUseCase {
     }
   }
 
+  public void checkTransactionWithError(Context context) {
+    // if (posTransactionProvider == null) {
+    //   return;
+    // }
+
+    // TransactionStatusEnum transactionStatus = posTransactionProvider.getTransactionStatus();
+
+    // if(transactionStatus == TransactionStatusEnum.WITH_ERROR) {
+    //   onReversalTransaction(context);
+    // }
+    onReversalTransaction(context);
+  }
+
   public void onReversalTransaction(Context context) {
     BasicResult basicResult = new BasicResult();
     basicResult.setMethod("reversal");
 
     try {
       ReversalProvider reversalProvider = new ReversalProvider(context);
-      // mFragment.onMessage("Cancelando transação com erro");
-      // reversalProvider.setDialogMessage("Cancelando transação com erro");
-      // reversalProvider.isDefaultUI();
       reversalProvider.setConnectionCallback(new StoneCallbackInterface() {
         @Override
         public void onSuccess() {
-          //ResponseCodeEnum responseCodeEnum = reversalProvider.getResponseCodeEnum();
           basicResult.setResult(0);
-          //basicResult.setMessage(mStoneHelper.getMessageFromResponseCodeEnum(responseCodeEnum));
-
-          // if(responseCodeEnum == ResponseCodeEnum.Approved){
-          //   mFragment.onMessage("Transação aprovada");
-          //   mFragment.onTransactionSuccess();
-
-          //   mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
-          //   return;
-          // }
-          // mFragment.onMessage("Transação concluída");
-          mFragment.onTransactionSuccess();
+          basicResult.setMessage("OK");
           mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
+          // Log.d("print", "****************************************************************** ABORT PIX 7 ******************************************************************");
         }
 
         @Override
         public void onError() {
-          // mFragment.onMessage("Erro ao processar transação");
-          basicResult.setResult(999999);
-          basicResult.setErrorMessage("Erro ao processar transação");
-
-          mFragment.onError(convertBasicResultToJson(basicResult));
+          basicResult.setMessage("ERROR");
+          // mFragment.onError(convertBasicResultToJson(basicResult));
+          mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
+          // Log.d("print", "****************************************************************** ABORT PIX 8 ******************************************************************");
         }
       });
       reversalProvider.execute();
     } catch (Exception error) {
       basicResult.setErrorMessage(error.getMessage());
-      mFragment.onError(convertBasicResultToJson(basicResult));
-      // mFragment.onMessage("Erro ao tentar reverter transação");
+      basicResult.setMessage("ERROR");
+          mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
     }
   }
 
@@ -608,8 +648,6 @@ public class PaymentsUseCase {
 
       } catch (Exception error) {
         handleTransactionError(context, "Erro ao buscar transação", actionResult, basicResult);
-
       }
-
     }
 }
