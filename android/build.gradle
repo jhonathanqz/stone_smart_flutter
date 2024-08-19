@@ -3,7 +3,7 @@ version '1.0'
 
 buildscript {
     ext.kotlin_version = '1.6.10'
-    ext.stone_sdk_version = '4.9.3'
+    ext.stone_sdk_version = '4.8.7'
 
     repositories {
         google()
