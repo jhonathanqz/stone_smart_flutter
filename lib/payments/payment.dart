@@ -7,6 +7,7 @@ import 'package:stone_smart_flutter/payments/utils/payment_types.dart';
 import 'handler/istone_smart_handler.dart';
 
 //Fixed channel name
+// ignore: constant_identifier_names
 const CHANNEL_NAME = "stone_smart_flutter";
 
 class Payment {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stone_smart_flutter/payments/utils/payment_types.dart';
 import 'package:stone_smart_flutter/stone_smart_flutter.dart';
 
 import 'payment_controller.dart';
@@ -34,9 +33,7 @@ class _PaymentPageState extends State<PaymentPage> {
           ),
           TextField(
             onChanged: (value) => setState(() {
-              controller.setSaleValue(moneyController.text.isNotEmpty
-                  ? double.parse(moneyController.text)
-                  : 0.0);
+              controller.setSaleValue(moneyController.text.isNotEmpty ? double.parse(moneyController.text) : 0.0);
             }),
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(hintText: "Digite o valor"),
@@ -73,9 +70,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         setState(() {
                           controller.clickPayment = true;
                         });
-                        StoneSmart.instance()
-                            .payment
-                            .creditPayment(controller.saleValue);
+                        StoneSmart.instance().payment.creditPayment(controller.saleValue);
                       }
                     : null,
               ),
@@ -103,9 +98,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         setState(() {
                           controller.clickPayment = true;
                         });
-                        StoneSmart.instance()
-                            .payment
-                            .voucherPayment(controller.saleValue);
+                        StoneSmart.instance().payment.voucherPayment(controller.saleValue);
                       }
                     : null,
               ),
@@ -116,9 +109,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   setState(() {
                     controller.clickPayment = true;
                   });
-                  StoneSmart.instance()
-                      .payment
-                      .activePinpad(appName: 'AppDemo', stoneCode: '206192723');
+                  StoneSmart.instance().payment.activePinpad(appName: 'AppDemo', stoneCode: '206192723');
                 },
               ),
             ],
@@ -150,9 +141,14 @@ class _PaymentPageState extends State<PaymentPage> {
           ElevatedButton(
             onPressed: () {
               StoneSmart.instance().payment.cancelTransaction(
-                    amount: controller.saleValue,
-                    transactionType: PaymentTypeTransaction.CREDIT,
+                    idFromBase: 0, //Precisa pegar o id da transação.
                   );
+
+              /**
+               * Caso não tenha o Id da Transação, pode ser utilizado o método abaixo para obter a lista de transações
+               * StoneSmart.instance().payment.getAllTransactions();
+               * a resposta vem no método onFinishedResponse, no campo "stoneTransactions"
+               */
             },
             child: const Text("Cancelar transação"),
           ),
