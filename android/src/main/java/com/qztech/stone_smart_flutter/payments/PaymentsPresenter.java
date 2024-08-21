@@ -79,8 +79,8 @@ public class PaymentsPresenter {
         mUseCase.initializeAndActivatePinPadWithCredentials(appName, stoneCode, stoneKeys, context);
 
     }
-    public void cancelTransaction(Context context, String amount, int typeTransaction) {
-        mUseCase.cancelTransaction(context, amount, typeTransaction);
+    public void cancelTransaction(Context context, int idFromBase) {
+        mUseCase.cancelTransaction(context, idFromBase);
     }
 
     public void onReversal(Context context) {
@@ -98,6 +98,10 @@ public class PaymentsPresenter {
     public void getTransactionByInitiatorTransactionKey(Context context, String initiatorTransactionKey) {
         System.out.println("InitiatorTransactionKey: " + initiatorTransactionKey);
         mUseCase.getTransactionByInitiatorTransactionKey(context, initiatorTransactionKey);
+    }
+
+    public void getAllTransactions(Context context) {
+        mUseCase.getAllTransactions(context);
     }
 
     public void dispose() {

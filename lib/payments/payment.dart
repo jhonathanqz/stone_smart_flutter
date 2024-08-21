@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:stone_smart_flutter/payments/handler/istone_handler.dart';
 import 'package:stone_smart_flutter/payments/helper/istone_helper.dart';
@@ -192,13 +193,15 @@ class Payment {
 
   //Function to invoke method from cancel transaction with sdk the Stone
   Future<bool> cancelTransaction({
-    required int amount,
-    required PaymentTypeTransaction transactionType,
+    required int idFromBase,
   }) async {
     return await channel.invokeMethod(PaymentTypeCall.CANCEL_TRANSACTION.method, {
-      "amount": amount.toString(),
-      "transactionType": transactionType.type,
+      "idFromBase": idFromBase,
     });
+  }
+
+  Future<bool> getAllTransactions() async {
+    return await channel.invokeMethod(PaymentTypeCall.GET_ALL_TRANSACTIONS.method);
   }
 
   Future<bool> setPaymentOption({

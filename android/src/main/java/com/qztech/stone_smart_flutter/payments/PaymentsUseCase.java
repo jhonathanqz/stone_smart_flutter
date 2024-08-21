@@ -10,6 +10,7 @@ import com.qztech.stone_smart_flutter.core.BasicResult;
 import com.qztech.stone_smart_flutter.printer.StonePrinter;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +42,8 @@ public class PaymentsUseCase {
   private PosTransactionProvider posTransactionProvider;
   private List<UserModel> userModel;
   private List<String> optionList;
+
+  List<TransactionObject> transactionObjects;
   Gson gson = null;
   public PaymentsUseCase(MethodChannel channel) {
     this.mFragment = new PaymentsFragment(channel);
@@ -405,11 +408,20 @@ public class PaymentsUseCase {
     }catch (Exception error){}
   }
 
-  public void cancelTransaction(Context context, String amount, int typeTransaction) {
+  public void cancelTransaction(Context context, int idFromBase) {
     BasicResult basicResult = new BasicResult();
     basicResult.setMethod("cancel");
     try {
-      final TransactionObject transaction = mStoneHelper.getTransactionObject(amount, typeTransaction, 1, false);
+      TransactionDAO transactionDAO = new TransactionDAO(context);
+      TransactionObject transaction = transactionDAO.findTransactionWithId(idFromBase);
+      if(transaction == null) {
+        mFragment.onError("Transação não encontrada");
+        basicResult.setResult(999999);
+        basicResult.setErrorMessage("Transação não encontrada");
+        String jsonError = convertBasicResultToJson(basicResult);
+        mFragment.onFinishedResponse(jsonError);
+        return;
+      }
       final CancellationProvider cancellationProvider = getCancellationProvider(context, transaction);
       cancellationProvider.execute();
     } catch (Exception error) {
@@ -648,6 +660,37 @@ public class PaymentsUseCase {
 
       } catch (Exception error) {
         handleTransactionError(context, "Erro ao buscar transação", actionResult, basicResult);
+      }
+    }
+
+    public void getAllTransactions(Context context) {
+      ActionResult actionResult = new ActionResult();
+      try {
+        mFragment.onMessage("Obtendo todas as transações");
+        // acessa todas as transacoes do banco de dados
+        TransactionDAO transactionDAO = new TransactionDAO(context);
+        // cria uma lista com todas as transacoes
+        transactionObjects = transactionDAO.getAllTransactionsOrderByIdDesc();
+
+
+        actionResult.setMethod("AllTransactions");
+
+        if(transactionObjects == null || transactionObjects.isEmpty()) {
+          transactionObjects = new ArrayList<TransactionObject>();
+        }
+
+        actionResult.buildAllTransactions(transactionObjects);
+        actionResult.setResult(0);
+        String jsonStoneResult = convertActionToJson(actionResult);
+        mFragment.onFinishedResponse(jsonStoneResult);
+      } catch (Exception e) {
+        mFragment.onMessage("Erro ao buscar transações");
+        actionResult.buildAllTransactions(transactionObjects);
+        actionResult.setResult(999999);
+        actionResult.setErrorMessage(e.getMessage());
+        String jsonStoneResult = convertActionToJson(actionResult);
+        mFragment.onFinishedResponse(jsonStoneResult);
+        mFragment.onError(e.getMessage());
       }
     }
 }

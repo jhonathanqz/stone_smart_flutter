@@ -39,6 +39,8 @@ public class ActionResult {
 
   private String userModel;
 
+  private List<StoneTransaction> stoneTransactions;
+
   public void setUserModel(String value) {
     if(value == null || value.isEmpty()) {
       return;
@@ -289,10 +291,21 @@ public class ActionResult {
     setTransactionKey(transactionObjects.getAcquirerTransactionKey());
     setExternalID(transactionObjects.getExternalId());
     setInitiatorTransactionKey(transactionObjects.getInitiatorTransactionKey());
+    setTransactionStatus(transactionObjects.getTransactionStatus().toString());
     setPrinterRequest(true);
 
     this.isBuildResponse = 1;
   }
 
 
+  public void buildAllTransactions(List<TransactionObject> transactionObjects) {
+    stoneTransactions.clear();
+    StoneTransaction stoneTransaction = new StoneTransaction();
+    for (int i = 0; i < transactionObjects.size(); i++) {
+      stoneTransaction.setAmount(transactionObjects.get(i).getAmount());
+      stoneTransaction.setIdFromBase(transactionObjects.get(i).getIdFromBase());
+      stoneTransaction.setTransactionStatus(transactionObjects.get(i).getTransactionStatus().toString());
+      stoneTransactions.add(stoneTransaction);
+    }
+  }
 }

@@ -272,6 +272,11 @@ Para a transação com `PIX` é necessário fornecer nos parâmetros o `qrCodeAu
 
 No método onChanged, pode vir um retorno com o campo "method" preenchido como "QRCode" e no campo message virá a imagem em formato Bitmap, convertida em String, ficando a cargo do desenvolvedor mostrar o QRCode gerado para o usuário final.
 
+##### Cancelamento
+
+Para cancelar uma transação é necessário chamar o método `cancelTransaction` passando o ID da transação.
+Caso você não tenha a informação do ID da transação, é necessário chamar o método `getAllTransactions` para trazer todas transações em forma de lista, e você conseguir pegar as informações de valor, id e status.
+
 ## :memo: Autores
 
 Este projeto foi desenvolvido por:
