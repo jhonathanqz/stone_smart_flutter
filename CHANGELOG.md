@@ -1,3 +1,9 @@
+## 1.0.15
+
+- Fix method cancellationTransaction
+- Add new method getAllTransactions
+- Stone SDK 4.8.7
+
 ## 1.0.14
 
 - Rollback Stone SDK to v4.8.7, because methods abortPayment and cancelTransacntion are in error
