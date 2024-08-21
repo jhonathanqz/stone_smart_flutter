@@ -101,13 +101,13 @@ public class StoneSmart {
             return;
         }
 
-        String amount = call.argument("amount");
-
         if (call.method.equals(PAYMENT_CANCEL_TRANSACTION)) {
             int idFromBase = call.argument("idFromBase");
             this.payment.cancelTransaction(currentContext, idFromBase);
             return;
         }
+
+        String amount = call.argument("amount");
 
         int parc = call.argument("installment");
         boolean withInterest = call.argument("withInterest");
