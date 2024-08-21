@@ -34,6 +34,7 @@ public class StoneSmart {
 
     private static final String PAYMENT_GET_TRANSACTION_BY_INITIATOR_TRANSACTION_KEY = "paymentGetTransactionByInitiatorTransactionKey";
 
+    private static final String PAYMENT_GET_ALL_TRANSACTIONS = "paymentGetAllTransactions";
     final Context currentContext;
 
     public StoneSmart(Context context, MethodChannel channel) {
@@ -44,6 +45,11 @@ public class StoneSmart {
     public void initPayment(MethodCall call, MethodChannel.Result result) {
         if (this.payment == null) {
             this.payment = new PaymentsPresenter(this.mChannel);
+        }
+
+        if (call.method.equals(PAYMENT_GET_ALL_TRANSACTIONS)) {
+            this.payment.getAllTransactions(currentContext);
+            return;
         }
 
         if (call.method.equals(PAYMENT_REVERSAL)) {
@@ -98,8 +104,8 @@ public class StoneSmart {
         String amount = call.argument("amount");
 
         if (call.method.equals(PAYMENT_CANCEL_TRANSACTION)) {
-            int typeTransaction = call.argument("transactionType");
-            this.payment.cancelTransaction(currentContext, amount, typeTransaction);
+            int idFromBase = call.argument("idFromBase");
+            this.payment.cancelTransaction(currentContext, idFromBase);
             return;
         }
 

@@ -6,6 +6,7 @@ import 'package:stone_smart_flutter/payments/utils/payment_types.dart';
 import 'handler/istone_smart_handler.dart';
 
 //Fixed channel name
+// ignore: constant_identifier_names
 const CHANNEL_NAME = "stone_smart_flutter";
 
 class Payment {
@@ -192,13 +193,15 @@ class Payment {
 
   //Function to invoke method from cancel transaction with sdk the Stone
   Future<bool> cancelTransaction({
-    required int amount,
-    required PaymentTypeTransaction transactionType,
+    required int idFromBase,
   }) async {
     return await channel.invokeMethod(PaymentTypeCall.CANCEL_TRANSACTION.method, {
-      "amount": amount.toString(),
-      "transactionType": transactionType.type,
+      "idFromBase": idFromBase,
     });
+  }
+
+  Future<bool> getAllTransactions() async {
+    return await channel.invokeMethod(PaymentTypeCall.GET_ALL_TRANSACTIONS.method);
   }
 
   Future<bool> setPaymentOption({
