@@ -4,6 +4,7 @@ import 'package:stone_smart_flutter/payments/helper/istone_helper.dart';
 import 'package:stone_smart_flutter/payments/utils/payment_types.dart';
 
 import 'handler/istone_smart_handler.dart';
+import 'model/stone_printer.dart';
 
 //Fixed channel name
 // ignore: constant_identifier_names
@@ -218,5 +219,27 @@ class Payment {
     return await channel.invokeMethod(PaymentTypeCall.GET_TRANSACTION_BY_INITIATOR_TRANSACTION_KEY.method, {
       "initiatorTransactionKey": initiatorTransactionKey,
     });
+  }
+
+  Future<bool> customPrinter(StonePrinterParams stonePrinterParams) async {
+    try {
+      await channel.invokeMethod(PaymentTypeCall.CUSTOM_PRINTER.method, {
+        "printerParams": stonePrinterParams.toJson(),
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> printerFromBase64(String base64) async {
+    try {
+      await channel.invokeMethod(PaymentTypeCall.PRINTER_FROM_BASE64.method, {
+        "printerParams": base64,
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

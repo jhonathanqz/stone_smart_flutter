@@ -312,7 +312,7 @@ public class StoneHelper {
                 aux= "Erro genérico de impressão";
                 break;
             case PRINTER_BUSY_ERROR:
-                aux= "Impressora ocupada, ocorre quando já está imprimindo algo";
+                aux= "Impressora ocupada.";
                 break;
             case PRINTER_INIT_ERROR:
                 aux= "Erro ao inicializar impressora";
@@ -494,6 +494,7 @@ public class StoneHelper {
             case QRCODE_EXPIRED:
                 aux= "QRCode expirado";
                 break;
+
             default:
                 aux = "";
                 break;

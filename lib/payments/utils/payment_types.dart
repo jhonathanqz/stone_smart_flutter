@@ -85,6 +85,8 @@ enum PaymentTypeCall {
   PAYMENT_OPTION,
   GET_TRANSACTION_BY_INITIATOR_TRANSACTION_KEY,
   GET_ALL_TRANSACTIONS,
+  CUSTOM_PRINTER,
+  PRINTER_FROM_BASE64,
 }
 
 enum PaymentTypeTransaction { CREDIT, DEBIT, VOUCHER, PIX }
@@ -157,6 +159,10 @@ extension PaymentTypeCallExt on PaymentTypeCall {
         return "paymentGetTransactionByInitiatorTransactionKey";
       case PaymentTypeCall.GET_ALL_TRANSACTIONS:
         return "paymentGetAllTransactions";
+      case PaymentTypeCall.CUSTOM_PRINTER:
+        return "paymentCustomPrinter";
+      case PaymentTypeCall.PRINTER_FROM_BASE64:
+        return "paymentPrinterBase64";
     }
   }
 }

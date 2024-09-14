@@ -35,6 +35,10 @@ public class StoneSmart {
     private static final String PAYMENT_GET_TRANSACTION_BY_INITIATOR_TRANSACTION_KEY = "paymentGetTransactionByInitiatorTransactionKey";
 
     private static final String PAYMENT_GET_ALL_TRANSACTIONS = "paymentGetAllTransactions";
+
+    private static final String PAYMENT_CUSTOM_PRINTER = "paymentCustomPrinter";
+
+    private static final String PAYMENT_PRINTER_BASE64 = "paymentPrinterBase64";
     final Context currentContext;
 
     public StoneSmart(Context context, MethodChannel channel) {
@@ -45,6 +49,18 @@ public class StoneSmart {
     public void initPayment(MethodCall call, MethodChannel.Result result) {
         if (this.payment == null) {
             this.payment = new PaymentsPresenter(this.mChannel);
+        }
+
+        if (call.method.equals(PAYMENT_CUSTOM_PRINTER)) {
+            String printerParams = call.argument("printerParams");
+            this.payment.customPrinter(printerParams, currentContext);
+            return;
+        }
+
+        if (call.method.equals(PAYMENT_PRINTER_BASE64)) {
+            String printerParams = call.argument("printerParams");
+            this.payment.printerFromBase64(printerParams, currentContext);
+            return;
         }
 
         if (call.method.equals(PAYMENT_GET_ALL_TRANSACTIONS)) {

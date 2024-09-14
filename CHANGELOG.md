@@ -1,3 +1,7 @@
+## 1.0.16
+
+- New methods `customPrinter` and `printerFromBase64` from printer.
+
 ## 1.0.15
 
 - Fix method cancellationTransaction

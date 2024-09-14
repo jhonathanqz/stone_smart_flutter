@@ -104,6 +104,14 @@ public class PaymentsPresenter {
         mUseCase.getAllTransactions(context);
     }
 
+    public void customPrinter(String params, Context context) {
+        mUseCase.customPrinter(params, context);
+    }
+
+    public void printerFromBase64(String params, Context context) {
+        mUseCase.printerFromBase64(params, context);
+    }
+
     public void dispose() {
         if (mSubscribe != null) {
             mSubscribe.dispose();
