@@ -453,6 +453,8 @@ public class PaymentsUseCase {
       
     }
 
+    checkTransactionWithError(context);
+    
     // try {
     //   final TransactionObject transaction = mStoneHelper.getTransactionObject("1", 3, 1, false);
     //   final PosTransactionProvider provider = new PosTransactionProvider(context, transaction, userModel.get(0));
@@ -490,8 +492,6 @@ public class PaymentsUseCase {
     //   String jsonError = convertBasicResultToJson(basicResult);
     //   mFragment.onFinishedResponse(jsonError);
     // }
-    checkTransactionWithError(context);
-
     // Log.d("print", "****************************************************************** ABORT PIX 2 ******************************************************************");
   }
 
@@ -692,5 +692,14 @@ public class PaymentsUseCase {
         mFragment.onFinishedResponse(jsonStoneResult);
         mFragment.onError(e.getMessage());
       }
+    }
+
+
+    public void customPrinter(String params, Context context) {
+      mStonePrinter.customPrinter(params, context);
+    }
+
+    public void printerFromBase64(String params, Context context) {
+      mStonePrinter.printerFromBase64(params, context);
     }
 }
