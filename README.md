@@ -34,7 +34,7 @@ Máquinas compatíveis:
 As seguintes ferramentas foram usadas na construção do projeto:
 
 - [Flutter](https://flutter.dev/)
-- SDK Stone version: 4.8.7
+- SDK Stone version: 4.9.5
 
 ## :checkered_flag: Configuração
 
@@ -51,7 +51,7 @@ This will get you the latest version.
 
 ### # Build.gradle
 
-Em seu build.gradle a nivel do app, a propriedade `minSdkVersion` precisa ser level 23. Recurso este exigido pela versão 4.8.7 do SDK Stone.
+Em seu build.gradle a nivel do app, a propriedade `minSdkVersion` precisa ser level 23. Recurso este exigido pela versão 4.9.5 do SDK Stone.
 
 ```xml
 ...
