@@ -1,3 +1,7 @@
+## 1.0.17
+
+- Update Stone SDK to version 4.9.5
+
 ## 1.0.16
 
 - New methods `customPrinter` and `printerFromBase64` from printer.
