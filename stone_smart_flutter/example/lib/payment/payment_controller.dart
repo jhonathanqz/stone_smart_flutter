@@ -1,4 +1,4 @@
-import 'package:stone_smart_flutter/payments/handler/istone_handler.dart';
+import 'package:interface_stone_smart_flutter/interface_stone_smart_flutter.dart';
 
 class PaymentController extends IStoneHandler {
   int saleValue = 0;

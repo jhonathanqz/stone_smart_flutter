@@ -17,9 +17,6 @@ doc/api/
 .fvm/
 .idea
 .vscode
-*DS_Store
-android/.gradle
-*local.properties
 
 # Avoid committing generated Javascript files:
 *.dart.js

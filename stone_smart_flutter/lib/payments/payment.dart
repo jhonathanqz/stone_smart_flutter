@@ -1,10 +1,7 @@
 import 'package:flutter/services.dart';
-import 'package:stone_smart_flutter/payments/handler/istone_handler.dart';
-import 'package:stone_smart_flutter/payments/helper/istone_helper.dart';
-import 'package:stone_smart_flutter/payments/utils/payment_types.dart';
+import 'package:interface_stone_smart_flutter/interface_stone_smart_flutter.dart';
 
-import 'handler/istone_smart_handler.dart';
-import 'model/stone_printer.dart';
+import 'helper/istone_helper.dart';
 
 //Fixed channel name
 // ignore: constant_identifier_names
@@ -64,7 +61,8 @@ class Payment {
     bool isPrinterEstablishment = true,
   }) async {
     try {
-      await channel.invokeMethod(PaymentTypeCall.ACTIVEPINPAD_CREDENTIALS.method, {
+      await channel
+          .invokeMethod(PaymentTypeCall.ACTIVEPINPAD_CREDENTIALS.method, {
         "appName": appName,
         "stoneCode": stoneCode,
         "qrCodeAuthorization": qrCodeAuthroization,
@@ -187,7 +185,8 @@ class Payment {
   Future<bool> printerCurrentTransaction({
     required bool isPrinter,
   }) async {
-    return await channel.invokeMethod(PaymentTypeCall.PRINTER_TRANSACTION.method, {
+    return await channel
+        .invokeMethod(PaymentTypeCall.PRINTER_TRANSACTION.method, {
       "isPrinter": isPrinter,
     });
   }
@@ -196,13 +195,15 @@ class Payment {
   Future<bool> cancelTransaction({
     required int idFromBase,
   }) async {
-    return await channel.invokeMethod(PaymentTypeCall.CANCEL_TRANSACTION.method, {
+    return await channel
+        .invokeMethod(PaymentTypeCall.CANCEL_TRANSACTION.method, {
       "idFromBase": idFromBase,
     });
   }
 
   Future<bool> getAllTransactions() async {
-    return await channel.invokeMethod(PaymentTypeCall.GET_ALL_TRANSACTIONS.method);
+    return await channel
+        .invokeMethod(PaymentTypeCall.GET_ALL_TRANSACTIONS.method);
   }
 
   Future<bool> setPaymentOption({
@@ -216,7 +217,8 @@ class Payment {
   Future<bool> getTransactionByInitiatorTransactionKey({
     required String initiatorTransactionKey,
   }) async {
-    return await channel.invokeMethod(PaymentTypeCall.GET_TRANSACTION_BY_INITIATOR_TRANSACTION_KEY.method, {
+    return await channel.invokeMethod(
+        PaymentTypeCall.GET_TRANSACTION_BY_INITIATOR_TRANSACTION_KEY.method, {
       "initiatorTransactionKey": initiatorTransactionKey,
     });
   }

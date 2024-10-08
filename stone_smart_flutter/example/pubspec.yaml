@@ -12,7 +12,9 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   stone_smart_flutter:
-    path: ../
+    path: ../../stone_smart_flutter
+  interface_stone_smart_flutter:
+    path: ../../interface_stone_smart_flutter
 
 dev_dependencies:
   flutter_test:
