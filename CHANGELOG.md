@@ -1,3 +1,8 @@
+## 1.0.18
+
+- Update Stone SDK to version 4.10.2
+- Update dependencies to use POS Gertec
+
 ## 1.0.17
 
 - Update Stone SDK to version 4.9.5
