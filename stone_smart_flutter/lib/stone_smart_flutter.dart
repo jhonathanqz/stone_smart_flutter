@@ -1,7 +1,6 @@
 import 'package:flutter/services.dart';
+import 'package:interface_stone_smart_flutter/interface_stone_smart_flutter.dart';
 
-import 'payments/handler/istone_handler.dart';
-import 'payments/handler/istone_smart_handler.dart';
 import 'payments/payment.dart';
 
 class StoneSmart {
