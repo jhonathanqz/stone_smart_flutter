@@ -1,3 +1,8 @@
+## 1.1.0
+
+- Refactor mehtod checkReversalTransactions
+- Fix stone sdk initialization
+
 ## 1.0.19
 
 - Fix onReversalTransactions with status error
