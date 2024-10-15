@@ -42,6 +42,7 @@ public class PaymentsUseCase {
   private PosTransactionProvider posTransactionProvider;
   private List<UserModel> userModel;
   private List<String> optionList;
+  private boolean isInitialized = false;
 
   List<TransactionObject> transactionObjects;
 
@@ -74,25 +75,24 @@ public class PaymentsUseCase {
       transaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, isPrinter);
       return;
     }
-    userModel = StoneStart.init(context, stoneKeys);
+    if(userModel == null) {
+      userModel = StoneStart.init(context, stoneKeys);
+    }
+    
     transaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, isPrinter);
   }
 
   private void checkUserModel(Context context) {
-    if(isActivePinpad == true) {
-      return;
-    }
+      isInitialized = StoneStart.INSTANCE.getSDKInitialized();
+
+      if (isInitialized) {
+        return;
+      }
 
       if(userModel == null) {
         userModel = StoneStart.init(context);
       }
-
-      boolean isInitialized = StoneStart.INSTANCE.getSDKInitialized();
-      if(!isInitialized){
-        userModel = StoneStart.init(context);
-      }
   }
-
 
   public void handleTransactionError(Context context, String message, ActionResult actionResult, BasicResult basicResult) {
     mFragment.onMessage(message);
@@ -235,7 +235,6 @@ public class PaymentsUseCase {
       posTransactionProvider.setConnectionCallback(new StoneActionCallback() {
         @Override
         public void onSuccess() {
-          checkTransactionWithErrorAndTransaction(context, posTransactionProvider);
           handleTransactionSuccess(context, actionResult, isPrinter, transaction);
         }
         @Override
@@ -244,7 +243,6 @@ public class PaymentsUseCase {
         }
         @Override
         public void onError() {
-          checkTransactionWithErrorAndTransaction(context, posTransactionProvider);
           handleTransactionError(context, "Erro ao realizar transação", actionResult, basicResult);
         }
 
@@ -437,8 +435,6 @@ public class PaymentsUseCase {
       basicResult.setErrorMessage(error.getMessage());
       mFragment.onError(convertBasicResultToJson(basicResult));
     }
-
-    checkTransactionWithError(context);
   }
 
   public void cancelTransactionPIX(Context context) {
@@ -459,9 +455,7 @@ public class PaymentsUseCase {
       basicResult.setResult(999999);
       
     }
-
-    checkTransactionWithError(context);
-    
+   
     // try {
     //   final TransactionObject transaction = mStoneHelper.getTransactionObject("1", 3, 1, false);
     //   final PosTransactionProvider provider = new PosTransactionProvider(context, transaction, userModel.get(0));
@@ -575,39 +569,16 @@ public class PaymentsUseCase {
   public void checkStatusWithErrorTransaction(TransactionStatusEnum status, Context context) {
     if(status == null || (status != TransactionStatusEnum.WITH_ERROR && status != TransactionStatusEnum.APPROVED) ) {
       if(posTransactionProvider != null) {
+        mFragment.onMessage("Abortando a transacao");
         posTransactionProvider.abortPayment();
       }
       return;
-    };
+    }
+
     if(status == TransactionStatusEnum.WITH_ERROR) {
+      mFragment.onMessage("Revertendo a transacao");
       onReversalTransaction(context);
     }
-  }
-
-  public void checkTransactionWithError(Context context) {
-    if (posTransactionProvider == null) {
-      return;
-    }
-
-    TransactionStatusEnum transactionStatus = posTransactionProvider.getTransactionStatus();
-
-    if(transactionStatus != TransactionStatusEnum.APPROVED) {
-      onReversalTransaction(context);
-    }
-//    onReversalTransaction(context);
-  }
-
-  public void checkTransactionWithErrorAndTransaction(Context context, PosTransactionProvider transaction) {
-    if (transaction == null) {
-      return;
-    }
-
-    TransactionStatusEnum transactionStatus = transaction.getTransactionStatus();
-
-    if(transactionStatus != TransactionStatusEnum.APPROVED) {
-      onReversalTransaction(context);
-    }
-//    onReversalTransaction(context);
   }
 
   public void onReversalTransaction(Context context) {
@@ -627,6 +598,7 @@ public class PaymentsUseCase {
 
         @Override
         public void onError() {
+          basicResult.setResult(999999);
           basicResult.setMessage("ERROR");
           // mFragment.onError(convertBasicResultToJson(basicResult));
           mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
