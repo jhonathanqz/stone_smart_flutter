@@ -1,39 +1,63 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+<h1 align="center">Interface Stone Smart Flutter</h1>
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+<div align="center" id="top"> 
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Stone_pagamentos.png/800px-Stone_pagamentos.png" alt="Stone" height=100 />
+</div>
+<br>
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+<p align="center">
+  <a href="#dart-sobre">Sobre</a> &#xa0; | &#xa0; 
+  <a href="#rocket-tecnologias">Tecnologias</a> &#xa0; | &#xa0;
+  <a href="#checkered_flag-configuração">Configuração</a> &#xa0; | &#xa0;
+  <a href="#memo-autores">Autores</a> &#xa0; | &#xa0;
+</p>
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+<br>
 
-## Features
+## Plugin não oficial!!!
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+## :dart: Sobre
 
-## Getting started
+Projeto destinado para centralizar a interface de implementação do plugin `stone_smart_flutter`.
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+## :rocket: Tecnologias
 
-## Usage
+As seguintes ferramentas foram usadas na construção do projeto:
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+- [Flutter](https://flutter.dev/)
 
-```dart
-const like = 'sample';
+## :checkered_flag: Configuração
+
+### # Pubspec.yaml
+
+Para usar este plugin, adicione `stone_smart_flutter` como [dependência](https://flutter.io/using-packages/) ao seu arquivo `pubspec.yaml`.
+
+```yaml
+dependencies:
+  stone_smart_flutter: any
 ```
 
-## Additional information
+This will get you the latest version.
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+## :memo: Autores
+
+Este projeto foi desenvolvido por:
+<a href="https://github.com/jhonathanqz" target="_blank">Jhonathan Queiroz</a>
+
+</br>
+
+<div> 
+<a href="https://github.com/jhonathanqz">
+  <img src="https://avatars.githubusercontent.com/u/74057391?s=96&v=4" height=90 />
+</a>
+<a href="https://github.com/Qz-Developer">
+  <img src="https://avatars.githubusercontent.com/u/149726256?s=200&v=4" height=90 />
+</a>
+<br>
+<a href="https://github.com/jhonathanqz" target="_blank">Jhonathan Queiroz</a> e
+<a href="https://github.com/Qz-Developer" target="_blank">QZ Tech</a>
+</div>
+
+&#xa0;
+
+<a href="#top">Voltar para o topo</a>
