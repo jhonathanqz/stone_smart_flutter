@@ -10,8 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  interface_stone_smart_flutter:
-    path: ../interface_stone_smart_flutter
+  interface_stone_smart_flutter: any
 
 dev_dependencies:
   flutter_test:
