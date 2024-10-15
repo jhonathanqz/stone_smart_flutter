@@ -1,3 +1,7 @@
+## 1.2.1
+
+- export interface_stone_smart_flutter
+
 ## 1.2.0
 
 - Centralize stone interface
