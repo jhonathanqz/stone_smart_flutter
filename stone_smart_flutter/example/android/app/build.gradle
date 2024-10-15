@@ -37,6 +37,12 @@ android {
             keyPassword '654321'
             storePassword '123456'
         }
+        gertec{
+            storeFile file('..\\..\\Chaves\\Development_GertecDeveloper_CustomerAPP.jks')
+            keyAlias 'developmentgertecdeveloper_customerapp'
+            keyPassword 'Development@GertecDeveloper2018'
+            storePassword 'Development@GertecDeveloper2018'
+        }
     }
 
     lintOptions {
@@ -74,14 +80,14 @@ android {
             shrinkResources false
             minifyEnabled true
             initWith debug
-            signingConfig signingConfigs.positivo
+            signingConfig signingConfigs.gertec
             matchingFallbacks = ['debug']
         }
         debug {
             shrinkResources false
             minifyEnabled false
             initWith debug
-            signingConfig signingConfigs.positivo
+            signingConfig signingConfigs.gertec
             matchingFallbacks = ['debug']
         }
     }

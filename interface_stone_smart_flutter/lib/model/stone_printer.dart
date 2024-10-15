@@ -2,8 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-
-import 'package:stone_smart_flutter/payments/enum/printer_type.dart';
+import 'package:interface_stone_smart_flutter/interface_stone_smart_flutter.dart';
 
 class StonePrinterParams {
   final List<StonePrinter> printers;
