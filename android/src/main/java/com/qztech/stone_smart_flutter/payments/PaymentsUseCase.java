@@ -235,7 +235,7 @@ public class PaymentsUseCase {
       posTransactionProvider.setConnectionCallback(new StoneActionCallback() {
         @Override
         public void onSuccess() {
-          checkTransactionWithErrorAndTransaction(context, posTransactionProvider);
+//          checkTransactionWithErrorAndTransaction(context, posTransactionProvider);
           handleTransactionSuccess(context, actionResult, isPrinter, transaction);
         }
         @Override
@@ -244,7 +244,7 @@ public class PaymentsUseCase {
         }
         @Override
         public void onError() {
-          checkTransactionWithErrorAndTransaction(context, posTransactionProvider);
+//          checkTransactionWithErrorAndTransaction(context, posTransactionProvider);
           handleTransactionError(context, "Erro ao realizar transação", actionResult, basicResult);
         }
 
