@@ -44,6 +44,8 @@ public class PaymentsUseCase {
   private List<String> optionList;
 
   List<TransactionObject> transactionObjects;
+
+  private boolean isActivePinpad = false;
   Gson gson = null;
   public PaymentsUseCase(MethodChannel channel) {
     this.mFragment = new PaymentsFragment(channel);
@@ -77,6 +79,10 @@ public class PaymentsUseCase {
   }
 
   private void checkUserModel(Context context) {
+    if(isActivePinpad == true) {
+      return;
+    }
+
       if(userModel == null) {
         userModel = StoneStart.init(context);
       }
@@ -229,7 +235,7 @@ public class PaymentsUseCase {
       posTransactionProvider.setConnectionCallback(new StoneActionCallback() {
         @Override
         public void onSuccess() {
-          checkTransactionWithError(context);
+          checkTransactionWithErrorAndTransaction(context, posTransactionProvider);
           handleTransactionSuccess(context, actionResult, isPrinter, transaction);
         }
         @Override
@@ -238,7 +244,7 @@ public class PaymentsUseCase {
         }
         @Override
         public void onError() {
-          checkTransactionWithError(context);
+          checkTransactionWithErrorAndTransaction(context, posTransactionProvider);
           handleTransactionError(context, "Erro ao realizar transação", actionResult, basicResult);
         }
 
@@ -359,12 +365,13 @@ public class PaymentsUseCase {
         activeApplicationProvider.activate(stoneCode);
 
       } else {
+        isActivePinpad = true;
         mFragment.onMessage("Terminal ativado");
 
         basicResult.setMethod("active");
         basicResult.setResult(0);
         basicResult.setMessage("Terminal ativado");
-        if(!userModel.isEmpty()){
+        if(!userModel.isEmpty()) {
           String userModelString = getGson().toJson(userModel.get(0));
           basicResult.setUserModel(userModelString);
         }
@@ -578,16 +585,29 @@ public class PaymentsUseCase {
   }
 
   public void checkTransactionWithError(Context context) {
-    // if (posTransactionProvider == null) {
-    //   return;
-    // }
+    if (posTransactionProvider == null) {
+      return;
+    }
 
-    // TransactionStatusEnum transactionStatus = posTransactionProvider.getTransactionStatus();
+    TransactionStatusEnum transactionStatus = posTransactionProvider.getTransactionStatus();
 
-    // if(transactionStatus == TransactionStatusEnum.WITH_ERROR) {
-    //   onReversalTransaction(context);
-    // }
-    onReversalTransaction(context);
+    if(transactionStatus != TransactionStatusEnum.APPROVED) {
+      onReversalTransaction(context);
+    }
+//    onReversalTransaction(context);
+  }
+
+  public void checkTransactionWithErrorAndTransaction(Context context, PosTransactionProvider transaction) {
+    if (transaction == null) {
+      return;
+    }
+
+    TransactionStatusEnum transactionStatus = transaction.getTransactionStatus();
+
+    if(transactionStatus != TransactionStatusEnum.APPROVED) {
+      onReversalTransaction(context);
+    }
+//    onReversalTransaction(context);
   }
 
   public void onReversalTransaction(Context context) {
