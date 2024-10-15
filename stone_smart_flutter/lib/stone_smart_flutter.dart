@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:interface_stone_smart_flutter/interface_stone_smart_flutter.dart';
 
 import 'payments/payment.dart';
+export 'package:interface_stone_smart_flutter/interface_stone_smart_flutter.dart';
 
 class StoneSmart {
   final MethodChannel _channel;
