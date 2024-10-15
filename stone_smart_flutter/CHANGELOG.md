@@ -1,3 +1,7 @@
+## 1.2.0
+
+- Centralize stone interface
+
 ## 1.1.0
 
 - Refactor mehtod checkReversalTransactions
