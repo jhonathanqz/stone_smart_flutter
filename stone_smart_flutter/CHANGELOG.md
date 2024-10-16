@@ -1,3 +1,7 @@
+## 1.2.2
+
+- fix methods abort and reversal transaction
+
 ## 1.2.1
 
 - export interface_stone_smart_flutter

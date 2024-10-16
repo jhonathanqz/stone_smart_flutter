@@ -183,6 +183,7 @@ public class PaymentsUseCase {
           boolean withInterest,
           boolean isPrinter
   ) {
+    isAbortRunning = false;
     BasicResult basicResult = new BasicResult();
     basicResult.setMethod("transaction");
     ActionResult actionResult = new ActionResult();
@@ -217,7 +218,7 @@ public class PaymentsUseCase {
             boolean isPaymentApproved = transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED;
 
             actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
-            checkStatusWithErrorTransaction(transactionObject.getTransactionStatus(), context);
+            // checkStatusWithErrorTransaction(transactionObject.getTransactionStatus(), context);
             String jsonStoneResult = convertActionToJson(actionResult);
             finishTransaction(jsonStoneResult);
 
@@ -305,14 +306,12 @@ public class PaymentsUseCase {
   }
 
   public void abortCurrentPosTransaction() {
-    Log.d("print", "****INICIANDO ABORT");
     if(posTransactionProvider == null){
       return;
     }
     try {
       posTransactionProvider.abortPayment();
       isAbortRunning = true;
-      Log.d("print", "****ABORT EXECUTADO");
     } catch (Exception error){
       Log.d("print", "****ERRO_ABORT: " + error.getMessage());
       BasicResult basicResult = new BasicResult();
@@ -323,7 +322,6 @@ public class PaymentsUseCase {
   }
 
   public void abortPIXTransaction(Context context) {
-    Log.d("print", "****INICIANDO ABORT PIX");
     try {
       cancelTransactionPIX(context);
     }catch (Exception err) {}
@@ -336,7 +334,6 @@ public class PaymentsUseCase {
 
     BasicResult basicResult = new BasicResult();
     basicResult.setMethod("abortPix");
-    Log.d("print", "****FIM ABORT PIX");
     mFragment.onMessage("Transação cancelada");
     basicResult.setResult(999999);
     basicResult.setMessage("Transação cancelada");
@@ -546,10 +543,10 @@ public class PaymentsUseCase {
       return;
     }
 
-    if(status == TransactionStatusEnum.WITH_ERROR) {
-      mFragment.onMessage("Revertendo a transacao");
-      onReversalTransaction(context);
-    }
+    // if(status == TransactionStatusEnum.WITH_ERROR) {
+    //   mFragment.onMessage("Revertendo a transacao");
+    //   onReversalTransaction(context);
+    // }
   }
 
   public void onReversalTransaction(Context context) {
