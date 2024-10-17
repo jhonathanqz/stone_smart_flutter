@@ -43,12 +43,8 @@ public class PaymentsUseCase {
   private List<UserModel> userModel;
   private List<String> optionList;
   private boolean isInitialized = false;
-
   List<TransactionObject> transactionObjects;
-
-  private boolean isActivePinpad = false;
   private boolean isAbortRunning = false;
-
   Gson gson = null;
   public PaymentsUseCase(MethodChannel channel) {
     this.mFragment = new PaymentsFragment(channel);
@@ -102,23 +98,28 @@ public class PaymentsUseCase {
     basicResult.setResult(999999);
     actionResult.setResult(999999);
 
-    if (!isAbortRunning) {
-      actionResult.setTransactionStatus(posTransactionProvider.getTransactionStatus().toString());
+    TransactionStatusEnum status = TransactionStatusEnum.UNKNOWN;
+
+    if(posTransactionProvider != null) {
+      status = posTransactionProvider.getTransactionStatus();
+    }
+
+    if (!isAbortRunning && posTransactionProvider != null) {
+      actionResult.setTransactionStatus(status.toString());
       actionResult.setMessageFromAuthorize(posTransactionProvider.getMessageFromAuthorize());
       actionResult.setAuthorizationCode(posTransactionProvider.getAuthorizationCode());
       actionResult.setErrorMessage(mStoneHelper.getErrorFromErrorList(posTransactionProvider.getListOfErrors()));
       mFragment.onMessage(posTransactionProvider.getMessageFromAuthorize());    
       basicResult.setErrorMessage(mStoneHelper.getErrorFromErrorList(posTransactionProvider.getListOfErrors()));
 
-      checkStatusWithErrorTransaction(posTransactionProvider.getTransactionStatus(), context);
+      checkStatusWithErrorTransaction(status, context);
     }
 
-    mFragment.onError(convertBasicResultToJson(basicResult));
-    String jsonError = convertActionToJson(actionResult);
-    mFragment.onFinishedResponse(jsonError);
-    currentTransactionObject = null;
-    posTransactionProvider= null;
 
+    String jsonError = convertActionToJson(actionResult);
+
+    mFragment.onError(convertBasicResultToJson(basicResult));
+    mFragment.onFinishedResponse(jsonError);
     mFragment.onMessage("Transação concluída");
   }
 
@@ -129,28 +130,33 @@ public class PaymentsUseCase {
       String userModelString = getGson().toJson(userModel.get(0));
       actionResult.setUserModel(userModelString);
     }
+
+    boolean isPaymentApproved = false;
+    TransactionStatusEnum transactionStatus = TransactionStatusEnum.UNKNOWN;
+    TransactionStatusEnum currentTransactionStatus = TransactionStatusEnum.UNKNOWN;
+
+    if(currentTransactionObject != null) {
+      currentTransactionStatus = currentTransactionObject.getTransactionStatus();
+    }
     
-    if (!isAbortRunning) {
-      actionResult.setTransactionStatus(posTransactionProvider.getTransactionStatus().toString());
+    if (!isAbortRunning && posTransactionProvider != null) {
+      transactionStatus = posTransactionProvider.getTransactionStatus();
+      actionResult.setTransactionStatus(transactionStatus.toString());
       actionResult.setMessageFromAuthorize(posTransactionProvider.getMessageFromAuthorize());
       actionResult.setAuthorizationCode(posTransactionProvider.getAuthorizationCode());
-      if (isPrinter) {
-        printerReceiptTransaction(context, currentTransactionObject, posTransactionProvider.getTransactionStatus());
+      if (isPrinter && currentTransactionObject != null) {
+        printerReceiptTransaction(context, currentTransactionObject, transactionStatus);
       }
+      isPaymentApproved = transactionStatus == TransactionStatusEnum.APPROVED || currentTransactionStatus == TransactionStatusEnum.APPROVED;
+      actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
+      checkStatusWithErrorTransaction(transactionStatus, context);
     }
-
-    boolean isPaymentApproved = posTransactionProvider.getTransactionStatus() == TransactionStatusEnum.APPROVED || currentTransactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED;
-
-    actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
 
     String jsonStoneResult = convertActionToJson(actionResult);
     finishTransaction(jsonStoneResult);
 
-    checkStatusWithErrorTransaction(posTransactionProvider.getTransactionStatus(), context);
-    
     mFragment.onMessage("Transação concluída");
     mFragment.onTransactionSuccess();
-    posTransactionProvider = null;
   }
 
   public void handleTransactionStatusChanged(Action action, TransactionObject transaction, BasicResult basicResult) {
@@ -183,7 +189,7 @@ public class PaymentsUseCase {
           boolean withInterest,
           boolean isPrinter
   ) {
-    isAbortRunning = false;
+
     BasicResult basicResult = new BasicResult();
     basicResult.setMethod("transaction");
     ActionResult actionResult = new ActionResult();
@@ -195,6 +201,7 @@ public class PaymentsUseCase {
       mFragment.onMessage("Iniciando transação");
       currentTransactionObject = null;
       posTransactionProvider = null;
+      isAbortRunning = false;
 
       final TransactionObject transaction = mStoneHelper.getTransactionObject(amount, typeTransaction, parc, withInterest);
       currentTransactionObject = transaction;
@@ -218,7 +225,6 @@ public class PaymentsUseCase {
             boolean isPaymentApproved = transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED;
 
             actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
-            // checkStatusWithErrorTransaction(transactionObject.getTransactionStatus(), context);
             String jsonStoneResult = convertActionToJson(actionResult);
             finishTransaction(jsonStoneResult);
 
@@ -256,15 +262,13 @@ public class PaymentsUseCase {
       });
       posTransactionProvider.execute();
     } catch (Exception e) {
+      Log.d("print", "****ERRO_transaction: " + e.getMessage());
+
       basicResult.setResult(999999);
       basicResult.setErrorMessage(e.getMessage());
 
       mFragment.onError(convertBasicResultToJson(basicResult));
-      currentTransactionObject = null;
-      if(posTransactionProvider != null){
-        abortCurrentPosTransaction();
-      }
-      posTransactionProvider = null;
+      abortCurrentPosTransaction();
     }
   }
 
@@ -283,14 +287,12 @@ public class PaymentsUseCase {
   }
 
   public void printerCurrentTransaction(Context context, boolean isPrinter) {
-    if(currentTransactionObject == null) return;
-    if(!isPrinter) {
-      currentTransactionObject = null;
-      return;
-    }
+    if(currentTransactionObject == null || !isPrinter) return;
     try {
       mStonePrinter.printerFromTransaction(context, currentTransactionObject);
-    } catch (Exception error) {}
+    } catch (Exception error) {
+      Log.d("print", "****ERRO_printerCurrentTransaction: " + error.getMessage());
+    }
   }
 
   public void printerReceiptTransaction(Context context, TransactionObject transactionObject,TransactionStatusEnum status ) {
@@ -302,18 +304,19 @@ public class PaymentsUseCase {
         printer.execute();
       }
     } catch(Exception e) {
+      Log.d("print", "****ERRO_printerReceiptTransaction: " + e.getMessage());
     }
   }
 
   public void abortCurrentPosTransaction() {
-    if(posTransactionProvider == null){
+    if(posTransactionProvider == null || isAbortRunning){
       return;
     }
     try {
       posTransactionProvider.abortPayment();
       isAbortRunning = true;
     } catch (Exception error){
-      Log.d("print", "****ERRO_ABORT: " + error.getMessage());
+      Log.d("print", "****ERRO_abortCurrentPosTransaction: " + error.getMessage());
       BasicResult basicResult = new BasicResult();
       basicResult.setResult(999999);
       basicResult.setErrorMessage(error.getMessage());
@@ -324,12 +327,16 @@ public class PaymentsUseCase {
   public void abortPIXTransaction(Context context) {
     try {
       cancelTransactionPIX(context);
-    }catch (Exception err) {}
+    }catch (Exception err) {
+      Log.d("print", "****ERRO_cancelTransactionPIX: " + err.getMessage());
+    }
 
     try {
       posTransactionProvider.abortPayment();
       isAbortRunning = true;
-    } catch (Exception error){}
+    } catch (Exception error){
+      Log.d("print", "****ERRO_abortCurrentPosTransaction: " + error.getMessage());
+    }
 
 
     BasicResult basicResult = new BasicResult();
@@ -371,7 +378,6 @@ public class PaymentsUseCase {
         activeApplicationProvider.activate(stoneCode);
 
       } else {
-        isActivePinpad = true;
         mFragment.onMessage("Terminal ativado");
 
         basicResult.setMethod("active");
@@ -385,7 +391,9 @@ public class PaymentsUseCase {
         mFragment.onFinishedResponse(resultJson);
         mFragment.onAuthProgress(resultJson);
       }
-    } catch (Exception error) {}
+    } catch (Exception error) {
+      Log.d("print", "****ERRO_initializeAndActivatePinpad: " + error.getMessage());
+    }
   }
 
   public void initializeAndActivatePinPadWithCredentials(
@@ -418,7 +426,9 @@ public class PaymentsUseCase {
         mFragment.onFinishedResponse(resultJson);
         mFragment.onAuthProgress(resultJson);
       }
-    }catch (Exception error){}
+    }catch (Exception error){
+      Log.d("print", "****ERRO_initializeAndActivatePinPadWithCredentials: " + error.getMessage());
+    }
   }
 
   public void cancelTransaction(Context context, int idFromBase) {
@@ -438,6 +448,7 @@ public class PaymentsUseCase {
       final CancellationProvider cancellationProvider = getCancellationProvider(context, transaction);
       cancellationProvider.execute();
     } catch (Exception error) {
+      Log.d("print", "****ERRO_cancelTransaction: " + error.getMessage());
       mFragment.onMessage("Erro ao cancelar transação");
       basicResult.setResult(999999);
       basicResult.setErrorMessage(error.getMessage());
@@ -457,7 +468,7 @@ public class PaymentsUseCase {
       final CancellationProvider cancellationProvider = new CancellationProvider(context, currentTransactionObject);
       cancellationProvider.execute();
     } catch (Exception error) {
-      Log.d("print", "****ERRO_CANCEL_PIX_1: " + error.getMessage());
+      Log.d("print", "****ERRO_cancelTransactionPIX: " + error.getMessage());
       mFragment.onMessage("Transação cancelada");
       basicResult.setResult(999999);
     }
@@ -535,7 +546,7 @@ public class PaymentsUseCase {
 
   public void checkStatusWithErrorTransaction(TransactionStatusEnum status, Context context) {
     if(status == null || (status != TransactionStatusEnum.WITH_ERROR && status != TransactionStatusEnum.APPROVED) ) {
-      if(posTransactionProvider != null) {
+      if(posTransactionProvider != null &&  !isAbortRunning) {
         mFragment.onMessage("Abortando a transacao");
         posTransactionProvider.abortPayment();
         isAbortRunning = true;
@@ -543,10 +554,10 @@ public class PaymentsUseCase {
       return;
     }
 
-    // if(status == TransactionStatusEnum.WITH_ERROR) {
-    //   mFragment.onMessage("Revertendo a transacao");
-    //   onReversalTransaction(context);
-    // }
+     if(status == TransactionStatusEnum.WITH_ERROR) {
+       mFragment.onMessage("Revertendo a transacao");
+       onReversalTransaction(context);
+     }
   }
 
   public void onReversalTransaction(Context context) {
@@ -575,6 +586,7 @@ public class PaymentsUseCase {
       });
       reversalProvider.execute();
     } catch (Exception error) {
+      Log.d("print", "****ERRO_onReversalTransaction: " + error.getMessage());
       basicResult.setResult(999999);
       basicResult.setErrorMessage(error.getMessage());
       basicResult.setMessage("ERROR");
@@ -620,6 +632,7 @@ public class PaymentsUseCase {
         finishTransaction(jsonStoneResult);
 
       } catch (Exception error) {
+        Log.d("print", "****ERRO_getTransactionByInitiatorTransactionKey: " + error.getMessage());
         handleTransactionError(context, "Erro ao buscar transação", actionResult, basicResult);
       }
     }
@@ -645,6 +658,7 @@ public class PaymentsUseCase {
         String jsonStoneResult = convertActionToJson(actionResult);
         mFragment.onFinishedResponse(jsonStoneResult);
       } catch (Exception e) {
+        Log.d("print", "****ERRO_getAllTransactions: " + e.getMessage());
         mFragment.onMessage("Erro ao buscar transações");
         actionResult.buildAllTransactions(transactionObjects);
         actionResult.setResult(999999);
