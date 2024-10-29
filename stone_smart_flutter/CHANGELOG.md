@@ -1,3 +1,7 @@
+## 1.2.2+1
+
+- remove gertec dependencies
+
 ## 1.2.2
 
 - fix methods abort and reversal transaction
