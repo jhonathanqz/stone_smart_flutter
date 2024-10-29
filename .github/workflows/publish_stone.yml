@@ -9,10 +9,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Setup PATH
+        run: echo "::add-path::/flutter/bin"
+
       - name: Install Flutter
         uses: subosito/flutter-action@v2
 
-      # Stone Smart Flutter
+      - name: Install Android SDK
+        run: sudo apt-get install -y android-sdk
+
       - name: Set up stone_smart_flutter directory
         run: cd stone_smart_flutter
         shell: bash
@@ -24,6 +29,11 @@ jobs:
       - name: Format code for stone_smart_flutter
         run: dart format --fix .
         working-directory: stone_smart_flutter
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config
 
       - name: Publish stone_smart_flutter
         uses: k-paxian/dart-package-publisher@v1.5.1
