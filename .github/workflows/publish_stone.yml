@@ -9,8 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup PATH
-        run: echo "::add-path::/flutter/bin"
+      - name: Set up Flutter SDK path
+        run: |
+          echo "/flutter/bin" >> $GITHUB_PATH
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
