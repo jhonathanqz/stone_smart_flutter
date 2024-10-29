@@ -9,19 +9,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Flutter SDK path
-        run: |
-          echo "/flutter/bin" >> $GITHUB_PATH
-
       - name: Install Flutter
         uses: subosito/flutter-action@v2
 
-      - name: Install Android SDK
-        run: sudo apt-get install -y android-sdk
+      - name: Set up Flutter SDK path
+        run: echo "/flutter/bin" >> $GITHUB_PATH
 
-      - name: Set up stone_smart_flutter directory
-        run: cd stone_smart_flutter
-        shell: bash
+      - name: Install Android SDK
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openjdk-8-jdk
+          wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
+          unzip sdk-tools-linux-4333796.zip -d $HOME/android-sdk
+          echo "sdk.dir=$HOME/android-sdk" > local.properties
+          export ANDROID_HOME=$HOME/android-sdk
+          export PATH=$PATH:$ANDROID_HOME/tools/bin
+          yes | sdkmanager --licenses
+          sdkmanager "platforms;android-30" "build-tools;30.0.3"
 
       - name: Install dependencies for stone_smart_flutter
         run: flutter pub get
