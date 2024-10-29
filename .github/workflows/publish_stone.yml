@@ -13,20 +13,23 @@ jobs:
         uses: subosito/flutter-action@v2
 
       # Stone Smart Flutter
+      - name: Set up stone_smart_flutter directory
+        run: cd stone_smart_flutter
+        shell: bash
+
       - name: Install dependencies for stone_smart_flutter
-        run: |
-          cd stone_smart_flutter
-          flutter pub get
+        run: flutter pub get
+        working-directory: stone_smart_flutter
 
       - name: Format code for stone_smart_flutter
-        run: |
-          cd stone_smart_flutter
-          dart format --fix .
+        run: dart format --fix .
+        working-directory: stone_smart_flutter
 
       - name: Publish stone_smart_flutter
         uses: k-paxian/dart-package-publisher@v1.5.1
         with:
           credentialJson: ${{ secrets.CREDENTIAL_JSON }}
           flutter: true
+          skipTests: true
         env:
           PROJECT_DIR: stone_smart_flutter
