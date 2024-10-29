@@ -12,15 +12,17 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   stone_smart_flutter:
-    path: ../../stone_smart_flutter
+    ^1.2.2+2
+    #path: ../../stone_smart_flutter
   interface_stone_smart_flutter:
-    path: ../../interface_stone_smart_flutter
+    ^1.0.1
+    #path: ../../interface_stone_smart_flutter
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^1.0.0
+  flutter_lints: ^4.0.0
 
 flutter:
   uses-material-design: true
