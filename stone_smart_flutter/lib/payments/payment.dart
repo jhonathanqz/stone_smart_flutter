@@ -58,7 +58,7 @@ class Payment {
     required String stoneCode,
     required String qrCodeAuthroization,
     required String qrCodeProviderid,
-    bool isPrinterEstablishment = true,
+    bool printClientVia = true,
   }) async {
     try {
       await channel
@@ -67,7 +67,7 @@ class Payment {
         "stoneCode": stoneCode,
         "qrCodeAuthorization": qrCodeAuthroization,
         "qrCodeProviderid": qrCodeProviderid,
-        "isPrinter": isPrinterEstablishment,
+        "printClientVia": printClientVia,
       });
       return true;
     } catch (e) {
@@ -78,7 +78,7 @@ class Payment {
   //Function to invoke method from credit payment with sdk the Stone
   Future<bool> creditPayment(
     int value, {
-    bool isPrinterEstablishment = true,
+    bool printClientVia = true,
     String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
@@ -87,7 +87,7 @@ class Payment {
         "amount": value.toString(),
         "installment": 1,
         "withInterest": false,
-        "isPrinter": isPrinterEstablishment,
+        "printClientVia": printClientVia,
         "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
@@ -98,7 +98,7 @@ class Payment {
     required int value,
     int installment = 1,
     bool withInterest = false,
-    bool isPrinterEstablishment = true,
+    bool printClientVia = true,
     String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
@@ -107,7 +107,7 @@ class Payment {
         "amount": value.toString(),
         "installment": installment,
         "withInterest": withInterest,
-        "isPrinter": isPrinterEstablishment,
+        "printClientVia": printClientVia,
         "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
@@ -116,7 +116,7 @@ class Payment {
   //Function to invoke method from debit payment with sdk the Stone
   Future<bool> debitPayment(
     int value, {
-    bool isPrinterEstablishment = true,
+    bool printClientVia = true,
     String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
@@ -125,7 +125,7 @@ class Payment {
         "amount": value.toString(),
         "installment": 1,
         "withInterest": false,
-        "isPrinter": isPrinterEstablishment,
+        "printClientVia": printClientVia,
         "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
@@ -136,7 +136,7 @@ class Payment {
     required int amount,
     required String qrCodeAuthroization,
     required String qrCodeProviderid,
-    bool isPrinterEstablishment = true,
+    bool printClientVia = true,
     String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
@@ -147,7 +147,7 @@ class Payment {
         "withInterest": false,
         "qrCodeAuthorization": qrCodeAuthroization,
         "qrCodeProviderid": qrCodeProviderid,
-        "isPrinter": isPrinterEstablishment,
+        "printClientVia": printClientVia,
         "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
@@ -156,7 +156,7 @@ class Payment {
   //Function to invoke method from voucher payment with sdk the Stone
   Future<bool> voucherPayment(
     int value, {
-    bool isPrinterEstablishment = true,
+    bool printClientVia = true,
     String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
@@ -165,7 +165,7 @@ class Payment {
         "amount": value.toString(),
         "installment": 1,
         "withInterest": false,
-        "isPrinter": isPrinterEstablishment,
+        "printClientVia": printClientVia,
         "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
@@ -183,11 +183,11 @@ class Payment {
 
   //Function to invoke method from printer current transaction with sdk the Stone
   Future<bool> printerCurrentTransaction({
-    required bool isPrinter,
+    required bool printClientVia,
   }) async {
     return await channel
         .invokeMethod(PaymentTypeCall.PRINTER_TRANSACTION.method, {
-      "isPrinter": isPrinter,
+      "printClientVia": printClientVia,
     });
   }
 

@@ -95,7 +95,7 @@
 
 ## 1.0.8
 
-- Feat: Configure new property isPrinterEstablishment
+- Feat: Configure new property printClientVia
 
 ## 1.0.7
 

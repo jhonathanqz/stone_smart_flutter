@@ -21,24 +21,18 @@ public class StoneSmart {
     private static final String PAYMENT_VOUCHER = "paymentVoucher";
     private static final String PAYMENT_PIX = "paymentPix";
     private static final String ACTIVE_PINPAD = "paymentActivePinpad";
-
     private static final String ACTIVE_PINPAD_CREDENTIALS = "paymentActivePinpadCredentials";
     private static final String PAYMENT_ABORT = "paymentAbort";
     private static final String PAYMENT_ABORT_PIX = "paymentAbortPix";
     private static final String PAYMENT_CANCEL_TRANSACTION = "paymentCancelTransaction";
-
     private static final String PAYMENT_REVERSAL = "paymentReversal";
     private static final String PAYMENT_OPTIONS = "paymentOptions";
-
     private static final String PAYMENT_PRINTER_TRANSACTION = "paymentPrinterTransaction";
-
     private static final String PAYMENT_GET_TRANSACTION_BY_INITIATOR_TRANSACTION_KEY = "paymentGetTransactionByInitiatorTransactionKey";
-
     private static final String PAYMENT_GET_ALL_TRANSACTIONS = "paymentGetAllTransactions";
-
     private static final String PAYMENT_CUSTOM_PRINTER = "paymentCustomPrinter";
-
     private static final String PAYMENT_PRINTER_BASE64 = "paymentPrinterBase64";
+
     final Context currentContext;
 
     public StoneSmart(Context context, MethodChannel channel) {
@@ -80,8 +74,8 @@ public class StoneSmart {
         }
 
         if(call.method.equals(PAYMENT_PRINTER_TRANSACTION)) {
-            boolean isPrinter = call.argument("isPrinter");
-            this.payment.printerCurrentTransaction(currentContext, isPrinter);
+            boolean printClientVia = call.argument("printClientVia");
+            this.payment.printerCurrentTransaction(currentContext, printClientVia);
             return;
         }
 
@@ -124,24 +118,23 @@ public class StoneSmart {
         }
 
         String amount = call.argument("amount");
-
         int parc = call.argument("installment");
         boolean withInterest = call.argument("withInterest");
-        boolean isPrinter = call.argument("isPrinter");
+        boolean printClientVia = call.argument("printClientVia");
         String initiatorTransactionKey = call.argument("initiatorTransactionKey");
 
         if (call.method.equals(PAYMENT_DEBIT)) {
-            this.payment.doTransaction(currentContext,amount, 2, initiatorTransactionKey, parc, withInterest, null,null, isPrinter);
+            this.payment.doTransaction(currentContext,amount, 2, initiatorTransactionKey, parc, withInterest, null,null, printClientVia);
         } else if (call.method.equals(PAYMENT_PIX)) {
             String qrCodeAuthotization = call.argument("qrCodeAuthorization");
             String qrCodeProviderid = call.argument("qrCodeProviderid");
-            this.payment.doTransaction(currentContext,amount, 3, initiatorTransactionKey, parc, withInterest, qrCodeAuthotization, qrCodeProviderid, isPrinter);
+            this.payment.doTransaction(currentContext,amount, 3, initiatorTransactionKey, parc, withInterest, qrCodeAuthotization, qrCodeProviderid, printClientVia);
         } else if (call.method.equals(PAYMENT_CREDIT)) {
-            this.payment.doTransaction(currentContext,amount, 1, initiatorTransactionKey, parc, withInterest,null,null, isPrinter);
+            this.payment.doTransaction(currentContext,amount, 1, initiatorTransactionKey, parc, withInterest,null,null, printClientVia);
         }  else if (call.method.equals(PAYMENT_CREDIT_PARC)) {
-            this.payment.doTransaction(currentContext,amount, 1, initiatorTransactionKey, parc, withInterest,null,null, isPrinter);
+            this.payment.doTransaction(currentContext,amount, 1, initiatorTransactionKey, parc, withInterest,null,null, printClientVia);
         } else if (call.method.equals(PAYMENT_VOUCHER)) {
-            this.payment.doTransaction(currentContext,amount, 4,initiatorTransactionKey, parc, withInterest, null,null, isPrinter);
+            this.payment.doTransaction(currentContext,amount, 4,initiatorTransactionKey, parc, withInterest, null,null, printClientVia);
         } else {
             result.notImplemented();
         }

@@ -34,9 +34,9 @@ public class PaymentsPresenter {
                               boolean withInterest,
                               String qrCodeAuthorization,
                               String qrCodeProviderid,
-                              boolean isPrinter) {
+                              boolean printClientVia) {
         if(qrCodeProviderid == null && qrCodeAuthorization == null){
-            mUseCase.initTransaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, null, isPrinter);
+            mUseCase.initTransaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, null, printClientVia);
             return;
         }
         Map<StoneKeyType, String> stoneKeys = new HashMap<StoneKeyType, String>()
@@ -46,11 +46,11 @@ public class PaymentsPresenter {
                 put(StoneKeyType.QRCODE_PROVIDERID, qrCodeProviderid);
             }
         };
-        mUseCase.initTransaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, stoneKeys, isPrinter);
+        mUseCase.initTransaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, stoneKeys, printClientVia);
     }
 
-    public void printerCurrentTransaction(Context context, boolean isPrinter) {
-        mUseCase.printerCurrentTransaction(context, isPrinter);
+    public void printerCurrentTransaction(Context context, boolean printClientVia) {
+        mUseCase.printerCurrentTransaction(context, printClientVia);
     }
 
     public void setPaymentOption(String value) {
