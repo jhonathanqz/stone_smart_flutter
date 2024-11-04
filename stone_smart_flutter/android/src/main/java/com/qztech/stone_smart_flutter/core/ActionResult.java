@@ -221,9 +221,9 @@ public class ActionResult {
     return 0;
   }
 
-  private boolean printClientViaRequest;
+  private boolean printCustomerSlipRequest;
 
-  public void setPrinterRequest(boolean value) {this.printClientViaRequest = value;}
+  public void setPrinterRequest(boolean value) {this.printCustomerSlipRequest = value;}
 
   public String cardSequenceNumber;
   public void setCardSequenceNumber(String value) {

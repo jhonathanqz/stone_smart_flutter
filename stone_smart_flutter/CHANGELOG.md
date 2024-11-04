@@ -99,7 +99,7 @@
 
 ## 1.0.8
 
-- Feat: Configure new property printClientVia
+- Feat: Configure new property printCustomerSlip
 
 ## 1.0.7
 

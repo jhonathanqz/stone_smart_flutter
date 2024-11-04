@@ -74,8 +74,8 @@ public class StoneSmart {
         }
 
         if(call.method.equals(PAYMENT_PRINTER_TRANSACTION)) {
-            boolean printClientVia = call.argument("printClientVia");
-            this.payment.printerCurrentTransaction(currentContext, printClientVia);
+            boolean printCustomerSlip = call.argument("printCustomerSlip");
+            this.payment.printerCurrentTransaction(currentContext, printCustomerSlip);
             return;
         }
 
@@ -120,21 +120,21 @@ public class StoneSmart {
         String amount = call.argument("amount");
         int parc = call.argument("installment");
         boolean withInterest = call.argument("withInterest");
-        boolean printClientVia = call.argument("printClientVia");
+        boolean printCustomerSlip = call.argument("printCustomerSlip");
         String initiatorTransactionKey = call.argument("initiatorTransactionKey");
 
         if (call.method.equals(PAYMENT_DEBIT)) {
-            this.payment.doTransaction(currentContext,amount, 2, initiatorTransactionKey, parc, withInterest, null,null, printClientVia);
+            this.payment.doTransaction(currentContext,amount, 2, initiatorTransactionKey, parc, withInterest, null,null, printCustomerSlip);
         } else if (call.method.equals(PAYMENT_PIX)) {
             String qrCodeAuthotization = call.argument("qrCodeAuthorization");
             String qrCodeProviderid = call.argument("qrCodeProviderid");
-            this.payment.doTransaction(currentContext,amount, 3, initiatorTransactionKey, parc, withInterest, qrCodeAuthotization, qrCodeProviderid, printClientVia);
+            this.payment.doTransaction(currentContext,amount, 3, initiatorTransactionKey, parc, withInterest, qrCodeAuthotization, qrCodeProviderid, printCustomerSlip);
         } else if (call.method.equals(PAYMENT_CREDIT)) {
-            this.payment.doTransaction(currentContext,amount, 1, initiatorTransactionKey, parc, withInterest,null,null, printClientVia);
+            this.payment.doTransaction(currentContext,amount, 1, initiatorTransactionKey, parc, withInterest,null,null, printCustomerSlip);
         }  else if (call.method.equals(PAYMENT_CREDIT_PARC)) {
-            this.payment.doTransaction(currentContext,amount, 1, initiatorTransactionKey, parc, withInterest,null,null, printClientVia);
+            this.payment.doTransaction(currentContext,amount, 1, initiatorTransactionKey, parc, withInterest,null,null, printCustomerSlip);
         } else if (call.method.equals(PAYMENT_VOUCHER)) {
-            this.payment.doTransaction(currentContext,amount, 4,initiatorTransactionKey, parc, withInterest, null,null, printClientVia);
+            this.payment.doTransaction(currentContext,amount, 4,initiatorTransactionKey, parc, withInterest, null,null, printCustomerSlip);
         } else {
             result.notImplemented();
         }
