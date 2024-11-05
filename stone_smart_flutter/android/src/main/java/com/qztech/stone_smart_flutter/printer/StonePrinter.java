@@ -27,7 +27,6 @@ public class StonePrinter {
     private StoneHelper mStoneHelper;
     private Gson gson = null;
 
-
     public StonePrinter(MethodChannel channel) {
         this.mFragment = new PaymentsFragment(channel);
         this.mStoneHelper = new StoneHelper();
@@ -45,77 +44,29 @@ public class StonePrinter {
     }
 
     public void printerFromTransaction(Context context, TransactionObject transactionObject) {
-        // BasicResult basicResult = new BasicResult();
-        // basicResult.setMethod("printer");
         try {
             PosPrintReceiptProvider posPrintReceiptProvider = new PosPrintReceiptProvider(context, transactionObject, ReceiptType.CLIENT);
-            posPrintReceiptProvider.setConnectionCallback(new StoneCallbackInterface() {
-                @Override
-                public void onSuccess() {
-                    // mFragment.onMessage("Impressão realizada com sucesso");
-                    // basicResult.setResult(0);
-                    // basicResult.setMessage("Impressão finalizada com sucesso");
-                    // mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
-                }
-
-                @Override
-                public void onError() {
-                    // basicResult.setResult(999999);
-                    // basicResult.setErrorMessage(posPrintReceiptProvider.getListOfErrors().toString());
-                    // mFragment.onMessage("Erro ao realizar impressão");
-                    // mFragment.onError(convertBasicResultToJson(basicResult));
-                }
-            });
+            StoneCallbackInterface callback = getCallback(basicResult, "Impressão realizada com sucesso", "Erro ao imprimir");
+            posPrintReceiptProvider.setConnectionCallback(callback);
             posPrintReceiptProvider.execute();
         } catch (Exception error) {
-            // basicResult.setResult(999999);
-            // basicResult.setErrorMessage(error.getMessage());
-            // mFragment.onMessage("Erro ao realizar impressão");
-            // mFragment.onError(convertBasicResultToJson(basicResult));
+            onError(basicResult, error.getMessage());
         }
     }
 
-    public void printerFromBase64(String base64, Context context) {
+    public void printFromBase64(String base64, Context context) {
         BasicResult basicResult = new BasicResult();
-        basicResult.setMethod("printerFromBase64");
+        basicResult.setMethod("printFromBase64");
         try {
             PosPrintProvider posPrintProvider = new PosPrintProvider(context);
             posPrintProvider.addBase64Image(base64);
-
-            posPrintProvider.setConnectionCallback(new StoneCallbackInterface() {
-                @Override
-                public void onSuccess() {
-                    basicResult.setResult(0);
-                    mFragment.onMessage("Impressão realizada com sucesso");
-                    mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
-
-                }
-
-                @Override
-                public void onError() {
-
-                    basicResult.setResult(999999);
-
-                    List<ErrorsEnum> errors = posPrintProvider.getListOfErrors();
-                    String error = "Erro ao realizar impressão";
-                    if(!errors.isEmpty()) {
-                        error = mStoneHelper.getErrorMessageFromErrorEnum(errors.get(0));
-                        basicResult.setErrorMessage(error);
-                    }else {
-                        basicResult.setErrorMessage("Erro ao imprimir: " + posPrintProvider.getListOfErrors());
-                    }
-
-                    mFragment.onMessage(error);
-                    mFragment.onError(convertBasicResultToJson(basicResult));
-                }
-            });
+            
+            StoneCallbackInterface callback = getCallback(basicResult, "Impressão realizada com sucesso", "Erro ao imprimir");
+            posPrintProvider.setConnectionCallback(callback);
 
             posPrintProvider.execute();
         } catch (Exception error) {
-            basicResult.setResult(999999);
-            basicResult.setErrorMessage(error.getMessage());
-            mFragment.onMessage("Erro ao realizar impressão");
-            mFragment.onError(convertBasicResultToJson(basicResult));
+            onError(basicResult, error.getMessage());
         }
     }
 
@@ -143,40 +94,66 @@ public class StonePrinter {
                     customPosPrintProvider.addBase64Image(imageBase64);
                 }
             }
-
-            customPosPrintProvider.setConnectionCallback(new StoneCallbackInterface() {
-                @Override
-                public void onSuccess() {
-                    basicResult.setResult(0);
-                    mFragment.onMessage("Impressão realizada com sucesso");
-                    mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
-                    
-                }
-            
-                @Override
-                public void onError() {
-                    basicResult.setResult(999999);
-
-                    List<ErrorsEnum> errors = customPosPrintProvider.getListOfErrors();
-                    String error = "Erro ao realizar impressão";
-                    if(!errors.isEmpty()) {
-                        error = mStoneHelper.getErrorMessageFromErrorEnum(errors.get(0));
-                        basicResult.setErrorMessage(error);
-                    }else {
-                        basicResult.setErrorMessage("Erro ao imprimir: " + customPosPrintProvider.getListOfErrors());
-                    }
-
-                    mFragment.onMessage(error);
-                    mFragment.onError(convertBasicResultToJson(basicResult));
-                }
-            });
-
+            StoneCallbackInterface callback = getCallback(basicResult, "Impressão realizada com sucesso", "Erro ao imprimir");
+            customPosPrintProvider.setConnectionCallback(callback);
             customPosPrintProvider.execute();
         } catch (Exception error) {
-            basicResult.setResult(999999);
-            basicResult.setErrorMessage(error.getMessage());
-            mFragment.onMessage("Erro ao realizar impressão");
-            mFragment.onError(convertBasicResultToJson(basicResult));
+            onError(basicResult, error.getMessage());
         }
+    }
+
+    public void printWrapPaper(int lines, Context context) {
+        BasicResult basicResult = new BasicResult();
+        basicResult.setMethod("printWrapPaper");
+        
+        try {
+            PosPrintProvider posPrintProvider = new PosPrintProvider(context);
+            
+            for (int i = 0; i < lines; i++) {
+                posPrintProvider.addLine();
+            }
+
+            StoneCallbackInterface callback = getCallback(basicResult, "Pulou linhas com sucesso", "Erro ao pular linhas");
+            posPrintProvider.setConnectionCallback(callback);
+
+            posPrintProvider.execute();
+        } catch (Exception error) {
+            onError(basicResult, error.getMessage());
+        }
+    }
+
+    private StoneCallbackInterface getCallback(BasicResult basicResult, String successMessage, String errorMessage) {
+        return new StoneCallbackInterface() {
+            @Override
+            public void onSuccess() {
+                onSuccess(basicResult, successMessage);
+            }
+
+            @Override
+            public void onError() {
+                onError(basicResult, errorMessage);
+            }
+        };
+    }
+
+    private void onSuccess(BasicResult basicResult, String message) {
+        basicResult.setResult(0);
+        mFragment.onMessage(message);
+        mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
+    }
+
+    private void onError(BasicResult basicResult, String message) {
+        basicResult.setResult(999999);
+        List<ErrorsEnum> errors = posPrintProvider.getListOfErrors();
+        
+        if(!errors.isEmpty()) {
+            error = mStoneHelper.getErrorMessageFromErrorEnum(errors.get(0));
+            basicResult.setErrorMessage(message);
+        } else {
+            basicResult.setErrorMessage("Error: " + posPrintProvider.getListOfErrors());
+        }
+
+        mFragment.onMessage(error);
+        mFragment.onError(convertBasicResultToJson(basicResult));
     }
 }

@@ -221,10 +221,6 @@ public class ActionResult {
     return 0;
   }
 
-  private boolean isPrinterRequest;
-
-  public void setPrinterRequest(boolean value) {this.isPrinterRequest = value;}
-
   public String cardSequenceNumber;
   public void setCardSequenceNumber(String value) {
     if(value == null || value.isEmpty()) {
@@ -250,12 +246,12 @@ public class ActionResult {
     this.externalId = value;
   }
 
-  public String initiatorTransactionKey;
+  public String initiatorKey;
   public void setInitiatorTransactionKey(String value) {
     if(value == null || value.isEmpty()) {
       return;
     }
-    this.initiatorTransactionKey = value;
+    this.initiatorKey = value;
   }
 
 
@@ -292,7 +288,6 @@ public class ActionResult {
     setExternalID(transactionObjects.getExternalId());
     setInitiatorTransactionKey(transactionObjects.getInitiatorTransactionKey());
     setTransactionStatus(transactionObjects.getTransactionStatus().toString());
-    setPrinterRequest(true);
 
     this.isBuildResponse = 1;
   }

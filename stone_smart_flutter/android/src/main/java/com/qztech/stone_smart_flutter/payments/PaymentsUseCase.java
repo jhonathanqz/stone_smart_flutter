@@ -62,23 +62,23 @@ public class PaymentsUseCase {
   public void initTransaction(Context context,
                               String amount,
                               int typeTransaction,
-                              String initiatorTransactionKey,
+                              String initiatorKey,
                               int parc,
                               boolean withInterest,
                               Map<StoneKeyType, String> stoneKeys,
-                              boolean isPrinter
+                              boolean printCustomerSlip
                               ){
     isAbortRunning = false;
     if(stoneKeys == null) {
       checkUserModel(context);
-      transaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, isPrinter);
+      transaction(context, amount, typeTransaction, initiatorKey, parc, withInterest, printCustomerSlip);
       return;
     }
     if(userModel == null) {
       userModel = StoneStart.init(context, stoneKeys);
     }
     
-    transaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, isPrinter);
+    transaction(context, amount, typeTransaction, initiatorKey, parc, withInterest, printCustomerSlip);
   }
 
   private void checkUserModel(Context context) {
@@ -123,7 +123,7 @@ public class PaymentsUseCase {
     mFragment.onMessage("Transação concluída");
   }
 
-  public void handleTransactionSuccess(Context context, ActionResult actionResult, boolean isPrinter, TransactionObject transaction) {
+  public void handleTransactionSuccess(Context context, ActionResult actionResult, boolean printCustomerSlip, TransactionObject transaction) {
     TransactionDAO transactionDAO = new TransactionDAO(context);
     TransactionObject transactionObject = transactionDAO.findTransactionWithInitiatorTransactionKey(transaction.getInitiatorTransactionKey());
     if(!userModel.isEmpty()){
@@ -144,7 +144,7 @@ public class PaymentsUseCase {
       actionResult.setTransactionStatus(transactionStatus.toString());
       actionResult.setMessageFromAuthorize(posTransactionProvider.getMessageFromAuthorize());
       actionResult.setAuthorizationCode(posTransactionProvider.getAuthorizationCode());
-      if (isPrinter && currentTransactionObject != null) {
+      if (printCustomerSlip && currentTransactionObject != null) {
         printerReceiptTransaction(context, currentTransactionObject, transactionStatus);
       }
       isPaymentApproved = transactionStatus == TransactionStatusEnum.APPROVED || currentTransactionStatus == TransactionStatusEnum.APPROVED;
@@ -184,10 +184,10 @@ public class PaymentsUseCase {
           Context context,
           String amount,
           int typeTransaction,
-          String initiatorTransactionKey,
+          String initiatorKey,
           int parc,
           boolean withInterest,
-          boolean isPrinter
+          boolean printCustomerSlip
   ) {
 
     BasicResult basicResult = new BasicResult();
@@ -207,10 +207,10 @@ public class PaymentsUseCase {
       currentTransactionObject = transaction;
 
       // Essa validação é para verificar se a transação já foi realizada (recomendação da própria Stone) para evitar duplicidade
-      if(initiatorTransactionKey != null && !initiatorTransactionKey.isEmpty()){
+      if(initiatorKey != null && !initiatorKey.isEmpty()){
         TransactionDAO transactionDAO = new TransactionDAO(context);
 
-        TransactionObject transactionObject = transactionDAO.findTransactionWithInitiatorTransactionKey(initiatorTransactionKey);
+        TransactionObject transactionObject = transactionDAO.findTransactionWithInitiatorTransactionKey(initiatorKey);
         if(transactionObject != null) {
           if(transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED) {
             actionResult.setTransactionStatus(transactionObject.getTransactionStatus().toString());
@@ -236,7 +236,7 @@ public class PaymentsUseCase {
           return;
         }
 
-        transaction.setInitiatorTransactionKey(initiatorTransactionKey);
+        transaction.setInitiatorTransactionKey(initiatorKey);
       }
 
 
@@ -248,7 +248,7 @@ public class PaymentsUseCase {
       posTransactionProvider.setConnectionCallback(new StoneActionCallback() {
         @Override
         public void onSuccess() {
-          handleTransactionSuccess(context, actionResult, isPrinter, transaction);
+          handleTransactionSuccess(context, actionResult, printCustomerSlip, transaction);
         }
         @Override
         public void onStatusChanged(Action action) {
@@ -286,8 +286,8 @@ public class PaymentsUseCase {
     mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
   }
 
-  public void printerCurrentTransaction(Context context, boolean isPrinter) {
-    if(currentTransactionObject == null || !isPrinter) return;
+  public void printerCurrentTransaction(Context context, boolean printCustomerSlip) {
+    if(currentTransactionObject == null || !printCustomerSlip) return;
     try {
       mStonePrinter.printerFromTransaction(context, currentTransactionObject);
     } catch (Exception error) {
@@ -295,7 +295,7 @@ public class PaymentsUseCase {
     }
   }
 
-  public void printerReceiptTransaction(Context context, TransactionObject transactionObject,TransactionStatusEnum status ) {
+  public void printerReceiptTransaction(Context context, TransactionObject transactionObject, TransactionStatusEnum status ) {
     try {
       boolean isPrinterValid = status == TransactionStatusEnum.APPROVED || transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED;
 
@@ -594,7 +594,7 @@ public class PaymentsUseCase {
     }
   }
 
-    public void getTransactionByInitiatorTransactionKey(Context context, String initiatorTransactionKey) {
+    public void getTransactionByInitiatorTransactionKey(Context context, String initiatorKey) {
       BasicResult basicResult = new BasicResult();
       basicResult.setMethod("paymentGetTransactionByInitiatorTransactionKey");
       ActionResult actionResult = new ActionResult();
@@ -602,7 +602,7 @@ public class PaymentsUseCase {
 
       try {
         TransactionDAO transactionDAO = new TransactionDAO(context);
-        TransactionObject transactionObject = transactionDAO.findTransactionWithInitiatorTransactionKey(initiatorTransactionKey);
+        TransactionObject transactionObject = transactionDAO.findTransactionWithInitiatorTransactionKey(initiatorKey);
 
         if (transactionObject == null) {
           handleTransactionError(context, "Transação não encontrada", actionResult, basicResult);
@@ -674,7 +674,11 @@ public class PaymentsUseCase {
       mStonePrinter.customPrinter(params, context);
     }
 
-    public void printerFromBase64(String params, Context context) {
-      mStonePrinter.printerFromBase64(params, context);
+    public void printFromBase64(String params, Context context) {
+      mStonePrinter.printFromBase64(params, context);
+    }
+
+    public void printWrapPaper(int lines, Context context) {
+      mStonePrinter.printWrapPaper(lines, context);
     }
 }

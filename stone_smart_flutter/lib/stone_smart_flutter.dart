@@ -5,6 +5,7 @@ import 'payments/payment.dart';
 export 'package:interface_stone_smart_flutter/interface_stone_smart_flutter.dart';
 
 class StoneSmart {
+  static const CHANNEL_NAME = "stone_smart_flutter";
   final MethodChannel _channel;
   Payment? _payment;
 
@@ -12,13 +13,12 @@ class StoneSmart {
 
   StoneSmart(this._channel);
 
-//GET instance from StoneSmart
   static StoneSmart instance() {
     _instance ??= StoneSmart(const MethodChannel(CHANNEL_NAME));
     return _instance!;
   }
 
-//Function to init payment and register handler from notify
+  /// Function to initialize payment and register the notification handler
   void initPayment({
     required IStoneHandler handler,
     IStoneSmartHandler? iStoneSmartHandler,
@@ -30,9 +30,10 @@ class StoneSmart {
     );
   }
 
+  /// Get the Payment object. Note: It needs to be initialized.
   Payment get payment {
     if (_payment == null) {
-      throw "PAYMENT NEED INITIALIZE! \n TRY: StoneSmart._instance.initPayment(handler)";
+      throw "PAYMENT NEEDS TO BE INITIALIZED! \n TRY: StoneSmart._instance.initPayment(handler)";
     }
     return _payment!;
   }
