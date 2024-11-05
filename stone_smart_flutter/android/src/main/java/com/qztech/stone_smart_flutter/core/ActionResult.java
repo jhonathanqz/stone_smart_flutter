@@ -221,6 +221,10 @@ public class ActionResult {
     return 0;
   }
 
+  private boolean printCustomerSlipRequest;
+
+  public void setPrinterRequest(boolean value) {this.printCustomerSlipRequest = value;}
+
   public String cardSequenceNumber;
   public void setCardSequenceNumber(String value) {
     if(value == null || value.isEmpty()) {

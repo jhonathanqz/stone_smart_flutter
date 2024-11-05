@@ -71,14 +71,14 @@ public class PaymentsUseCase {
     isAbortRunning = false;
     if(stoneKeys == null) {
       checkUserModel(context);
-      transaction(context, amount, typeTransaction, initiatorKey, parc, withInterest, printCustomerSlip);
+      transaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, printCustomerSlip);
       return;
     }
     if(userModel == null) {
       userModel = StoneStart.init(context, stoneKeys);
     }
     
-    transaction(context, amount, typeTransaction, initiatorKey, parc, withInterest, printCustomerSlip);
+    transaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, printCustomerSlip);
   }
 
   private void checkUserModel(Context context) {
@@ -143,10 +143,8 @@ public class PaymentsUseCase {
       actionResult.setTransactionStatus(transactionStatus.toString());
       actionResult.setMessageFromAuthorize(posTransactionProvider.getMessageFromAuthorize());
       actionResult.setAuthorizationCode(posTransactionProvider.getAuthorizationCode());
-      if (printCustomerSlip && currentTransactionObject != null) {
-        printerReceiptTransaction(context, currentTransactionObject, transactionStatus);
-      }
-      boolean isPaymentApproved = transactionStatus == TransactionStatusEnum.APPROVED || currentTransactionStatus == TransactionStatusEnum.APPROVED;
+      printerReceiptTransaction(context, currentTransactionObject, transactionStatus, printCustomerSlip);
+      isPaymentApproved = transactionStatus == TransactionStatusEnum.APPROVED || currentTransactionStatus == TransactionStatusEnum.APPROVED;
       actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
       checkStatusWithErrorTransaction(transactionStatus, context);
     }
@@ -286,24 +284,46 @@ public class PaymentsUseCase {
   }
 
   public void printerCurrentTransaction(Context context, boolean printCustomerSlip) {
-    if(currentTransactionObject == null || !printCustomerSlip) return;
+    if(currentTransactionObject == null) {
+      Log.d("print", "****ERROR_currentTransactionObject: invalid null value");
+      return;
+    }
+
     try {
       mStonePrinter.printerFromTransaction(context, currentTransactionObject);
     } catch (Exception error) {
-      Log.d("print", "****ERRO_printerCurrentTransaction: " + error.getMessage());
+      Log.d("print", "****ERROR_printerCurrentTransaction: " + error.getMessage());
     }
   }
 
-  public void printerReceiptTransaction(Context context, TransactionObject transactionObject, TransactionStatusEnum status ) {
+  public void printerReceiptTransaction(
+          Context context,
+          TransactionObject transactionObject,
+          TransactionStatusEnum status,
+          boolean printCustomerSlip
+  ) {
     try {
-      boolean isPrinterValid = status == TransactionStatusEnum.APPROVED || transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED;
+      boolean isValidTransaction = status == TransactionStatusEnum.APPROVED || transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED;
+      
+      if(!isValidTransaction) return;
+      printReceipt(context, transactionObject, ReceiptType.MERCHANT);
+      Log.d("print", "****printMerchantVia");
 
-        if(isPrinterValid) {
-        PosPrintReceiptProvider printer = new PosPrintReceiptProvider(context, transactionObject, ReceiptType.MERCHANT);
-        printer.execute();
-      }
+      if (!printCustomerSlip) return;
+      printReceipt(context, transactionObject, ReceiptType.CLIENT);
+      Log.d("print", "****printCustomerSlip ");
+
     } catch(Exception e) {
-      Log.d("print", "****ERRO_printerReceiptTransaction: " + e.getMessage());
+      Log.d("print", "****ERROR_printerReceiptTransaction: " + e.getMessage());
+    }
+  }
+
+  public void printReceipt(Context context, TransactionObject transactionObject, ReceiptType type) {
+    try {
+      PosPrintReceiptProvider printer = new PosPrintReceiptProvider(context, transactionObject, type);
+      printer.execute();
+    } catch (Exception e) {
+      Log.d("print", "****ERROR_printMerchantVia: " + e.getMessage());
     }
   }
 
@@ -315,7 +335,7 @@ public class PaymentsUseCase {
       posTransactionProvider.abortPayment();
       isAbortRunning = true;
     } catch (Exception error){
-      Log.d("print", "****ERRO_abortCurrentPosTransaction: " + error.getMessage());
+      Log.d("print", "****ERROR_abortCurrentPosTransaction: " + error.getMessage());
       BasicResult basicResult = new BasicResult();
       basicResult.setResult(999999);
       basicResult.setErrorMessage(error.getMessage());
@@ -546,7 +566,7 @@ public class PaymentsUseCase {
   public void checkStatusWithErrorTransaction(TransactionStatusEnum status, Context context) {
     if(status == null || (status != TransactionStatusEnum.WITH_ERROR && status != TransactionStatusEnum.APPROVED) ) {
       if(posTransactionProvider != null &&  !isAbortRunning) {
-        mFragment.onMessage("Abortando a transacao");
+        mFragment.onMessage(posTransactionProvider.getMessageFromAuthorize());
         posTransactionProvider.abortPayment();
         isAbortRunning = true;
       }
@@ -554,7 +574,7 @@ public class PaymentsUseCase {
     }
 
      if(status == TransactionStatusEnum.WITH_ERROR) {
-       mFragment.onMessage("Revertendo a transacao");
+       mFragment.onMessage("Revertendo a transação");
        onReversalTransaction(context);
      }
   }
@@ -571,6 +591,7 @@ public class PaymentsUseCase {
           basicResult.setResult(0);
           basicResult.setMessage("OK");
           mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
+          printReceipt(context, currentTransactionObject, ReceiptType.MERCHANT);
           // Log.d("print", "****************************************************************** ABORT PIX 7 ******************************************************************");
         }
 
@@ -623,11 +644,11 @@ public class PaymentsUseCase {
           String userModelString = getGson().toJson(userModel.get(0));
           actionResult.setUserModel(userModelString);
         }
-
+        actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
         actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
 
-        actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
         String jsonStoneResult = convertActionToJson(actionResult);
+
         finishTransaction(jsonStoneResult);
 
       } catch (Exception error) {
@@ -640,9 +661,7 @@ public class PaymentsUseCase {
       ActionResult actionResult = new ActionResult();
       try {
         mFragment.onMessage("Obtendo todas as transações");
-        // acessa todas as transacoes do banco de dados
         TransactionDAO transactionDAO = new TransactionDAO(context);
-        // cria uma lista com todas as transacoes
         transactionObjects = transactionDAO.getAllTransactionsOrderByIdDesc();
 
 

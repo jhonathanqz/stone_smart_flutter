@@ -55,7 +55,7 @@ class Payment {
     required String stoneCode,
     required String qrCodeAuthroization,
     required String qrCodeProviderid,
-    bool isPrinterEstablishment = true,
+    bool printCustomerSlip = true,
   }) async {
     try {
       await channel
@@ -64,7 +64,7 @@ class Payment {
         "stoneCode": stoneCode,
         "qrCodeAuthorization": qrCodeAuthroization,
         "qrCodeProviderid": qrCodeProviderid,
-        "isPrinter": isPrinterEstablishment,
+        "printCustomerSlip": printCustomerSlip,
       });
       return true;
     } catch (e) {
@@ -180,11 +180,11 @@ class Payment {
 
   /// Function to invoke method from printer current transaction with SDK the Stone
   Future<bool> printerCurrentTransaction({
-    required bool isPrinter,
+    required bool printCustomerSlip,
   }) async {
     return await channel
-        .invokeMethod(PaymentTypeCall.printTransaction.method, {
-      "printCustomerSlip": isPrinter,
+        .invokeMethod(PaymentTypeCall.PRINTER_TRANSACTION.method, {
+      "printCustomerSlip": printCustomerSlip,
     });
   }
 
