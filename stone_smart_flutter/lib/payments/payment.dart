@@ -3,7 +3,6 @@ import 'package:interface_stone_smart_flutter/interface_stone_smart_flutter.dart
 
 import 'helper/istone_helper.dart';
 
-
 class Payment {
   final MethodChannel channel;
   final IStoneHandler paymentHandler;
@@ -182,8 +181,7 @@ class Payment {
   Future<bool> printerCurrentTransaction({
     required bool printCustomerSlip,
   }) async {
-    return await channel
-        .invokeMethod(PaymentTypeCall.PRINTER_TRANSACTION.method, {
+    return await channel.invokeMethod(PaymentTypeCall.printTransaction.method, {
       "printCustomerSlip": printCustomerSlip,
     });
   }
@@ -214,12 +212,12 @@ class Payment {
   }
 
   /// Function to get a transaction by initiator key
-  Future<bool> getTransactionByInitiatorKey({
-    required String initiatorKey,
+  Future<bool> getTransactionByInitiatorTransactionKey({
+    required String InitiatorTransactionKey,
   }) async {
-    return await channel
-        .invokeMethod(PaymentTypeCall.getTransactionByInitiatorKey.method, {
-      "initiatorKey": initiatorKey,
+    return await channel.invokeMethod(
+        PaymentTypeCall.getTransactionByInitiatorTransactionKey.method, {
+      "InitiatorTransactionKey": InitiatorTransactionKey,
     });
   }
 

@@ -3,8 +3,8 @@ import 'package:interface_stone_smart_flutter/utils/types/payment_type_call.dart
 extension PaymentTypeCallExt on PaymentTypeCall {
   String get method {
     const Map<PaymentTypeCall, String> paymentTypeCallMap = {
-      PaymentTypeCall.credit: "paymentcredit",
-      PaymentTypeCall.creditParc: "paymentcreditParc",
+      PaymentTypeCall.credit: "paymentCredit",
+      PaymentTypeCall.creditParc: "paymentCreditParc",
       PaymentTypeCall.debit: "paymentDebit",
       PaymentTypeCall.voucher: "paymentVoucher",
       PaymentTypeCall.abort: "paymentAbort",
@@ -19,12 +19,12 @@ extension PaymentTypeCallExt on PaymentTypeCall {
       PaymentTypeCall.printTransaction: "paymentPrinterTransaction",
       PaymentTypeCall.abortPix: "paymentAbortPix",
       PaymentTypeCall.paymentOption: "paymentOptions",
-      PaymentTypeCall.getTransactionByInitiatorKey:
+      PaymentTypeCall.getTransactionByInitiatorTransactionKey:
           "paymentGetTransactionByInitiatorTransactionKey",
       PaymentTypeCall.getAllTransactions: "paymentGetAllTransactions",
       PaymentTypeCall.customPrinter: "paymentCustomPrinter",
-      PaymentTypeCall.printFromBase64: "paymentPrinterBase64",
-      PaymentTypeCall.printWrapPaper: "printWrapPaper",
+      PaymentTypeCall.printFromBase64: "paymentPrintBase64",
+      PaymentTypeCall.printWrapPaper: "paymentPrintWrapPaper",
     };
     return paymentTypeCallMap[this] ?? (throw 'Not Implemented');
   }

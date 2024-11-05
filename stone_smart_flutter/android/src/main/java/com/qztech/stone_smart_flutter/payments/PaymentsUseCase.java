@@ -62,7 +62,7 @@ public class PaymentsUseCase {
   public void initTransaction(Context context,
                               String amount,
                               int typeTransaction,
-                              String initiatorKey,
+                              String initiatorTransactionKey,
                               int parc,
                               boolean withInterest,
                               Map<StoneKeyType, String> stoneKeys,
@@ -144,7 +144,7 @@ public class PaymentsUseCase {
       actionResult.setMessageFromAuthorize(posTransactionProvider.getMessageFromAuthorize());
       actionResult.setAuthorizationCode(posTransactionProvider.getAuthorizationCode());
       printerReceiptTransaction(context, currentTransactionObject, transactionStatus, printCustomerSlip);
-      isPaymentApproved = transactionStatus == TransactionStatusEnum.APPROVED || currentTransactionStatus == TransactionStatusEnum.APPROVED;
+      boolean isPaymentApproved = transactionStatus == TransactionStatusEnum.APPROVED || currentTransactionStatus == TransactionStatusEnum.APPROVED;
       actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
       checkStatusWithErrorTransaction(transactionStatus, context);
     }
@@ -181,7 +181,7 @@ public class PaymentsUseCase {
           Context context,
           String amount,
           int typeTransaction,
-          String initiatorKey,
+          String InitiatorTransactionKey,
           int parc,
           boolean withInterest,
           boolean printCustomerSlip
@@ -204,10 +204,10 @@ public class PaymentsUseCase {
       currentTransactionObject = transaction;
 
       // Essa validação é para verificar se a transação já foi realizada (recomendação da própria Stone) para evitar duplicidade
-      if(initiatorKey != null && !initiatorKey.isEmpty()){
+      if(InitiatorTransactionKey != null && !InitiatorTransactionKey.isEmpty()){
         TransactionDAO transactionDAO = new TransactionDAO(context);
 
-        TransactionObject transactionObject = transactionDAO.findTransactionWithInitiatorTransactionKey(initiatorKey);
+        TransactionObject transactionObject = transactionDAO.findTransactionWithInitiatorTransactionKey(InitiatorTransactionKey);
         if(transactionObject != null) {
           if(transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED) {
             actionResult.setTransactionStatus(transactionObject.getTransactionStatus().toString());
@@ -233,7 +233,7 @@ public class PaymentsUseCase {
           return;
         }
 
-        transaction.setInitiatorTransactionKey(initiatorKey);
+        transaction.setInitiatorTransactionKey(InitiatorTransactionKey);
       }
 
 
@@ -614,7 +614,7 @@ public class PaymentsUseCase {
     }
   }
 
-    public void getTransactionByInitiatorTransactionKey(Context context, String initiatorKey) {
+    public void getTransactionByInitiatorTransactionKey(Context context, String InitiatorTransactionKey) {
       BasicResult basicResult = new BasicResult();
       basicResult.setMethod("paymentGetTransactionByInitiatorTransactionKey");
       ActionResult actionResult = new ActionResult();
@@ -622,7 +622,7 @@ public class PaymentsUseCase {
 
       try {
         TransactionDAO transactionDAO = new TransactionDAO(context);
-        TransactionObject transactionObject = transactionDAO.findTransactionWithInitiatorTransactionKey(initiatorKey);
+        TransactionObject transactionObject = transactionDAO.findTransactionWithInitiatorTransactionKey(InitiatorTransactionKey);
 
         if (transactionObject == null) {
           handleTransactionError(context, "Transação não encontrada", actionResult, basicResult);

@@ -5,7 +5,7 @@ import 'payments/payment.dart';
 export 'package:interface_stone_smart_flutter/interface_stone_smart_flutter.dart';
 
 class StoneSmart {
-  static const CHANNEL_NAME = "stone_smart_flutter";
+  static const channelName = "stone_smart_flutter";
   final MethodChannel _channel;
   Payment? _payment;
 
@@ -14,7 +14,7 @@ class StoneSmart {
   StoneSmart(this._channel);
 
   static StoneSmart instance() {
-    _instance ??= StoneSmart(const MethodChannel(CHANNEL_NAME));
+    _instance ??= StoneSmart(const MethodChannel(channelName));
     return _instance!;
   }
 

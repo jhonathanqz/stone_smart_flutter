@@ -15,7 +15,7 @@ enum PaymentTypeCall {
   reversal,
   printTransaction,
   paymentOption,
-  getTransactionByInitiatorKey,
+  getTransactionByInitiatorTransactionKey,
   getAllTransactions,
   customPrinter,
   printFromBase64,

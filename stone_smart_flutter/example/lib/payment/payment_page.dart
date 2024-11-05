@@ -60,6 +60,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   setState(() {
                     controller.clickPayment = true;
                   });
+
                   StoneSmart.instance().payment.debitPayment(6);
                 },
               ),
@@ -70,9 +71,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         setState(() {
                           controller.clickPayment = true;
                         });
-                        StoneSmart.instance()
-                            .payment
-                            .creditPayment(controller.saleValue);
+                        StoneSmart.instance().payment.printWrapPaper(6);
                       }
                     : null,
                 child: const Text("Crédito"),

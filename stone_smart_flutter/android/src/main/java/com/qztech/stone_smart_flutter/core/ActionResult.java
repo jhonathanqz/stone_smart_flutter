@@ -250,12 +250,12 @@ public class ActionResult {
     this.externalId = value;
   }
 
-  public String initiatorKey;
+  public String InitiatorTransactionKey;
   public void setInitiatorTransactionKey(String value) {
     if(value == null || value.isEmpty()) {
       return;
     }
-    this.initiatorKey = value;
+    this.InitiatorTransactionKey = value;
   }
 
 

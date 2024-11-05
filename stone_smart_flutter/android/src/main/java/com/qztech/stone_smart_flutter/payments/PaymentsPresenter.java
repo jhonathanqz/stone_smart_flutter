@@ -29,7 +29,7 @@ public class PaymentsPresenter {
     public void doTransaction(Context context,
                               String amount,
                               int typeTransaction,
-                              String initiatorKey,
+                              String initiatorTransactionKey,
                               int parc,
                               boolean withInterest,
                               String qrCodeAuthorization,
@@ -95,9 +95,9 @@ public class PaymentsPresenter {
         mUseCase.abortPIXTransaction(context);
     }
 
-    public void getTransactionByInitiatorTransactionKey(Context context, String initiatorKey) {
-        System.out.println("InitiatorTransactionKey: " + initiatorKey);
-        mUseCase.getTransactionByInitiatorTransactionKey(context, initiatorKey);
+    public void getTransactionByInitiatorTransactionKey(Context context, String InitiatorTransactionKey) {
+        System.out.println("InitiatorTransactionKey: " + InitiatorTransactionKey);
+        mUseCase.getTransactionByInitiatorTransactionKey(context, InitiatorTransactionKey);
     }
 
     public void getAllTransactions(Context context) {
