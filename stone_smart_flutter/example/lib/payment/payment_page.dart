@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:stone_smart_flutter/stone_smart_flutter.dart';
-
 import 'payment_controller.dart';
 
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({Key? key}) : super(key: key);
+  const PaymentPage({super.key});
 
   @override
-  _PaymentPageState createState() => _PaymentPageState();
+  State<PaymentPage> createState() => _PaymentPageState();
 }
 
 class _PaymentPageState extends State<PaymentPage> {

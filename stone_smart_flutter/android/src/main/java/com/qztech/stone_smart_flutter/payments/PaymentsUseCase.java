@@ -131,7 +131,6 @@ public class PaymentsUseCase {
       actionResult.setUserModel(userModelString);
     }
 
-    boolean isPaymentApproved = false;
     TransactionStatusEnum transactionStatus = TransactionStatusEnum.UNKNOWN;
     TransactionStatusEnum currentTransactionStatus = TransactionStatusEnum.UNKNOWN;
 
@@ -147,7 +146,7 @@ public class PaymentsUseCase {
       if (printCustomerSlip && currentTransactionObject != null) {
         printerReceiptTransaction(context, currentTransactionObject, transactionStatus);
       }
-      isPaymentApproved = transactionStatus == TransactionStatusEnum.APPROVED || currentTransactionStatus == TransactionStatusEnum.APPROVED;
+      boolean isPaymentApproved = transactionStatus == TransactionStatusEnum.APPROVED || currentTransactionStatus == TransactionStatusEnum.APPROVED;
       actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
       checkStatusWithErrorTransaction(transactionStatus, context);
     }
