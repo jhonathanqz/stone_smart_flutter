@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:stone_smart_flutter/stone_smart_flutter.dart';
-
 import 'payment_controller.dart';
 
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({Key? key}) : super(key: key);
+  const PaymentPage({super.key});
 
   @override
-  _PaymentPageState createState() => _PaymentPageState();
+  State<PaymentPage> createState() => _PaymentPageState();
 }
 
 class _PaymentPageState extends State<PaymentPage> {
@@ -33,7 +32,9 @@ class _PaymentPageState extends State<PaymentPage> {
           ),
           TextField(
             onChanged: (value) => setState(() {
-              controller.setSaleValue(moneyController.text.isNotEmpty ? double.parse(moneyController.text) : 0.0);
+              controller.setSaleValue(moneyController.text.isNotEmpty
+                  ? double.parse(moneyController.text)
+                  : 0.0);
             }),
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(hintText: "Digite o valor"),
@@ -59,6 +60,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   setState(() {
                     controller.clickPayment = true;
                   });
+
                   StoneSmart.instance().payment.debitPayment(6);
                 },
               ),
@@ -69,7 +71,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         setState(() {
                           controller.clickPayment = true;
                         });
-                        StoneSmart.instance().payment.creditPayment(controller.saleValue);
+                        StoneSmart.instance().payment.printWrapPaper(6);
                       }
                     : null,
                 child: const Text("Crédito"),
@@ -97,7 +99,9 @@ class _PaymentPageState extends State<PaymentPage> {
                         setState(() {
                           controller.clickPayment = true;
                         });
-                        StoneSmart.instance().payment.voucherPayment(controller.saleValue);
+                        StoneSmart.instance()
+                            .payment
+                            .voucherPayment(controller.saleValue);
                       }
                     : null,
                 child: const Text("Voucher"),
@@ -109,7 +113,9 @@ class _PaymentPageState extends State<PaymentPage> {
                   setState(() {
                     controller.clickPayment = true;
                   });
-                  StoneSmart.instance().payment.activePinpad(appName: 'AppDemo', stoneCode: '206192723');
+                  StoneSmart.instance()
+                      .payment
+                      .activePinpad(appName: 'AppDemo', stoneCode: '206192723');
                 },
               ),
             ],

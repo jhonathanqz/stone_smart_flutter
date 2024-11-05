@@ -34,9 +34,9 @@ public class PaymentsPresenter {
                               boolean withInterest,
                               String qrCodeAuthorization,
                               String qrCodeProviderid,
-                              boolean isPrinter) {
+                              boolean printCustomerSlip) {
         if(qrCodeProviderid == null && qrCodeAuthorization == null){
-            mUseCase.initTransaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, null, isPrinter);
+            mUseCase.initTransaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, null, printCustomerSlip);
             return;
         }
         Map<StoneKeyType, String> stoneKeys = new HashMap<StoneKeyType, String>()
@@ -46,11 +46,11 @@ public class PaymentsPresenter {
                 put(StoneKeyType.QRCODE_PROVIDERID, qrCodeProviderid);
             }
         };
-        mUseCase.initTransaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, stoneKeys, isPrinter);
+        mUseCase.initTransaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, stoneKeys, printCustomerSlip);
     }
 
-    public void printerCurrentTransaction(Context context, boolean isPrinter) {
-        mUseCase.printerCurrentTransaction(context, isPrinter);
+    public void printerCurrentTransaction(Context context, boolean printCustomerSlip) {
+        mUseCase.printerCurrentTransaction(context, printCustomerSlip);
     }
 
     public void setPaymentOption(String value) {
@@ -95,9 +95,9 @@ public class PaymentsPresenter {
         mUseCase.abortPIXTransaction(context);
     }
 
-    public void getTransactionByInitiatorTransactionKey(Context context, String initiatorTransactionKey) {
-        System.out.println("InitiatorTransactionKey: " + initiatorTransactionKey);
-        mUseCase.getTransactionByInitiatorTransactionKey(context, initiatorTransactionKey);
+    public void getTransactionByInitiatorTransactionKey(Context context, String InitiatorTransactionKey) {
+        System.out.println("InitiatorTransactionKey: " + InitiatorTransactionKey);
+        mUseCase.getTransactionByInitiatorTransactionKey(context, InitiatorTransactionKey);
     }
 
     public void getAllTransactions(Context context) {
@@ -108,8 +108,12 @@ public class PaymentsPresenter {
         mUseCase.customPrinter(params, context);
     }
 
-    public void printerFromBase64(String params, Context context) {
-        mUseCase.printerFromBase64(params, context);
+    public void printFromBase64(String params, Context context) {
+        mUseCase.printFromBase64(params, context);
+    }
+
+    public void printWrapPaper(int lines, Context context) {
+        mUseCase.printWrapPaper(lines, context);
     }
 
     public void dispose() {

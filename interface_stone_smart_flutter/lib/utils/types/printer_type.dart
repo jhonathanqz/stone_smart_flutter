@@ -1,0 +1,4 @@
+enum PrinterType {
+  text,
+  image;
+}

@@ -3,10 +3,6 @@ import 'package:interface_stone_smart_flutter/interface_stone_smart_flutter.dart
 
 import 'helper/istone_helper.dart';
 
-//Fixed channel name
-// ignore: constant_identifier_names
-const CHANNEL_NAME = "stone_smart_flutter";
-
 class Payment {
   final MethodChannel channel;
   final IStoneHandler paymentHandler;
@@ -24,24 +20,24 @@ class Payment {
         ));
   }
 
-  //Function to reversal transaction
+  /// Function to reversal transaction
   Future<bool> reversal() async {
     try {
-      await channel.invokeMethod(PaymentTypeCall.REVERSAL.method);
+      await channel.invokeMethod(PaymentTypeCall.reversal.method);
       return true;
     } catch (e) {
       return false;
     }
   }
 
-  //Create external functions from invoke methodChannel
-  //Function to active pinpad with sdk the Stone
+  /// Create external functions from invoke methodChannel
+  /// Function to active pinpad with SDK the Stone
   Future<bool> activePinpad({
     required String appName,
     required String stoneCode,
   }) async {
     try {
-      await channel.invokeMethod(PaymentTypeCall.ACTIVEPINPAD.method, {
+      await channel.invokeMethod(PaymentTypeCall.activePinpad.method, {
         "appName": appName,
         "stoneCode": stoneCode,
       });
@@ -51,23 +47,23 @@ class Payment {
     }
   }
 
-  //Create external functions from invoke methodChannel
-  //Function to active pinpad with sdk the Stone with credentials
+  /// Create external functions from invoke methodChannel
+  /// Function to active pinpad with SDK the Stone with credentials
   Future<bool> activePinpadWithCredentials({
     required String appName,
     required String stoneCode,
     required String qrCodeAuthroization,
     required String qrCodeProviderid,
-    bool isPrinterEstablishment = true,
+    bool printCustomerSlip = true,
   }) async {
     try {
       await channel
-          .invokeMethod(PaymentTypeCall.ACTIVEPINPAD_CREDENTIALS.method, {
+          .invokeMethod(PaymentTypeCall.activePinpadCredentials.method, {
         "appName": appName,
         "stoneCode": stoneCode,
         "qrCodeAuthorization": qrCodeAuthroization,
         "qrCodeProviderid": qrCodeProviderid,
-        "isPrinter": isPrinterEstablishment,
+        "printCustomerSlip": printCustomerSlip,
       });
       return true;
     } catch (e) {
@@ -75,157 +71,160 @@ class Payment {
     }
   }
 
-  //Function to invoke method from credit payment with sdk the Stone
+  /// Function to invoke method from credit payment with SDK the Stone
   Future<bool> creditPayment(
     int value, {
-    bool isPrinterEstablishment = true,
+    bool printCustomerSlip = true,
     String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
-      PaymentTypeCall.CREDIT.method,
+      PaymentTypeCall.credit.method,
       {
         "amount": value.toString(),
         "installment": 1,
         "withInterest": false,
-        "isPrinter": isPrinterEstablishment,
+        "printCustomerSlip": printCustomerSlip,
         "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
   }
 
-  //Function to invoke method from credit installment payment  with sdk the Stone
+  /// Function to invoke method from credit installment payment  with SDK the Stone
   Future<bool> creditPaymentParc({
     required int value,
     int installment = 1,
     bool withInterest = false,
-    bool isPrinterEstablishment = true,
+    bool printCustomerSlip = true,
     String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
-      PaymentTypeCall.CREDIT_PARC.method,
+      PaymentTypeCall.creditParc.method,
       {
         "amount": value.toString(),
         "installment": installment,
         "withInterest": withInterest,
-        "isPrinter": isPrinterEstablishment,
+        "printCustomerSlip": printCustomerSlip,
         "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
   }
 
-  //Function to invoke method from debit payment with sdk the Stone
+  /// Function to invoke method from debit payment with SDK the Stone
   Future<bool> debitPayment(
     int value, {
-    bool isPrinterEstablishment = true,
+    bool printCustomerSlip = true,
     String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
-      PaymentTypeCall.DEBIT.method,
+      PaymentTypeCall.debit.method,
       {
         "amount": value.toString(),
         "installment": 1,
         "withInterest": false,
-        "isPrinter": isPrinterEstablishment,
+        "printCustomerSlip": printCustomerSlip,
         "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
   }
 
-  //Function to invoke method from debit payment with sdk the Stone
+  /// Function to invoke method from debit payment with SDK the Stone
   Future<bool> pixPayment({
     required int amount,
     required String qrCodeAuthroization,
     required String qrCodeProviderid,
-    bool isPrinterEstablishment = true,
+    bool printCustomerSlip = true,
     String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
-      PaymentTypeCall.PIX.method,
+      PaymentTypeCall.pix.method,
       {
         "amount": amount.toString(),
         "installment": 1,
         "withInterest": false,
         "qrCodeAuthorization": qrCodeAuthroization,
         "qrCodeProviderid": qrCodeProviderid,
-        "isPrinter": isPrinterEstablishment,
+        "printCustomerSlip": printCustomerSlip,
         "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
   }
 
-  //Function to invoke method from voucher payment with sdk the Stone
+  /// Function to invoke method from voucher payment with SDK the Stone
   Future<bool> voucherPayment(
     int value, {
-    bool isPrinterEstablishment = true,
+    bool printCustomerSlip = true,
     String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
-      PaymentTypeCall.VOUCHER.method,
+      PaymentTypeCall.voucher.method,
       {
         "amount": value.toString(),
         "installment": 1,
         "withInterest": false,
-        "isPrinter": isPrinterEstablishment,
+        "printCustomerSlip": printCustomerSlip,
         "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
   }
 
-  //OPERATIONS
-  //Function to invoke method from abort current transaction with sdk the Stone
+  /// Function to invoke method from abort current transaction with SDK the Stone
   Future<bool> abortTransaction() async {
-    return await channel.invokeMethod(PaymentTypeCall.ABORT.method);
+    return await channel.invokeMethod(PaymentTypeCall.abort.method);
   }
 
+  /// Function to invoke method from abort current PIX transaction with SDK the Stone
   Future<bool> abortPIXTransaction() async {
-    return await channel.invokeMethod(PaymentTypeCall.ABORT_PIX.method);
+    return await channel.invokeMethod(PaymentTypeCall.abortPix.method);
   }
 
-  //Function to invoke method from printer current transaction with sdk the Stone
+  /// Function to invoke method from printer current transaction with SDK the Stone
   Future<bool> printerCurrentTransaction({
-    required bool isPrinter,
+    required bool printCustomerSlip,
   }) async {
-    return await channel
-        .invokeMethod(PaymentTypeCall.PRINTER_TRANSACTION.method, {
-      "isPrinter": isPrinter,
+    return await channel.invokeMethod(PaymentTypeCall.printTransaction.method, {
+      "printCustomerSlip": printCustomerSlip,
     });
   }
 
-  //Function to invoke method from cancel transaction with sdk the Stone
+  /// Function to invoke method from cancel transaction with SDK the Stone
   Future<bool> cancelTransaction({
     required int idFromBase,
   }) async {
     return await channel
-        .invokeMethod(PaymentTypeCall.CANCEL_TRANSACTION.method, {
+        .invokeMethod(PaymentTypeCall.cancelTransaction.method, {
       "idFromBase": idFromBase,
     });
   }
 
+  /// Function to get all transactions
   Future<bool> getAllTransactions() async {
     return await channel
-        .invokeMethod(PaymentTypeCall.GET_ALL_TRANSACTIONS.method);
+        .invokeMethod(PaymentTypeCall.getAllTransactions.method);
   }
 
+  /// Function to set a payment option
   Future<bool> setPaymentOption({
     required String option,
   }) async {
-    return await channel.invokeMethod(PaymentTypeCall.PAYMENT_OPTION.method, {
+    return await channel.invokeMethod(PaymentTypeCall.paymentOption.method, {
       "option": option,
     });
   }
 
+  /// Function to get a transaction by initiator key
   Future<bool> getTransactionByInitiatorTransactionKey({
-    required String initiatorTransactionKey,
+    required String InitiatorTransactionKey,
   }) async {
     return await channel.invokeMethod(
-        PaymentTypeCall.GET_TRANSACTION_BY_INITIATOR_TRANSACTION_KEY.method, {
-      "initiatorTransactionKey": initiatorTransactionKey,
+        PaymentTypeCall.getTransactionByInitiatorTransactionKey.method, {
+      "InitiatorTransactionKey": InitiatorTransactionKey,
     });
   }
 
+  /// Function to send custom printer parameters
   Future<bool> customPrinter(StonePrinterParams stonePrinterParams) async {
     try {
-      await channel.invokeMethod(PaymentTypeCall.CUSTOM_PRINTER.method, {
+      await channel.invokeMethod(PaymentTypeCall.customPrinter.method, {
         "printerParams": stonePrinterParams.toJson(),
       });
       return true;
@@ -234,10 +233,23 @@ class Payment {
     }
   }
 
-  Future<bool> printerFromBase64(String base64) async {
+  /// Function to print from base64 image
+  Future<bool> printFromBase64(String base64) async {
     try {
-      await channel.invokeMethod(PaymentTypeCall.PRINTER_FROM_BASE64.method, {
+      await channel.invokeMethod(PaymentTypeCall.printFromBase64.method, {
         "printerParams": base64,
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// Function to print wrap paper
+  Future<bool> printWrapPaper(int lines) async {
+    try {
+      await channel.invokeMethod(PaymentTypeCall.printWrapPaper.method, {
+        "lines": lines,
       });
       return true;
     } catch (e) {

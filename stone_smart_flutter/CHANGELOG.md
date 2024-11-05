@@ -34,7 +34,7 @@
 
 ## 1.0.16
 
-- New methods `customPrinter` and `printerFromBase64` from printer.
+- New methods `customPrinter` and `printFromBase64` from printer.
 
 ## 1.0.15
 
@@ -99,7 +99,7 @@
 
 ## 1.0.8
 
-- Feat: Configure new property isPrinterEstablishment
+- Feat: Configure new property printCustomerSlip
 
 ## 1.0.7
 

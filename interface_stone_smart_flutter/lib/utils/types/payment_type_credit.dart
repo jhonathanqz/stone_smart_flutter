@@ -1,0 +1,4 @@
+enum PaymentTypecredit {
+  salesman,
+  client,
+}
