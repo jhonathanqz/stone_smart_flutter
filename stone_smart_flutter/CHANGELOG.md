@@ -1,3 +1,7 @@
+## 1.3.0
+
+- Remove function onReversal from handleSuccess
+
 ## 1.2.2+2
 
 - remove gertec dependencies
