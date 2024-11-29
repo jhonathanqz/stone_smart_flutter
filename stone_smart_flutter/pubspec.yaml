@@ -4,14 +4,15 @@ version: 1.3.0
 repository: https://github.com/jhonathanqz/stone_smart_flutter
 
 environment:
-  sdk: ">=2.18.5 <4.0.0"
+  sdk: ">=3.4.0 <4.0.0"
   flutter: ">=2.5.0"
 
 dependencies:
   flutter:
     sdk: flutter
   interface_stone_smart_flutter:
-    path: ../interface_stone_smart_flutter
+    ^1.0.2
+    #path: ../interface_stone_smart_flutter
 
 dev_dependencies:
   flutter_test:

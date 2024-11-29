@@ -57,8 +57,7 @@ class Payment {
     bool printCustomerSlip = true,
   }) async {
     try {
-      await channel
-          .invokeMethod(PaymentTypeCall.activePinpadCredentials.method, {
+      await channel.invokeMethod(PaymentTypeCall.activePinpadCredentials.method, {
         "appName": appName,
         "stoneCode": stoneCode,
         "qrCodeAuthorization": qrCodeAuthroization,
@@ -190,16 +189,14 @@ class Payment {
   Future<bool> cancelTransaction({
     required int idFromBase,
   }) async {
-    return await channel
-        .invokeMethod(PaymentTypeCall.cancelTransaction.method, {
+    return await channel.invokeMethod(PaymentTypeCall.cancelTransaction.method, {
       "idFromBase": idFromBase,
     });
   }
 
   /// Function to get all transactions
   Future<bool> getAllTransactions() async {
-    return await channel
-        .invokeMethod(PaymentTypeCall.getAllTransactions.method);
+    return await channel.invokeMethod(PaymentTypeCall.getAllTransactions.method);
   }
 
   /// Function to set a payment option
@@ -215,8 +212,7 @@ class Payment {
   Future<bool> getTransactionByInitiatorTransactionKey({
     required String InitiatorTransactionKey,
   }) async {
-    return await channel.invokeMethod(
-        PaymentTypeCall.getTransactionByInitiatorTransactionKey.method, {
+    return await channel.invokeMethod(PaymentTypeCall.getTransactionByInitiatorTransactionKey.method, {
       "InitiatorTransactionKey": InitiatorTransactionKey,
     });
   }
