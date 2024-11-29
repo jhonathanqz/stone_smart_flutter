@@ -111,10 +111,11 @@ public class PaymentsUseCase {
       actionResult.setErrorMessage(mStoneHelper.getErrorFromErrorList(posTransactionProvider.getListOfErrors()));
       mFragment.onMessage(posTransactionProvider.getMessageFromAuthorize());    
       basicResult.setErrorMessage(mStoneHelper.getErrorFromErrorList(posTransactionProvider.getListOfErrors()));
-
-      checkStatusWithErrorTransaction(status, context);
     }
 
+    if( posTransactionProvider != null) {
+      checkStatusWithErrorTransaction(status, context);
+    }
 
     String jsonError = convertActionToJson(actionResult);
 
@@ -146,7 +147,8 @@ public class PaymentsUseCase {
       printerReceiptTransaction(context, currentTransactionObject, transactionStatus, printCustomerSlip);
       boolean isPaymentApproved = transactionStatus == TransactionStatusEnum.APPROVED || currentTransactionStatus == TransactionStatusEnum.APPROVED;
       actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
-      checkStatusWithErrorTransaction(transactionStatus, context);
+      // Log.d("print", "**** ENTREI ONDE NÃO PODIA ****");
+      // checkStatusWithErrorTransaction(transactionStatus, context);
     }
 
     String jsonStoneResult = convertActionToJson(actionResult);
@@ -564,6 +566,7 @@ public class PaymentsUseCase {
   }
 
   public void checkStatusWithErrorTransaction(TransactionStatusEnum status, Context context) {
+    // Log.d("print", "****checkStatusWithErrorTransaction: " + status);
     if(status == null || (status != TransactionStatusEnum.WITH_ERROR && status != TransactionStatusEnum.APPROVED) ) {
       if(posTransactionProvider != null &&  !isAbortRunning) {
         mFragment.onMessage(posTransactionProvider.getMessageFromAuthorize());
@@ -582,7 +585,6 @@ public class PaymentsUseCase {
   public void onReversalTransaction(Context context) {
     BasicResult basicResult = new BasicResult();
     basicResult.setMethod("reversal");
-
     try {
       ReversalProvider reversalProvider = new ReversalProvider(context);
       reversalProvider.setConnectionCallback(new StoneCallbackInterface() {
