@@ -1,3 +1,8 @@
+## 1.3.1
+
+- Configure function to active debugLog
+- Stone SDk version 4.10.2
+
 ## 1.3.0
 
 - Remove function onReversal from handleSuccess
