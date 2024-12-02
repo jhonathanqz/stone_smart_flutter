@@ -13,6 +13,8 @@ public class StoneSmart {
 
     final Context currentContext;
     private String TAG = "StoneSmart";
+    private boolean isDebugLogActive = false;
+
 
     public StoneSmart(Context context, MethodChannel channel) {
         this.currentContext = context;
@@ -21,7 +23,7 @@ public class StoneSmart {
 
     public void initPayment(MethodCall call, MethodChannel.Result result) {
         if (this.payment == null) {
-            this.payment = new PaymentsPresenter(this.mChannel);
+            this.payment = new PaymentsPresenter(this.mChannel, isDebugLogActive);
         }
 
         Log.i(TAG, "Call Method: " + call.method);
@@ -32,6 +34,11 @@ public class StoneSmart {
         }
 
         switch (paymentMethod) {
+            case PAYMENT_ACTIVE_DEBUG_LOG:
+                boolean isDebugLogParams = call.argument("isDebugLog");
+                isDebugLogActive = isDebugLogParams;
+                this.payment = new PaymentsPresenter(this.mChannel, isDebugLogActive);
+                break;
             case PAYMENT_CUSTOM_PRINTER:
                 String printerParams = call.argument("printerParams");
                 this.payment.customPrinter(printerParams, currentContext);

@@ -63,6 +63,12 @@ public class StoneHelper {
                 return "Selecione Alimentação ou Refeição.";
             case  TRANSACTION_WAITING_QRCODE_SCAN:
                 return "Leia o QRCode para prosseguir com o pagamento.";
+            case TRANSACTION_WAITING_SWIPE_CARD:
+               return "Aguardando passe o cartão";
+            case TRANSACTION_REQUIRES_CARDHOLDER_TO_CHECK_DEVICE:
+                return "A TRANSAÇÃO EXIGE QUE O TITULAR DO CARTÃO VERIFIQUE O DISPOSITIVO";
+            case SWITCH_INTERFACE:
+                return "Trocando interface";
             default:
                 return "Em processamento. Aguarde.";
         }

@@ -166,6 +166,18 @@ class Payment {
     );
   }
 
+  /// Function to invoke method from refund payment with SDK the Stone
+  Future<void> activeDebugLog({
+    required bool isDebugLog,
+  }) async {
+    await channel.invokeMethod(
+      PaymentTypeCall.activeDebugLog.method,
+      {
+        "isDebugLog": isDebugLog,
+      },
+    );
+  }
+
   /// Function to invoke method from abort current transaction with SDK the Stone
   Future<bool> abortTransaction() async {
     return await channel.invokeMethod(PaymentTypeCall.abort.method);

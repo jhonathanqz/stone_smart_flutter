@@ -18,7 +18,8 @@ enum PaymentMethod {
     PAYMENT_GET_ALL_TRANSACTIONS("paymentGetAllTransactions"),
     PAYMENT_CUSTOM_PRINTER("paymentCustomPrinter"),
     PAYMENT_PRINT_BASE64("paymentPrintBase64"),
-    PAYMENT_PRINT_WRAP_PAPER("paymentPrintWrapPaper");
+    PAYMENT_PRINT_WRAP_PAPER("paymentPrintWrapPaper"),
+    PAYMENT_ACTIVE_DEBUG_LOG("paymentActiveDebugLog");
 
     private final String method;
 

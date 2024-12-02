@@ -17,14 +17,13 @@ public class PaymentsPresenter {
     private Disposable mSubscribe;
     private Boolean hasAborted = false;
     private int countPassword = 0;
+    private boolean isDebugLog = false;
 
     //@Inject
-    public PaymentsPresenter(MethodChannel channel) {
-        this.mUseCase = new PaymentsUseCase(channel);
+    public PaymentsPresenter(MethodChannel channel, boolean isDebugLog) {
+        this.mUseCase = new PaymentsUseCase(channel, isDebugLog);
         this.mFragment = new PaymentsFragment(channel);
     }
-
-
 
     public void doTransaction(Context context,
                               String amount,
