@@ -19,12 +19,12 @@ extension PaymentTypeCallExt on PaymentTypeCall {
       PaymentTypeCall.printTransaction: "paymentPrinterTransaction",
       PaymentTypeCall.abortPix: "paymentAbortPix",
       PaymentTypeCall.paymentOption: "paymentOptions",
-      PaymentTypeCall.getTransactionByInitiatorTransactionKey:
-          "paymentGetTransactionByInitiatorTransactionKey",
+      PaymentTypeCall.getTransactionByInitiatorTransactionKey: "paymentGetTransactionByInitiatorTransactionKey",
       PaymentTypeCall.getAllTransactions: "paymentGetAllTransactions",
       PaymentTypeCall.customPrinter: "paymentCustomPrinter",
       PaymentTypeCall.printFromBase64: "paymentPrintBase64",
       PaymentTypeCall.printWrapPaper: "paymentPrintWrapPaper",
+      PaymentTypeCall.activeDebugLog: "paymentActiveDebugLog",
     };
     return paymentTypeCallMap[this] ?? (throw 'Not Implemented');
   }

@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Add propertie activeDebugLog
+
 ## 1.0.2
 
 - Update interface
