@@ -39,6 +39,14 @@ public class StoneSmart {
                 isDebugLogActive = isDebugLogParams;
                 this.payment = new PaymentsPresenter(this.mChannel, isDebugLogActive);
                 break;
+            case PAYMENT_GET_SERIAL_NUMBER:
+                String serialNumber = this.payment.getPosSerialNumber();
+                result.success(serialNumber);
+                break;
+            case PAYMENT_GET_MANUFACTURE:
+                String posManufacture = this.payment.getPosManufacture();
+                result.success(posManufacture);
+                break;
             case PAYMENT_CUSTOM_PRINTER:
                 String printerParams = call.argument("printerParams");
                 this.payment.customPrinter(printerParams, currentContext);

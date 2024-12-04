@@ -115,6 +115,14 @@ public class PaymentsPresenter {
         mUseCase.printWrapPaper(lines, context);
     }
 
+    public String getPosSerialNumber() {
+        return mUseCase.getSerialNumber();
+    }
+
+    public String getPosManufacture() {
+        return mUseCase.getPosManufacture();
+    }
+
     public void dispose() {
         if (mSubscribe != null) {
             mSubscribe.dispose();

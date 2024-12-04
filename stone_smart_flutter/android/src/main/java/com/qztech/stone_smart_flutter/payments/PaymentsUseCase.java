@@ -753,4 +753,26 @@ public class PaymentsUseCase {
       }
       mStonePrinter.printWrapPaper(lines, context);
     }
+
+    public String getSerialNumber() {
+    try {
+      if(!isInitialized) {
+        return null;
+      }
+      return Stone.getPosAndroidDevice().getPosAndroidSerialNumber();
+    }catch (Exception error) {
+        return null;
+    }
+    }
+
+    public String getPosManufacture() {
+    try {
+      if(!isInitialized) {
+        return null;
+      }
+      return Stone.getPosAndroidDevice().getPosAndroidManufacturer();
+    } catch (Exception error) {
+      return null;
+    }
+    }
 }

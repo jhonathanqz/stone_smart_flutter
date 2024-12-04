@@ -178,6 +178,16 @@ class Payment {
     );
   }
 
+  //Get Pos serial number
+  Future<String?> getPosSerialNumber() async {
+    return await channel.invokeMethod(PaymentTypeCall.getPosSerialNumber.method);
+  }
+
+  //Get Pos manufacture
+  Future<String?> getPosManufacture() async {
+    return await channel.invokeMethod(PaymentTypeCall.getPosManufacture.method);
+  }
+
   /// Function to invoke method from abort current transaction with SDK the Stone
   Future<bool> abortTransaction() async {
     return await channel.invokeMethod(PaymentTypeCall.abort.method);

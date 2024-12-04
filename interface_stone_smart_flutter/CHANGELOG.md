@@ -1,3 +1,7 @@
+## 1.0.4
+
+- Add properties `getPosSerialNumber` and `getPosManufacture`
+
 ## 1.0.3
 
 - Add propertie activeDebugLog
