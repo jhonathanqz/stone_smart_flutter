@@ -605,14 +605,14 @@ public class PaymentsUseCase {
     if(isDebugLog) {
     Log.d("print", "**** checkStatusWithErrorTransaction: " + status);
     }
-    // if(status == null || (status != TransactionStatusEnum.WITH_ERROR && status != TransactionStatusEnum.APPROVED) ) {
-    //   if(posTransactionProvider != null &&  !isAbortRunning) {
-    //     mFragment.onMessage(posTransactionProvider.getMessageFromAuthorize());
-    //     posTransactionProvider.abortPayment();
-    //     isAbortRunning = true;
-    //   }
-    //   return;
-    // }
+     if(status == null || (status != TransactionStatusEnum.WITH_ERROR && status != TransactionStatusEnum.APPROVED) ) {
+       if(posTransactionProvider != null &&  !isAbortRunning) {
+         mFragment.onMessage(posTransactionProvider.getMessageFromAuthorize());
+         posTransactionProvider.abortPayment();
+         isAbortRunning = true;
+       }
+       return;
+     }
      if(status == TransactionStatusEnum.WITH_ERROR) {
        mFragment.onMessage("Revertendo a transação");
        onReversalTransaction(context);
