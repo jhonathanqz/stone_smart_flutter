@@ -264,4 +264,20 @@ class Payment {
       return false;
     }
   }
+  
+  //Function to get serialNumber
+  Future<bool> getSerialNumber({
+    required String appName,
+    required String stoneCode,
+  }) async {
+    try {
+      await channel.invokeMethod(PaymentTypeCall.getPosAndroidSerialNumber.method, {
+        "appName": appName,
+        "stoneCode": stoneCode,
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

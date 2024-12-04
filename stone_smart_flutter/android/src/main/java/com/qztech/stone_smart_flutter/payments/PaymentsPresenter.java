@@ -115,6 +115,12 @@ public class PaymentsPresenter {
         mUseCase.printWrapPaper(lines, context);
     }
 
+    public void getSerialNumber(String appName,
+                         String stoneCode,
+                         Context context) {
+        mUseCase.getSerialNumber(appName, stoneCode, context);
+    }
+
     public void dispose() {
         if (mSubscribe != null) {
             mSubscribe.dispose();

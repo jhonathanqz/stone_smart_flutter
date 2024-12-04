@@ -34,6 +34,9 @@ public class StoneSmart {
         }
 
         switch (paymentMethod) {
+            case GET_SERIAL_NUMBER:
+                this.payment.getSerialNumber(call.argument("appName"), call.argument("stoneCode"), currentContext);
+                break;
             case PAYMENT_ACTIVE_DEBUG_LOG:
                 boolean isDebugLogParams = call.argument("isDebugLog");
                 isDebugLogActive = isDebugLogParams;

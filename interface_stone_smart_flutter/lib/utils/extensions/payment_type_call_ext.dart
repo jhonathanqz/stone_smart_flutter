@@ -25,6 +25,8 @@ extension PaymentTypeCallExt on PaymentTypeCall {
       PaymentTypeCall.customPrinter: "paymentCustomPrinter",
       PaymentTypeCall.printFromBase64: "paymentPrintBase64",
       PaymentTypeCall.printWrapPaper: "paymentPrintWrapPaper",
+      PaymentTypeCall.activeDebugLog: "paymentActiveDebugLog",
+      PaymentTypeCall.getSerialNumber: "paymentGetSerialNumber",
     };
     return paymentTypeCallMap[this] ?? (throw 'Not Implemented');
   }

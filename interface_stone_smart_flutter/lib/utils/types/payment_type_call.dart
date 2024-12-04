@@ -20,4 +20,6 @@ enum PaymentTypeCall {
   customPrinter,
   printFromBase64,
   printWrapPaper,
+  activeDebugLog,
+  getSerialNumber,
 }

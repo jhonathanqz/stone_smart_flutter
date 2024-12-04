@@ -753,4 +753,42 @@ public class PaymentsUseCase {
       }
       mStonePrinter.printWrapPaper(lines, context);
     }
+	public void getSerialNumber(
+            String appName,
+            String stoneCode,
+            Context context
+	) {
+      try {
+        mFragment.onMessage("Iniciando ativação");
+        Stone.setAppName(appName);
+        checkUserModel(context);
+        BasicResult basicResult = new BasicResult();
+        if (userModel == null) {
+          ActiveApplicationProvider activeApplicationProvider = getActiveApplicationProvider(context);
+          activeApplicationProvider.activate(stoneCode);
+
+        } else {
+          mFragment.onMessage("Terminal ativado");
+
+          basicResult.setMethod("active");
+          basicResult.setResult(0);
+          basicResult.setMessage("Terminal ativado");
+          if(!userModel.isEmpty()) {
+            String userModelString = getGson().toJson(userModel.get(0));
+            basicResult.setUserModel(userModelString);
+          }
+        }
+
+        mFragment.onMessage("Obtendo Serial Number");
+        ActionResult actionResult = new ActionResult();
+        actionResult.setMethod("getSerialNumber");
+        actionResult.setSerialNumber(Stone.getPosAndroidDevice().getPosAndroidSerialNumber());
+        String jsonStoneResult = convertActionToJson(actionResult);
+        mFragment.onFinishedResponse(jsonStoneResult);
+
+      } catch (Exception error) {
+        Log.d("print", "****ERRO_getSerialNumber: " + error.getMessage());
+      }
+
+  }
 }
