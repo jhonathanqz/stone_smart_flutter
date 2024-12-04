@@ -39,6 +39,14 @@ public class StoneSmart {
                 isDebugLogActive = isDebugLogParams;
                 this.payment = new PaymentsPresenter(this.mChannel, isDebugLogActive);
                 break;
+            case PAYMENT_GET_SERIAL_NUMBER:
+                String serialNumber = this.payment.getPosSerialNumber();
+                result.success(serialNumber);
+                break;
+            case PAYMENT_GET_MANUFACTURE:
+                String posManufacture = this.payment.getPosManufacture();
+                result.success(posManufacture);
+                break;
             case PAYMENT_CUSTOM_PRINTER:
                 String printerParams = call.argument("printerParams");
                 this.payment.customPrinter(printerParams, currentContext);
@@ -110,25 +118,28 @@ public class StoneSmart {
                 int parc = call.argument("installment");
                 boolean withInterest = call.argument("withInterest");
                 boolean withCustomerSlip = call.argument("printCustomerSlip");
+                boolean withEstablishmentSlip = call.argument("printEstablishmentSlip");
                 String initiatorKey = call.argument("initiatorTransactionKey");
 
                 switch (paymentMethod) {
                     case PAYMENT_DEBIT:
-                        this.payment.doTransaction(currentContext, amount, 2, initiatorKey, parc, withInterest, null, null, withCustomerSlip);
+                        this.payment.doTransaction(currentContext, amount, 2, initiatorKey, parc, withInterest, null, null, withCustomerSlip, withEstablishmentSlip);
                         break;
 
                     case PAYMENT_PIX:
-                        this.payment.doTransaction(currentContext, amount, 3, initiatorKey, parc, withInterest, 
-                            call.argument("qrCodeAuthorization"), call.argument("qrCodeProviderid"), withCustomerSlip);
+                        String withQrCodeAuthorization = call.argument("qrCodeAuthorization");
+                        String withQrCodeProviderid = call.argument("qrCodeProviderid");
+                        this.payment.doTransaction(currentContext, amount, 3, initiatorKey, parc, withInterest,
+                                withQrCodeAuthorization, withQrCodeProviderid, withCustomerSlip, withEstablishmentSlip);
                         break;
 
                     case PAYMENT_CREDIT:
                     case PAYMENT_CREDIT_PARC:
-                        this.payment.doTransaction(currentContext, amount, 1, initiatorKey, parc, withInterest, null, null, withCustomerSlip);
+                        this.payment.doTransaction(currentContext, amount, 1, initiatorKey, parc, withInterest, null, null, withCustomerSlip, withEstablishmentSlip);
                         break;
 
                     case PAYMENT_VOUCHER:
-                        this.payment.doTransaction(currentContext, amount, 4, initiatorKey, parc, withInterest, null, null, withCustomerSlip);
+                        this.payment.doTransaction(currentContext, amount, 4, initiatorKey, parc, withInterest, null, null, withCustomerSlip, withEstablishmentSlip);
                         break;
 
                     default:

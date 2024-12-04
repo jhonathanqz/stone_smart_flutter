@@ -1,3 +1,8 @@
+## 1.3.2
+
+- Add functions `getPosSerialNumber` and `getPosManufacture`
+- Add new property printEstablishmentSlip in transaction functions
+
 ## 1.3.1+1
 
 - Use interface_stone_smart_flutter version 1.0.3

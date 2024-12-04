@@ -21,4 +21,6 @@ enum PaymentTypeCall {
   printFromBase64,
   printWrapPaper,
   activeDebugLog,
+  getPosSerialNumber,
+  getPosManufacture,
 }
