@@ -1,3 +1,7 @@
+## 1.3.1+1
+
+- Use interface_stone_smart_flutter version 1.0.3
+
 ## 1.3.1
 
 - Configure function to active debugLog
