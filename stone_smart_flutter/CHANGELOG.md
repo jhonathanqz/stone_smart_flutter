@@ -1,6 +1,7 @@
 ## 1.3.2
 
 - Add functions `getPosSerialNumber` and `getPosManufacture`
+- Add new property printEstablishmentSlip in transaction functions
 
 ## 1.3.1+1
 

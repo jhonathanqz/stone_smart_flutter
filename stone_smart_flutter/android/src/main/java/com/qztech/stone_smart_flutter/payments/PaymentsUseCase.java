@@ -69,12 +69,13 @@ public class PaymentsUseCase {
                               int parc,
                               boolean withInterest,
                               Map<StoneKeyType, String> stoneKeys,
-                              boolean printCustomerSlip
+                              boolean printCustomerSlip,
+                              boolean printEstablishmentSlip
                               ){
     isAbortRunning = false;
     if(stoneKeys == null) {
       checkUserModel(context);
-      transaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, printCustomerSlip);
+      transaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, printCustomerSlip, printEstablishmentSlip);
       return;
     }
 
@@ -82,7 +83,7 @@ public class PaymentsUseCase {
       userModel = StoneStart.init(context, stoneKeys);
     }
     
-    transaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, printCustomerSlip);
+    transaction(context, amount, typeTransaction, initiatorTransactionKey, parc, withInterest, printCustomerSlip, printEstablishmentSlip);
   }
 
   private void checkUserModel(Context context) {
@@ -132,7 +133,7 @@ public class PaymentsUseCase {
     mFragment.onMessage("Transação concluída");
   }
 
-  public void handleTransactionSuccess(Context context, ActionResult actionResult, boolean printCustomerSlip, TransactionObject transaction) {
+  public void handleTransactionSuccess(Context context, ActionResult actionResult, boolean printCustomerSlip, boolean printEstablishmentSlip, TransactionObject transaction) {
     TransactionDAO transactionDAO = new TransactionDAO(context);
     if(isDebugLog) {
     Log.d("print", "****** handleTransactionSuccess: " + transaction.getTransactionStatus());
@@ -152,7 +153,7 @@ public class PaymentsUseCase {
       actionResult.setTransactionStatus(transactionStatusPos.toString());
       actionResult.setMessageFromAuthorize(posTransactionProvider.getMessageFromAuthorize());
       actionResult.setAuthorizationCode(posTransactionProvider.getAuthorizationCode());
-      printerReceiptTransaction(context, transaction, transactionStatusPos, printCustomerSlip);
+      printerReceiptTransaction(context, transaction, transactionStatusPos, printCustomerSlip, printEstablishmentSlip);
       boolean isPaymentApproved = transactionStatusPos == TransactionStatusEnum.APPROVED || currentTransactionStatus == TransactionStatusEnum.APPROVED;
        actionResult.buildResponseStoneTransaction(transactionObject, isPaymentApproved);
     }
@@ -195,7 +196,8 @@ public class PaymentsUseCase {
           String InitiatorTransactionKey,
           int parc,
           boolean withInterest,
-          boolean printCustomerSlip
+          boolean printCustomerSlip,
+          boolean printEstablishmentSlip
   ) {
 
     BasicResult basicResult = new BasicResult();
@@ -254,7 +256,7 @@ public class PaymentsUseCase {
       posTransactionProvider.setConnectionCallback(new StoneActionCallback() {
         @Override
         public void onSuccess() {
-          handleTransactionSuccess(context, actionResult, printCustomerSlip, transaction);
+          handleTransactionSuccess(context, actionResult, printCustomerSlip, printEstablishmentSlip, transaction);
         }
         @Override
         public void onStatusChanged(Action action) {
@@ -313,13 +315,17 @@ public class PaymentsUseCase {
           Context context,
           TransactionObject transactionObject,
           TransactionStatusEnum status,
-          boolean printCustomerSlip
+          boolean printCustomerSlip,
+          boolean printEstablishmentSlip
   ) {
     try {
       boolean isValidTransaction = status == TransactionStatusEnum.APPROVED || transactionObject.getTransactionStatus() == TransactionStatusEnum.APPROVED;
       
       if(!isValidTransaction) return;
-      printReceipt(context, transactionObject, ReceiptType.MERCHANT);
+
+      if(printEstablishmentSlip) {
+        printReceipt(context, transactionObject, ReceiptType.MERCHANT);
+      }
 
       if (!printCustomerSlip) return;
       printReceipt(context, transactionObject, ReceiptType.CLIENT);

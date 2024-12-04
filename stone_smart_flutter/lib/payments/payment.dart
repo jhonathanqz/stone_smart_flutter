@@ -74,6 +74,7 @@ class Payment {
   Future<bool> creditPayment(
     int value, {
     bool printCustomerSlip = true,
+    bool printEstablishmentSlip = false,
     String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
@@ -83,6 +84,7 @@ class Payment {
         "installment": 1,
         "withInterest": false,
         "printCustomerSlip": printCustomerSlip,
+        "printEstablishmentSlip": printEstablishmentSlip,
         "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
@@ -94,6 +96,7 @@ class Payment {
     int installment = 1,
     bool withInterest = false,
     bool printCustomerSlip = true,
+    bool printEstablishmentSlip = false,
     String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
@@ -103,6 +106,7 @@ class Payment {
         "installment": installment,
         "withInterest": withInterest,
         "printCustomerSlip": printCustomerSlip,
+        "printEstablishmentSlip": printEstablishmentSlip,
         "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
@@ -112,6 +116,7 @@ class Payment {
   Future<bool> debitPayment(
     int value, {
     bool printCustomerSlip = true,
+    bool printEstablishmentSlip = false,
     String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
@@ -121,6 +126,7 @@ class Payment {
         "installment": 1,
         "withInterest": false,
         "printCustomerSlip": printCustomerSlip,
+        "printEstablishmentSlip": printEstablishmentSlip,
         "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
@@ -132,6 +138,7 @@ class Payment {
     required String qrCodeAuthroization,
     required String qrCodeProviderid,
     bool printCustomerSlip = true,
+    bool printEstablishmentSlip = false,
     String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
@@ -143,6 +150,7 @@ class Payment {
         "qrCodeAuthorization": qrCodeAuthroization,
         "qrCodeProviderid": qrCodeProviderid,
         "printCustomerSlip": printCustomerSlip,
+        "printEstablishmentSlip": printEstablishmentSlip,
         "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
@@ -152,6 +160,7 @@ class Payment {
   Future<bool> voucherPayment(
     int value, {
     bool printCustomerSlip = true,
+    bool printEstablishmentSlip = false,
     String initiatorTransactionKey = "",
   }) async {
     return await channel.invokeMethod(
@@ -161,6 +170,7 @@ class Payment {
         "installment": 1,
         "withInterest": false,
         "printCustomerSlip": printCustomerSlip,
+        "printEstablishmentSlip": printEstablishmentSlip,
         "initiatorTransactionKey": initiatorTransactionKey,
       },
     );
@@ -232,11 +242,14 @@ class Payment {
 
   /// Function to get a transaction by initiator key
   Future<bool> getTransactionByInitiatorTransactionKey({
-    required String InitiatorTransactionKey,
+    required String initiatorTransactionKey,
   }) async {
-    return await channel.invokeMethod(PaymentTypeCall.getTransactionByInitiatorTransactionKey.method, {
-      "InitiatorTransactionKey": InitiatorTransactionKey,
-    });
+    return await channel.invokeMethod(
+      PaymentTypeCall.getTransactionByInitiatorTransactionKey.method,
+      {
+        "InitiatorTransactionKey": initiatorTransactionKey,
+      },
+    );
   }
 
   /// Function to send custom printer parameters
