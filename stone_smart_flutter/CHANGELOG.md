@@ -1,3 +1,7 @@
+## 1.3.4
+
+- Add gertec dependencies
+
 ## 1.3.3
 
 - Add functions `getPosSerialNumber` and `getPosManufacture`
