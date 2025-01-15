@@ -2,8 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.qztech.stone_smart_flutter_example">
    
-   <permission android:name="br.com.uol.stone.permission.MANAGE_PAYMENTS"/>
-   
    <application
         android:label="stone_smart_flutter_example"
         android:name="${applicationName}"
