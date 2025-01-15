@@ -1,3 +1,7 @@
+## 1.3.4+1
+
+- Fix function `initializeAndActivatePinpad` with StoneStart.init()
+
 ## 1.3.4
 
 - Add gertec dependencies

@@ -411,20 +411,21 @@ public class PaymentsUseCase {
           Context context
   ) {
     try {
+      BasicResult basicResult = new BasicResult();
       if(isDebugLog) {
         Log.d("print", "****initializeAndActivatePinpad");
       }
       mFragment.onMessage("Iniciando ativação");
       Stone.setAppName(appName);
-      checkUserModel(context);
-      BasicResult basicResult = new BasicResult();
-      if (userModel == null) {
+      List<UserModel> userList = StoneStart.init(context);
+      userModel = userList;
+
+      if (userList == null) {
         ActiveApplicationProvider activeApplicationProvider = getActiveApplicationProvider(context);
         activeApplicationProvider.activate(stoneCode);
 
       } else {
         mFragment.onMessage("Terminal ativado");
-
         basicResult.setMethod("active");
         basicResult.setResult(0);
         basicResult.setMessage("Terminal ativado");
@@ -448,6 +449,7 @@ public class PaymentsUseCase {
           Context context
   ) {
     try {
+      BasicResult basicResult = new BasicResult();
       if(isDebugLog) {
         Log.d("print", "****initializeAndActivatePinPadWithCredentials");
       }
@@ -455,14 +457,13 @@ public class PaymentsUseCase {
       Stone.setAppName(appName);
       List<UserModel> userList = StoneStart.init(context, stoneKeys);
       userModel = userList;
-      BasicResult basicResult = new BasicResult();
+
       if (userList == null) {
         ActiveApplicationProvider activeApplicationProvider = getActiveApplicationProvider(context);
         activeApplicationProvider.activate(stoneCode);
 
       } else {
         mFragment.onMessage("Terminal ativado");
-
         basicResult.setMethod("active");
         basicResult.setResult(0);
         basicResult.setMessage("Terminal ativado");
