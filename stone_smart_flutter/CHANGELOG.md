@@ -1,3 +1,7 @@
+## 1.3.5
+
+- Flutter sdk 3.1.5
+
 ## 1.3.4+1
 
 - Fix function `initializeAndActivatePinpad` with StoneStart.init()

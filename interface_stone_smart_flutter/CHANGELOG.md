@@ -1,3 +1,7 @@
+## 1.0.5
+
+- Flutter sdk 3.1.5
+
 ## 1.0.4
 
 - Add properties `getPosSerialNumber` and `getPosManufacture`

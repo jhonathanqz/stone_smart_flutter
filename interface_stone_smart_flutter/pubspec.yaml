@@ -1,10 +1,10 @@
 name: interface_stone_smart_flutter
 description: Pacote de inteface para integrar com o plugin StoneSmartFlutter e facilitar o uso de forma geral com as funçoes de pagamento.
-version: 1.0.4
+version: 1.0.5
 repository: https://github.com/jhonathanqz/stone_smart_flutter
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.1.5 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
