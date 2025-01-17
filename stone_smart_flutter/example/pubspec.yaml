@@ -4,7 +4,7 @@ description: Demonstrates how to use the stone_smart_flutter plugin.
 publish_to: "none"
 
 environment:
-  sdk: ">=2.18.5 <3.0.0"
+  sdk: ">=3.1.5 <4.0.0"
 
 dependencies:
   flutter:
@@ -15,8 +15,8 @@ dependencies:
     # ^1.2.2+2
     path: ../../stone_smart_flutter
   interface_stone_smart_flutter:
-    # ^1.0.1
-    path: ../../interface_stone_smart_flutter
+    ^1.0.5
+    #path: ../../interface_stone_smart_flutter
 
 dev_dependencies:
   flutter_test:
