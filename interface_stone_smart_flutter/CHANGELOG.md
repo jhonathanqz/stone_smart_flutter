@@ -1,3 +1,7 @@
+## 1.0.6
+
+- Add new function paymentPrinterTransactionKey
+
 ## 1.0.5
 
 - Flutter sdk 3.1.5

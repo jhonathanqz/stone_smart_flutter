@@ -80,6 +80,11 @@ public class StoneSmart {
                 this.payment.printerCurrentTransaction(currentContext, printCustomerSlip);
                 break;
 
+            case PAYMENT_PRINTER_TRANSACTION_KEY:
+                String transactionKey = call.argument("paymentPrinterTransactionKey");
+                this.payment.printerFromTransactionKey(currentContext, transactionKey);
+                break;
+
             case ACTIVE_PINPAD:
                 String appName = call.argument("appName");
                 String stoneCode = call.argument("stoneCode");

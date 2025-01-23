@@ -311,6 +311,18 @@ public class PaymentsUseCase {
     }
   }
 
+  public void printerFromTransactionKey(Context context, String transactionKey) {
+    TransactionDAO transactionDAO = new TransactionDAO(context);
+    Log.d("print", "*****Chegou transactionKey: " + transactionKey);
+    TransactionObject transactionObject = transactionDAO.findTransactionWithInitiatorTransactionKey(transactionKey);
+    if(transactionObject == null) return;
+    try {
+      mStonePrinter.printerFromTransaction(context, transactionObject);
+    } catch (Exception error) {
+      Log.d("print", "****ERROR_printerCurrentTransaction: " + error.getMessage());
+    }
+  }
+
   public void printerReceiptTransaction(
           Context context,
           TransactionObject transactionObject,
@@ -640,7 +652,7 @@ public class PaymentsUseCase {
           basicResult.setResult(0);
           basicResult.setMessage("OK");
           mFragment.onFinishedResponse(convertBasicResultToJson(basicResult));
-          printReceipt(context, currentTransactionObject, ReceiptType.MERCHANT);
+          // printReceipt(context, currentTransactionObject, ReceiptType.MERCHANT);
         }
 
         @Override
