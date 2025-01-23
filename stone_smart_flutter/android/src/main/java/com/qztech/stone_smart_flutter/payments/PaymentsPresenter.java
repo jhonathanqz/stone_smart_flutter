@@ -53,6 +53,10 @@ public class PaymentsPresenter {
         mUseCase.printerCurrentTransaction(context, printCustomerSlip);
     }
 
+    public void printerFromTransactionKey(Context context, String transactionKey) {
+        mUseCase.printerFromTransactionKey(context, transactionKey);
+    }
+
     public void setPaymentOption(String value) {
         mUseCase.setPaymentOption(value);
     }

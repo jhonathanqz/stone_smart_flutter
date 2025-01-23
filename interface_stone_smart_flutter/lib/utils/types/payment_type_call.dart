@@ -23,4 +23,5 @@ enum PaymentTypeCall {
   activeDebugLog,
   getPosSerialNumber,
   getPosManufacture,
+  paymentPrinterTransactionKey,
 }

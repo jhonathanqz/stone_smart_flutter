@@ -217,6 +217,15 @@ class Payment {
     });
   }
 
+  /// Function to invoke method from printer transaction by key
+  Future<bool> paymentPrinterTransactionKey({
+    required String transactionKey,
+  }) async {
+    return await channel.invokeMethod(PaymentTypeCall.paymentPrinterTransactionKey.method, {
+      "transactionKey": transactionKey,
+    });
+  }
+
   /// Function to invoke method from cancel transaction with SDK the Stone
   Future<bool> cancelTransaction({
     required int idFromBase,

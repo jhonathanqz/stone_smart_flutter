@@ -27,6 +27,7 @@ extension PaymentTypeCallExt on PaymentTypeCall {
       PaymentTypeCall.activeDebugLog: "paymentActiveDebugLog",
       PaymentTypeCall.getPosSerialNumber: "paymentGetSerialNumber",
       PaymentTypeCall.getPosManufacture: "paymentGetManufacture",
+      PaymentTypeCall.paymentPrinterTransactionKey: "paymentPrinterTransactionKey",
     };
     return paymentTypeCallMap[this] ?? (throw 'Not Implemented');
   }

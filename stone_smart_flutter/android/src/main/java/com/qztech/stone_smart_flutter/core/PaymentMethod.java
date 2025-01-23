@@ -14,6 +14,7 @@ enum PaymentMethod {
     PAYMENT_REVERSAL("paymentReversal"),
     PAYMENT_OPTIONS("paymentOptions"),
     PAYMENT_PRINTER_TRANSACTION("paymentPrinterTransaction"),
+    PAYMENT_PRINTER_TRANSACTION_KEY("paymentPrinterTransactionKey"),
     PAYMENT_GET_TRANSACTION_BY_INITIATOR_TRANSACTION_KEY("paymentGetTransactionByInitiatorTransactionKey"),
     PAYMENT_GET_ALL_TRANSACTIONS("paymentGetAllTransactions"),
     PAYMENT_CUSTOM_PRINTER("paymentCustomPrinter"),

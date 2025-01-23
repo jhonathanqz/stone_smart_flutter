@@ -149,6 +149,7 @@ public class StonePrinter {
     }
 
     public void onPrintError(PosPrintProvider provider, BasicResult basicResult, String message) {
+       try {
         Log.i(TAG, "Error printWrapPaper");
         basicResult.setResult(999999);
         List<ErrorsEnum> errors = provider.getListOfErrors();
@@ -161,6 +162,9 @@ public class StonePrinter {
 
         mFragment.onMessage(message);
         mFragment.onError(convertBasicResultToJson(basicResult));
+       } catch (Exception e) {
+        Log.d("print", "***Erro onPrintError: " + e.getMessage());
+       }
     }
 
 }

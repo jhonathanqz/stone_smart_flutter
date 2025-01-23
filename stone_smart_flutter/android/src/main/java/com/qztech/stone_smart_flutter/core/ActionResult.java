@@ -41,6 +41,10 @@ public class ActionResult {
 
   private List<StoneTransaction> stoneTransactions;
 
+  private boolean isPrinterRequest;
+
+  public void setPrinterRequest(boolean value) {this.isPrinterRequest = value;}
+
   public void setUserModel(String value) {
     if(value == null || value.isEmpty()) {
       return;
@@ -221,10 +225,6 @@ public class ActionResult {
     return 0;
   }
 
-  private boolean printCustomerSlipRequest;
-
-  public void setPrinterRequest(boolean value) {this.printCustomerSlipRequest = value;}
-
   public String cardSequenceNumber;
   public void setCardSequenceNumber(String value) {
     if(value == null || value.isEmpty()) {
@@ -292,6 +292,7 @@ public class ActionResult {
     setExternalID(transactionObjects.getExternalId());
     setInitiatorTransactionKey(transactionObjects.getInitiatorTransactionKey());
     setTransactionStatus(transactionObjects.getTransactionStatus().toString());
+    setPrinterRequest(true);
 
     this.isBuildResponse = 1;
   }
