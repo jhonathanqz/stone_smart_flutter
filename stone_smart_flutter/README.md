@@ -63,7 +63,7 @@ Em seu build.gradle a nivel do app, a propriedade `minSdkVersion` precisa ser le
 ...
 defaultConfig {
         applicationId "com.example.stone_example"
-        minSdkVersion 23
+        minSdkVersion 22
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

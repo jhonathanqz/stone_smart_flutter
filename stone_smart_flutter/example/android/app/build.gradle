@@ -69,7 +69,7 @@ android {
 
     defaultConfig {
         applicationId "com.qztech.stone_smart_flutter_example"
-        minSdkVersion 23
+        minSdkVersion 22
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName "1.0"
