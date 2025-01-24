@@ -1,3 +1,7 @@
+## 1.3.7
+
+- Set minSdkAndroid 22
+
 ## 1.3.6
 
 - Add new function paymentPrinterTransactionKey
