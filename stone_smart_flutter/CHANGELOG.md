@@ -1,3 +1,7 @@
+## 1.4.0
+
+- Fix readToken
+
 ## 1.3.7
 
 - Set minSdkAndroid 22
