@@ -2,8 +2,18 @@ group 'com.qztech.stone_smart_flutter'
 version '1.0'
 
 buildscript {
-    ext.kotlin_version = '1.6.10'
-    ext.stone_sdk_version = '4.10.2'
+    ext {
+        kotlin_version = '1.6.10'
+        stone_sdk_version = '4.10.2'
+
+        localProp = new Properties()
+        fileName = 'local.properties'
+        if (project.rootProject.file(fileName).exists()) {
+            localProp.load(new FileInputStream(rootProject.file(fileName)))
+        }
+        packageCloudReadToken = System.env.PACKAGECLOUD_READ_TOKEN != null ? System.env.PACKAGECLOUD_READ_TOKEN  : localProp["packageCloudReadToken"] ?: ""
+        packageCloudReadTokenInternal = System.env.PACKAGECLOUD_READ_TOKEN_INTERNAL ?: localProp["packageCloudReadTokenInternal"]
+    }
 
     repositories {
         google()
@@ -20,7 +30,8 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://packagecloud.io/priv/5f856791b6d15a1dd06085af7187839144dcb4f670f13b82/stone/pos-android/maven2" }
+        maven { url "https://packagecloud.io/priv/${packageCloudReadToken}/stone/pos-android/maven2" }
+        maven { url "https://packagecloud.io/priv/${packageCloudReadTokenInternal}/stone/pos-android-internal/maven2" }
     }
 }
 
