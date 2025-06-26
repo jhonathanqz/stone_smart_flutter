@@ -6,9 +6,15 @@
     "configurations": [
         {
             "name": "example",
-            "cwd": "example",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "program": "stone_smart_flutter/example/lib/main.dart"
+        },
+        {
+            "name": "package_example",
+            "request": "launch",
+            "type": "dart",
+            "program": "package_example/example/lib/main.dart"
         },
     ]
 }
