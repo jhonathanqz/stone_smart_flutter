@@ -1,0 +1,21 @@
+name: stone_smart_flutter
+
+packages:
+  - interface_stone_smart_flutter
+  - stone_smart_flutter
+  - stone_smart_flutter/example
+
+scripts:
+  analyze:
+    run: melos exec -- flutter analyze .
+  format:
+    run: melos exec -- flutter format .
+
+command:
+  version:
+    linkToCommits: true
+    workspaceChangelog: true
+
+sdk: ">=3.0.0 <4.0.0"
+
+repository: https://github.com/jhonathanqz/stone_smart_flutter

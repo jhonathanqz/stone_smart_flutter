@@ -33,6 +33,13 @@ import stone.utils.Stone;
 import io.flutter.plugin.common.MethodChannel;
 import stone.utils.keys.StoneKeyType;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.provider.Settings;
+import androidx.core.content.ContextCompat;
+
 public class PaymentsUseCase {
 
   private PaymentsFragment mFragment;
@@ -210,6 +217,9 @@ public class PaymentsUseCase {
       currentTransactionObject = null;
       posTransactionProvider = null;
       isAbortRunning = false;
+
+      String serialNumber = getSerialNumber();
+      actionResult.setDeviceSerialNumber(serialNumber);
 
       final TransactionObject transaction = mStoneHelper.getTransactionObject(amount, typeTransaction, parc, withInterest);
       currentTransactionObject = transaction;
@@ -424,6 +434,9 @@ public class PaymentsUseCase {
   ) {
     try {
       BasicResult basicResult = new BasicResult();
+      String serialNumber = getSerialNumber();
+      basicResult.setDeviceSerialNumber(serialNumber);
+
       if(isDebugLog) {
         Log.d("print", "****initializeAndActivatePinpad");
       }
@@ -775,14 +788,35 @@ public class PaymentsUseCase {
 
     public String getSerialNumber() {
     try {
-      if(!isInitialized) {
-        return null;
+      String result =  Stone.getPosAndroidDevice().getPosAndroidSerialNumber();
+      Log.d("print", "**** getSerialNumberNativo: " + result);
+      if ("Mobile".equals(result)) {
+        return getSerialNumberAndroid();
       }
-      return Stone.getPosAndroidDevice().getPosAndroidSerialNumber();
+      return result;
     }catch (Exception error) {
         return null;
     }
     }
+
+  public String getSerialNumberAndroid() {
+    String serial = "unknown";
+
+    try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            serial = Build.getSerial(); // Pode lançar SecurityException se a permissão não estiver concedida
+        } else {
+            serial = Build.SERIAL; // Deprecated, mas funciona em APIs < 26
+        }
+    } catch (SecurityException se) {
+        serial = "permission_not_granted";
+    } catch (Exception e) {
+        serial = "error_" + e.getMessage();
+    }
+
+    return serial;
+}
+
 
     public String getPosManufacture() {
     try {
