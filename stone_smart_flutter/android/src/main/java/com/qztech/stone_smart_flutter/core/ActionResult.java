@@ -38,10 +38,18 @@ public class ActionResult {
   private String transactionObject;
 
   private String userModel;
+  private String deviceSerialNumber;
 
   private List<StoneTransaction> stoneTransactions;
 
   private boolean isPrinterRequest;
+
+  public void setDeviceSerialNumber(String value) {
+    if(value == null || value.isEmpty()) {
+      return;
+    }
+    this.deviceSerialNumber = value;
+  }
 
   public void setPrinterRequest(boolean value) {this.isPrinterRequest = value;}
 

@@ -8,16 +8,10 @@ import com.qztech.stone_smart_flutter.payments.PaymentsFragment;
 import com.qztech.stone_smart_flutter.payments.PaymentsPresenter;
 import com.qztech.stone_smart_flutter.payments.PaymentsUseCase;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
-import io.flutter.embedding.engine.plugins.FlutterPlugin;
-import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 public class StoneSmartFlutterPlugin
   implements FlutterPlugin, MethodCallHandler {

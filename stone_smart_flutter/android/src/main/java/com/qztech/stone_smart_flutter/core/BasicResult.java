@@ -9,6 +9,15 @@ public class BasicResult {
     private int result;
     private String message;
     private String userModel;
+    private String deviceSerialNumber;
+
+    public String getDeviceSerialNumber() {
+        return deviceSerialNumber;
+    }
+
+    public void setDeviceSerialNumber(String value) {
+        this.deviceSerialNumber = value;
+    }
 
     private List<String> options;
 
